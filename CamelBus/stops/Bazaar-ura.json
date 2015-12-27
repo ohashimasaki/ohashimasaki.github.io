@@ -1,0 +1,13 @@
+﻿{
+	"名称": "バザール裏",
+	"のりば": [
+		{
+			"名称": "1番のりば",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Bazaar-ura/1.json"
+		},
+		{
+			"名称": "2番のりば",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Bazaar-ura/2.json"
+		}
+	]
+}

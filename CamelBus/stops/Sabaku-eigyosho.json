@@ -1,0 +1,9 @@
+﻿{
+	"名称": "砂漠営業所",
+	"のりば": [
+		{
+			"名称": "1番のりば",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Sabaku-eigyosho/1.json"
+		}
+	]
+}

@@ -1,0 +1,18 @@
+﻿{
+	"名称": "フタコブラクダ線",
+	"路線": [
+		{
+			"方面": [
+				{
+					"名称": "下り",
+					"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines/Fu02/outbound.json"
+				},
+				{
+					"名称": "上り",
+					"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines/Fu02/inbound.json"
+				}
+			]
+		}
+
+	]
+}

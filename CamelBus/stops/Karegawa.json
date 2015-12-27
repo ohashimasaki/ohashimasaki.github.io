@@ -1,0 +1,13 @@
+﻿{
+	"名称": "枯れ川",
+	"のりば": [
+		{
+			"名称": "1番のりば",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Karegawa/1.json"
+		},
+		{
+			"名称": "2番のりば",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Karegawa/2.json"
+		}
+	]
+}

@@ -1,0 +1,9 @@
+﻿{
+	"名称": "ヒトコブラクダ駅",
+	"のりば": [
+		{
+			"名称": "1番のりば",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Hitokoburakuda-eki/1.json"
+		}
+	]
+}

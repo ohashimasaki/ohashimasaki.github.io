@@ -1,0 +1,13 @@
+﻿{
+	"名称": "フタコブラクダ商業高校前",
+	"のりば": [
+		{
+			"名称": "1番のりば",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Futakoburakuda-shogyokoko-mae/1.json"
+		},
+		{
+			"名称": "2番のりば",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Futakoburakuda-shogyokoko-mae/2.json"
+		}
+	]
+}

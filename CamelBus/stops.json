@@ -1,0 +1,88 @@
+﻿{
+	"停留所": [
+		{
+			"名称": "ヒトコブラクダ駅",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Hitokoburakuda-eki.json"
+		},
+		{
+			"名称": "砂漠営業所",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Sabaku-eigyosho.json"
+		},
+		{
+			"名称": "砂漠市役所",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Sabaku-shiyakusho.json"
+		},
+		{
+			"名称": "砂漠一丁目",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Sabaku-icchome.json"
+		},
+		{
+			"名称": "砂漠二丁目",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Sabaku-nichome.json"
+		},
+		{
+			"名称": "砂漠三丁目",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Sabaku-sanchome.json"
+		},
+		{
+			"名称": "砂漠四丁目",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Sabaku-yonchome.json"
+		},
+		{
+			"名称": "砂漠五丁目",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Sabaku-gochome.json"
+		},
+		{
+			"名称": "砂漠小学校",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Sabaku-shogakko.json"
+		},
+		{
+			"名称": "砂漠中学校",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Sabaku-chugakko.json"
+		},
+		{
+			"名称": "オアシス一丁目",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Oasis-icchome.json"
+		},
+		{
+			"名称": "オアシス二丁目",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Oasis-nichome.json"
+		},
+		{
+			"名称": "オアシス三丁目",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Oasis-sanchome.json"
+		},
+		{
+			"名称": "枯れ川",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Karegawa.json"
+		},
+		{
+			"名称": "モスク前",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Mosque-mae.json"
+		},
+		{
+			"名称": "バザール前",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Bazaar-mae.json"
+		},
+		{
+			"名称": "バザール裏",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Bazaar-ura.json"
+		},
+		{
+			"名称": "フタコブラクダ駅",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Futakoburakuda-eki.json"
+		},
+		{
+			"名称": "フタコブラクダ商業高校前",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Futakoburakuda-shogyokoko-mae.json"
+		},
+		{
+			"名称": "月の砂漠ニュータウン入口",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Tsukinosabaku-newtown-iriguchi.json"
+		},
+		{
+			"名称": "井戸",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Ido.json"
+		}
+	]
+}

@@ -1,0 +1,13 @@
+﻿{
+	"名称": "オアシス二丁目",
+	"のりば": [
+		{
+			"名称": "1番のりば",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Oasis-nichome/1.json"
+		},
+		{
+			"名称": "2番のりば",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Oasis-nichome/2.json"
+		}
+	]
+}

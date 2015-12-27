@@ -1,0 +1,16 @@
+﻿{
+	"運行日": [
+		{
+			"名称":"平日",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines/Hi01/outbound/weekdays.json"
+		},
+		{
+			"名称":"土曜",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines/Hi01/outbound/saturdays.json"
+		},
+		{
+			"名称":"日祝",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines/Hi01/outbound/holidays.json"
+		}
+	]
+}
