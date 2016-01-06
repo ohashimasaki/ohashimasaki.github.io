@@ -22,6 +22,7 @@
 
     function Cover(map, type) {
         var transition;
+
         var cover = {
             timeout: null,
             moving: false
