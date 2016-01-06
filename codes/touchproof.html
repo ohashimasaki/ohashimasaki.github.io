@@ -7,26 +7,61 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: Meiryo, "メイリオ", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", Arial, sans-serif;
 }
 body {
-    background-color: #f0f0f0;
+    padding: 20px 30px 300px 20px;
+    background-color: #f3f3f6;
 }
-#map {
-    margin: 30px auto;
+#map1, #map2 {
+    margin: 100px auto 300px auto;
     width: 60%;
     height: 500px;
 }
 </style>
-<title>Test</title>
+<title>Touchproof.js</title>
 </head>
 <body>
-<div id="map"></div>
+<h1>Touchproof.js</h1>
+
+<div id="map1"></div>
+<div id="map2"></div>
 </body>
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 <script src="touchproof.js"></script>
 <script>
 (function() {
+
+    var _map1 = document.getElementById("map1");
+    var _map2 = document.getElementById("map2");
+
+    new google.maps.Map(_map1, {
+        center: new google.maps.LatLng(38.260678, 140.882082),
+        zoom: 14,
+        disableDefaultUI: true,
+        zoomControl: true,
+        zoomControlOptions: {
+            style: google.maps.ZoomControlStyle.SMALL
+        },
+        scaleControl: true
+    });
+
+    new google.maps.Map(_map2, {
+        center: new google.maps.LatLng(35.705369, 139.634038),
+        zoom: 14,
+        disableDefaultUI: true,
+        zoomControl: true,
+        zoomControlOptions: {
+            style: google.maps.ZoomControlStyle.SMALL
+        },
+        scaleControl: true
+    });
+
     var touchproof = new Touchproof();
-    touchproof.attach(document.getElementById("map"), "cloud");
+    touchproof.attach(_map1, "cloud");
+    touchproof.attach(_map2);
+
 }())
 </script>
 </html>

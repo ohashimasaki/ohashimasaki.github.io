@@ -1,16 +1,14 @@
 ﻿function Touchproof() {
 
     var touchproof = {};
-    var transition;
-    var transitionAvailable = false;
 
 
     touchproof.attach = function(map, type) {
         if(Math.max(screen.width, screen.height) <= 800) {
             type = false;
         }
-        if(typeof type == "string" && /^(?:cloud)$/i.test(type)) {
-            transitionAvailable = true;
+        if(typeof type != "string" || ! /^(?:cloud)$/i.test(type)) {
+            type = false;
         }
         var cover = Cover(map, type);
         cover.on(0);
@@ -23,6 +21,7 @@
 
 
     function Cover(map, type) {
+        var transition;
         var cover = {
             timeout: null,
             moving: false
@@ -33,7 +32,7 @@
         _cover.style.overflow = "hidden";
         _cover.style.display = "block";
 
-        if( ! transitionAvailable) {
+        if( ! type) {
             _cover.style.backgroundColor = "#000000";
             _cover.style.opacity = "0.05";
         }
@@ -111,7 +110,7 @@
                 _cover.style.height = map.offsetHeight + "px";
                 _cover.style.top = map.offsetTop + "px";
                 _cover.style.left = map.offsetLeft + "px";
-                if(transitionAvailable) {
+                if(type) {
                     transition = transition ? transition :Transition(_cover);
                     transition.start();
                 }
