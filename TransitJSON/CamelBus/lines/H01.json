@@ -1,0 +1,30 @@
+﻿{
+	"name": "H01",
+	"routes": [
+		{
+			"directions": [
+				{
+					"name": "inbound",
+					"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines/H01/outbound.json"
+				},
+				{
+					"name": "outbound",
+					"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines/H01/inbound.json"
+				}
+			]
+		},
+		{
+			"name": "Depot",
+			"directions": [
+				{
+					"name": "inbound",
+					"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines/H01/outbound-depot.json"
+				},
+				{
+					"name": "outbound",
+					"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines/H01/inbound-depot.json"
+				}
+			]
+		}
+	]
+}

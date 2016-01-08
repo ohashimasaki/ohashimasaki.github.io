@@ -5,31 +5,33 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 body {
     font-size: 11pt;
     color: #263140;
     font-family: Meiryo, "メイリオ", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", Arial, sans-serif;
 }
 main {
-    padding: 20px 0 300px 0;
-}
-@media only screen and (min-width: 768px) {
-    main {
-        padding: 20px 10px 300px 10px;
-    }
+    padding: 20px 20px 300px 20px;
 }
 h1 {
     font-size: 32pt;
-    margin: 20px;
     font-weight: normal;
 }
 h2 {
-    margin: 20px 25px;
     font-size: 18pt;
     font-weight: normal;
 }
-
-
+section {
+    margin: 30px 30px 100px 30px;
+}
+h3 {
+    margin: 20px 0 0 0;
+}
 </style>
 <meta charset="UTF-8" />
 <title>TransitJSON/TransitXML</title>
@@ -38,9 +40,19 @@ h2 {
 <header></header>
 <main>
 <h1>TransitJSON / TransitXML</h1>
-<h2></h2>
 
+<section>
+    <h2>TransitJSON</h2>
+    <p>This is a draft of TransitJSON, a format for representing transit data (e.g. timetables, routes).<br/>
+TransitJSON is aiming to be as simple as possible so that non-dev people can easily adopt.</p>
+    <h3>Example</h3>
+    <a href="CamelBUs.json">CamelBus Transit Data (fictional)</a>
+</section>
 
+<section>
+<h2>TransitXML</h2>
+<p>Coming soon.</p>
+</section>
 
 </main>
 <footer></footer>

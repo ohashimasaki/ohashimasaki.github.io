@@ -1,12 +1,12 @@
 ﻿{
-	"系統": [
+	"lines": [
 		{
-			"名称": "ひ01",
-			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines/Hi01.json"
+			"name": "H01",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines/H01.json"
 		},
 		{
-			"name": "ふ02",
-			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines/Fu02.json"
+			"name": "F02",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines/F02.json"
 		}
 	]
 }

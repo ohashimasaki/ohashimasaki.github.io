@@ -1,12 +1,12 @@
 ﻿{
-	"名称": "砂漠一丁目",
+	"name": "砂漠一丁目",
 	"のりば": [
 		{
-			"名称": "1番のりば",
+			"name": "1番のりば",
 			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Sabaku-icchome/1.json"
 		},
 		{
-			"名称": "2番のりば",
+			"name": "2番のりば",
 			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Sabaku-icchome/2.json"
 		}
 	]

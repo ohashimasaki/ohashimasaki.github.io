@@ -1,0 +1,18 @@
+﻿{
+	"name": "F02",
+	"routes": [
+		{
+			"directions": [
+				{
+					"name": "inbound",
+					"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines/F02/outbound.json"
+				},
+				{
+					"name": "outbound",
+					"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines/F02/inbound.json"
+				}
+			]
+		}
+
+	]
+}

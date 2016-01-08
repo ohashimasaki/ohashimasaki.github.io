@@ -1,11 +1,11 @@
 ﻿{
-	"名称": "ラクダ交通バス",
-	"住所": "",
-	"電話番号": "",
-	"系統": {
+	"name": "Camel Bus",
+	"address": "",
+	"tel": "",
+	"lines": {
 		"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines.json"
 	},
-	"停留所": {
+	"stops": {
 		"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops.json"
 	}
 }

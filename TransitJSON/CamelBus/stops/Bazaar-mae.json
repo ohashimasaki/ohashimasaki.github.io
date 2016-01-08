@@ -1,12 +1,12 @@
 ﻿{
-	"名称": "バザール前",
+	"name": "バザール前",
 	"のりば": [
 		{
-			"名称": "1番のりば",
+			"name": "1番のりば",
 			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Bazaar-mae/1.json"
 		},
 		{
-			"名称": "2番のりば",
+			"name": "2番のりば",
 			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Bazaar-mae/2.json"
 		}
 	]

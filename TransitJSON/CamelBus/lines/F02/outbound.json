@@ -1,0 +1,16 @@
+﻿{
+	"dates": [
+		{
+			"name":"Weekdays",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines/F02/outbound/weekdays.json"
+		},
+		{
+			"name":"Saturdays",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines/F02/outbound/saturdays.json"
+		},
+		{
+			"name":"Holidays",
+			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines/F02/outbound/holidays.json"
+		}
+	]
+}
