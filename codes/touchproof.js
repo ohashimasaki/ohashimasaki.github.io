@@ -145,7 +145,18 @@
             cover.resize();
         });
 
+        attachEvent(window, "visibilitychange", function() {
+            if(transition) {
+                if(document.visibilityState == "visible") {
+                    transition.start();
+                } else {
+                    transition.stop();
+                }
+            }
+        });
+
         return cover;
+
     }
 
 
