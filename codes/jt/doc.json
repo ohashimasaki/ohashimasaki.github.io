@@ -1,0 +1,627 @@
+﻿{
+    "head": {
+        "meta": {
+            "Title": "jt.js",
+            "Summary": "An XSLT-like JSON Transform with JavaScript",
+            "NOTE": "THIS IS JUST A CRAPPY & BUGGY PROTOTYPE."
+        }
+    },
+    "body": {
+        "Introduction": [
+            "jt.js is an XSLT-like transform JSON-formatted data into HTML with JavaScript.",
+            "I welcome your feedback and requests."
+        ],
+        "Usage": {
+            "Example": [
+                "var jt = new JT;",
+                "var myjsondata = {...};",
+                "var mystylesheet = {...}; // see below",
+                "document.body.innerHTML = jt.transform(mystylesheet, myjsondata);"
+            ],
+            "Notes": [
+                "For the real example, see the source of this page."
+            ]
+        },
+        "Stylesheet": {
+            "Summary": [
+                "A stylesheet may have 'match' and 'name' template rule groups.",
+                "Each template rule in 'match' has a match pattern as key, and a JavaScript function as value.",
+                "The function in a 'match' template rule has 'this' argument as the matched(current) JSON node.",
+                "The nodes in JSON are processed from the root node along match patterns. If there is no template rule that matches, built-in template rules are applied."
+            ],
+            "Syntax": [
+                "stylesheet = {",
+                "    match: {",
+                "        <b>match pattern</b>: function([<i>param</i>]) {",
+                "            <i>// template as a JavaScript function</i>",
+                "        },",
+                "        <b>match pattern</b>: function([<i>param</i>]) {",
+                "            <i>// template as a JavaScript function</i>",
+                "        },",
+                "        <b>match pattern</b>: function[<i>param</i>]) {",
+                "            <i>// template as a JavaScript function</i>",
+                "        },",
+                "        ........",
+                "    },",
+                "    name: {",
+                "        <b>template name</b>: function([<i>param</i>]) {",
+                "            <i>// template as a JavaScript function</i>",
+                "        },",
+                "        <b>template name</b>: function([<i>param</i>]) {",
+                "            <i>// template as a JavaScript function</i>",
+                "        },",
+                "        <b>template name</b>: function([<i>param</i>]) {",
+                "            <i>// template as a JavaScript function</i>",
+                "        },",
+                "        ........",
+                "    }",
+                "};"
+            ],
+            "Notes": [
+                "A match pattern may be a comma-separated list.",
+                "For the real example, see the source of this page."
+            ],
+            "this":{
+                "Summary":[
+                    "'match' template rule has an implicit argument 'this' as matched(current) node. 'this' has some properties as below."
+                ],
+                "Properties":[
+                    "path\tAbsolute path to the selected node",
+                    "name\tName of the selected node",
+                    "position\tPosition of the selected node",
+                    "type\tData type of the selected node",
+                    "value()\tValue of the selectd node or concatenated string when argument is given as joiner. see below."
+                ],
+                "Notes":[
+                    "'position' is in 'document order', or, if sorted, in sorted order.",
+                    "types are 'string', 'number', 'boolean', 'array', 'object', and 'null'. it returns blank string when the type cannot be defined.",
+                    "If you need an array of names or values of multiple nodes, use name() or value() method."
+                ]
+            },
+            "Example": [
+                "var mystylesheet = {",
+                "    match:{",
+                "        <b>&quot;.&quot;</b>:function() {",
+                "            return jt.select(this.path + &quot;.Section|Notes&quot;).apply();",
+                "        },",
+                "        <b>&quot;Section&quot;</b>:function() {",
+                "            return [",
+                "                '&lt;h2&gt;' + this.value('') + '&lt;/h2&gt;',",
+                "                '&lt;ul&gt;&lt;li&gt;' + jt.select(this.path + &quot;.item&quot;).value('&lt;/li&gt;&lt;li&gt;') + '&lt;/li&gt;&lt;/ul&gt;',",
+                "                jt.call('Footer')",
+                "            ].join('');",
+                "        },",
+                "",
+                "        ........",
+                "",
+                "        <b>&quot;Notes, Caption&quot;</b>:function() {",
+                "            return '&lt;ul&gt;' + jt.select(this.path + &quot;.*&quot;).apply() + '&lt;/ul&gt;';",
+                "        },",
+                "        <b>&quot;Notes[*], Caption[*]&quot;</b>:function() {",
+                "            return '&lt;li&gt;' + jt.select(this.path).apply() + '&lt;/li&gt;';",
+                "        }",
+                "    },",
+                "    name:{",
+                "        <b>&quot;Footer&quot;</b>:function() {",
+                "            return '&lt;div&gt;Foo Bar Co., 2014&lt;/div&gt;'",
+                "        }",
+                "    }",
+                "};"
+            ]
+        },
+        "Path Expression": {
+            "Summary": "jt.js uses dot-separated expression and XPath-like filtering to select JSON nodes.",
+            "Example": [
+                ".\tselects the root node",
+                "*\tselects any child node including array element except the current node(=self)",
+                "^\tselects the parent node",
+                "~foo\tselects any ancestor node 'foo' except the current node(=self)",
+                "..foo\tselects any descendant nodes 'foo' except the current node(=self)",
+                ".data.foo\tselects 'foo'",
+                ".data.foo|bar\tselects 'foo' or 'bar'",
+                ".data.item[foo]\tselects 'item' that has 'foo' as child node",
+                ".data.(foo|bar)[baz]\tselects 'foo' or 'bar' that has 'baz' as child node",
+                ".data.item[not(foo)]\tselects 'item' that does not have 'foo' as child node",
+                ".data.item[not(foo[='bar'])]\tselects 'item' that does not have 'foo' that has value 'bar'",
+                ".data.item[foo!='bar']\tselects 'item' that has 'foo' that has other value than 'bar'",
+                ".data.item[not(foo='bar')]\tselects 'item' that has 'foo' that has other value than 'bar'",
+                ".data.item[foo[bar[baz]]]\tselects 'item' that has 'foo' that has 'bar' that has 'baz'",
+                ".data.item[='foo' or ='bar']\tselects 'item' that has value 'foo' or 'bar'",
+                ".data.item[!='foo']\tselects 'item' that has other value than 'foo'",
+                ".data.item[1]\tselects the first element of 'item'",
+                ".data.item[!2]\tselects elements of 'item' with other index than 2",
+                ".data.item[$]\tselects the last element of 'item'",
+                ".data.item[?]\tselects any element of 'item', or, if 'item' is not an array, selects 'item'",
+                ".data.item[*]\tselects any element of 'item', or, if 'item' is not an array, selects 'item' that has child node",
+                ".data.item[>1 and <=9]\tselects elements of 'item' with index greater than 1 and less than or equal to 9 ",
+                ".data.item[*>1]\tselects 'item' that has child node with a value greater than 1",
+                ".data.item[foo='bar']\tselects 'item' that has 'foo' with a value 'bar'",
+                ".data.item.*\tselects any child node or element of 'item'",
+                ".data.item.*[='foo']\tselects any child node of 'item' that has value 'foo'",
+                ".data.item.*[!='foo']\tselects any child node of 'item' that has other value than 'foo'",
+                ".data.item.*[foo or not(bar)]\tselects any child node of 'item' that has 'foo' and does not have 'bar' as child node",
+                ".data.item.*[!foo and !bar]\tselects any child node of 'item' except 'foo' and 'bar'",
+                ".data.item.*[1][foo]\tselects the first element of any child node of 'item' that has 'foo' as child node",
+                ".data.item.*[>1]\tselects elements of any child node of 'item' with index greater than 1",
+                ".data.item.*[not(*>1)]\tselects any child node of 'item' that does not have child node with a value greater than 1"
+            ],
+            "Notes": [
+                "'$'(last() equivalent) is cannot be used in arithmetic.",
+                "'^'(parent), '~'(ancestor) and '..'(descendant) cannot be used in match patterns of 'match' template rules.",
+                "'i'(ignore case) flag only can be used with RegExp pattern.",
+                "',' (%2C), '.' (%2E)', (' (%28), ')' (%29), '[' (%5B), ']' (%5D), and '|' (%7C) are percent-encoded internally. Use encoded strings to match them. "
+            ]
+        },
+        "Methods": [
+            {
+                "Name": "jt.transform()",
+                "Summary": [
+                    "Returns a string of the whole result of transformations.",
+                    "cf. xsl:stylesheet, xsl:transform"
+                ],
+                "Syntax": "jt.transform(<i>stylesheet, JSON Object</i>);",
+                "Parameters": [
+                    {
+                        "Name": "stylesheet",
+                        "Description": "Required, Object. Template rules expressed in JSON format as above."
+                    }
+                ]
+            },
+            {
+                "Name": "jt.select()",
+                "Summary": [
+                    "Select JSON objects by path expression to transform."
+                ],
+                "Syntax": "jt.select(<i>path[, filterFunction]</i>);",
+                "Parameters": [
+                    {
+                        "Name": "path",
+                        "Description": "Required, String. A path to the target node."
+                    },
+                    {
+                        "Name": "filterFunction",
+                        "Description": "Optional, Function. see below."
+                    }
+                ],
+                "Filter Function": {
+                    "Summary": [
+                        "Filter function returns boolean value to select(=true) or not to select(=false) each node.",
+                        "filter function has 2 arguments: the 1st argument is the absolute path to the node, and the 2nd is the value of the node."
+                    ],
+                    "Syntax": [
+                        "function (<i>path</i>, <i>value</i>) {",
+                        "    if(<i>condition</i>) {",
+                        "        return true;",
+                        "    } else {",
+                        "        return false;",
+                        "    }",
+                        "}"
+                    ],
+                    "Notes":[
+                        "See 'Templating Tips' below for examples."
+                    ]
+                }
+            },
+            {
+                "Name": "apply()",
+                "Summary": [
+                    "Returns a string of the transformation result of selected nodes.",
+                    "cf. xsl:apply-templates"
+                ],
+                "Syntax": "jt.select(<i>path[, filterFunction]).apply([param[, sortFunction]]</i>);",
+                "Parameters": [
+                    {
+                        "Name": "param",
+                        "Description": "Optional, Object. An arbitrary object literal to be passed to the template rules."
+                    },
+                    {
+                        "Name": "sortFunction",
+                        "Description": "Optional, Function. See below."
+                    }
+                ],
+                "Example": [
+                    "jt.select(this.path + &quot;.foo&quot;).apply();",
+                    "jt.select(this.path + &quot;.foo|bar&quot;).apply();",
+                    "jt.select(this.path + &quot;.foo&quot;).apply({x:0, y:3});",
+                    "",  
+                    "jt.select(this.path + &quot;.foo|bar&quot;).apply(function(a, b) {",
+                    "    if(a.path > b.path) {",
+                    "        return 1;",
+                    "    } else {",
+                    "        return -1;",
+                    "    }",
+                    "});",
+                    "",
+                    "jt.select(this.path + &quot;.foo|bar&quot;).apply({x:0, y:3}, function(a, b) {",
+                    "    if(a.value > b.value) {",
+                    "        return 1;",
+                    "    } else {",
+                    "        return -1;",
+                    "    }",
+                    "});",
+                    "",
+                    "jt.select(this.path + &quot;.foo&quot;).apply({mode:'special', priority:0});"
+                ],
+                "Sort Function": {
+                    "Summary": [
+                        "Sort function is the same as compare function of javaScript Array.",
+                        "Sort function has 2 arguments. Both arguments are objects that have 'path' and 'value' properties.",
+                        "'path' property is the absolute path to the node, and 'value' property is the value of the node."
+                    ],
+                    "Syntax": [
+                        "function (<i>a</i>, <i>b</i>) {",
+                        "    if(<i>condition</i>) {",
+                        "        return 1;",
+                        "    } else {",
+                        "        return -1;",
+                        "    }",
+                        "}"
+                    ],
+                    "Notes":[
+                        "See 'Templating Tips' below for an example."
+                    ]
+                }
+            },
+            {
+                "Name": "value()",
+                "Summary": [
+                    "Returns value of the node or an array of selected nodes.",
+                    "When joiner given, returns a string of the values of selected nodes and their descendants concatenated with joiner."
+                ],
+                "Syntax": "jt.select(<i>path[, filterFunction]).value([joiner[, sortFunction]]</i>);",
+                "Parameters": [
+                    {
+                        "Name": "joiner",
+                        "Description": "Optional, String. A string that is used as joiner(=delimiter)."
+                    },
+                    {
+                        "Name": "sortFunction",
+                        "Description": "Optional, Function. See 'apply()' section."
+                    }
+                ],
+                "Example": [
+                    "this.value();",
+                    "this.value('&lt;br /&gt;');",
+                    "",
+                    "jt.select(this.path).value();",
+                    "jt.select(this.path).value('&lt;br /&gt;');",
+                    "",
+                    "jt.select(this.path).value(function(a, b) {",
+                    "    if(a.value > b.value) {",
+                    "        return 1;",
+                    "    } else {",
+                    "        return -1;",
+                    "    }",
+                    "});"
+                ]
+            },
+            {
+                "Name": "name()",
+                "Summary": [
+                    "Returns an array of the names of selected nodes.",
+                    "When joiner given, returns a string of the names concatenated with joiner."
+                ],
+                "Syntax": "jt.select(<i>path[, filterFunction]).name([joiner[, sortFunction]]</i>);",
+                "Parameters": [
+                    {
+                        "Name": "joiner",
+                        "Description": "Optional, String. A string that is used as joiner(=delimiter)."
+                    },
+                    {
+                        "Name": "sortFunction",
+                        "Description": "Optional, Function. See 'apply()' section."
+                    }
+                ],
+                "Example": [
+                    "jt.select(this.path).name();",
+                    "jt.select(&quot;.foo.bar.baz&quot;).name(); // returns 'baz'",
+                    "jt.select(this.path + &quot;.foo[1]&quot;).name(); // returns 'foo[1]'",
+                    "jt.select(this.path + &quot;.foo[*]&quot;).name(); // returns 'foo[0]'",
+                    "jt.select(this.path + &quot;[1]&quot;).name(); // returns 'foo[1]' when 'this.path' is 'foo'",
+                    "jt.select(this.path + &quot;.^&quot;).name(); // returns the name of the parent node",
+                    "jt.select(this.path + &quot;.*&quot;).name(',');, // returns a comma-separated name list.",
+                    "",
+                    "jt.select(this.path).value(function(a, b) {",
+                    "    if(a.path.split('.').pop() > b.path.split('.').pop()) {",
+                    "        return 1;",
+                    "    } else {",
+                    "        return -1;",
+                    "    }",
+                    "});"
+                ]
+            },
+            {
+                "Name": "nodeset()",
+                "Summary": [
+                    "Returns an array of selected nodes with 'path' and 'value' property.",
+                    "'path' property is the absolute path to the node, and 'value' property is the value of the node."
+                 ],
+                "Syntax": "jt.select(<i>path[, filterFunction]).nodeset([sortFunction]</i>);",
+                "Parameters": [
+                    {
+                        "Name": "sortFunction",
+                        "Description": "Optional, Function. See 'apply()' section."
+                    }
+                ]
+            },
+            {
+                "Name": "call()",
+                "Summary": [
+                    "Returns a string of the result of the named template rule.",
+                    "cf. xsl:call-template"
+                ],
+                "Syntax": "jt.call(<i>name, param</i>);",
+                "Parameters": [
+                    {
+                        "Name": "name",
+                        "Description": "Required, String. A name of the template rule."
+                    },
+                    {
+                        "Name": "param",
+                        "Description": "Optional, Object. An arbitrary object literal to be passed to the template rules."
+                    }
+                ],
+                "Example": [
+                    "jt.call(&quot;template1&quot;);",
+                    "jt.call(&quot;template1&quot;, {x:0, y:3});",
+                    "jt.call(&quot;template1&quot;, {current:this, x:0, y:3});"
+                ]
+            }
+        ],
+        "Tips": [
+            {
+                "Title": "Array to List",
+                "Code": [
+                    "'items':function() {",
+                    "    return '&lt;ul&gt;&lt;li&gt;' + jt.select(this.path + &quot;.*&quot;).value('&lt;/li&gt;&lt;li&gt;') + '&lt;/li&gt;&lt;/ul&gt;';",
+                    "}"
+                ]
+            },
+            {
+                "Title": "2-dimensional Array to Table",
+                "Code": [
+                    "&quot;items&quot;:function() {",
+                    "    return [",
+                    "        '&lt;table&gt;',",
+                    "        '&lt;thead&gt;' + jt.select(this.path + &quot;[0]&quot;).apply + '&lt;/thead&gt;',",
+                    "        '&lt;tbody&gt;' + jt.select(this.path + &quot;[>0]&quot;).apply + '&lt;/tbody&gt;',",
+                    "        '&lt;/table&gt;'",
+                    "    ].join('');",
+                    "},",
+                    "&quot;items[=0]&quot;:function() {",
+                    "    return '&lt;tr&gt;&lt;th&gt;' + jt.select(this.path + &quot;.*&quot;).value('&lt;/th&gt;&lt;th&gt;') + '&lt;/th&gt;&lt;/tr&gt;';",
+                    "},",
+                    "&quot;items[>0]&quot;:function() {",
+                    "    return '&lt;tr&gt;&lt;td&gt;' + jt.select(this.path + &quot;.*&quot;).value('&lt;/td&gt;&lt;td&gt;') + '&lt;/td&gt;&lt;/tr&gt;';",
+                    "}"
+                ]
+            },
+            {
+                "Title": "Using mode",
+                "Code": [
+                    "&quot;section&quot;:function() {",
+                    "    return [",
+                    "        '&lt;ul&gt;' + jt.select(this.path + &quot;.*&quot;).apply({mode:'table-of-contents'}) + '&lt;/ul&gt;'",
+                    "        '&lt;div&gt;' + jt.select(this.path + &quot;.*&quot;).apply() + '&lt;/div&gt;'",
+                    "    ].join('');",
+                    "},",
+                    "&quot;section[*]&quot;:function(param) {",
+                    "    if(param && param.mode == 'table-of-contents') {",
+                    "        return '&lt;li&gt;' + this.value + '&lt;/li&gt;';",
+                    "    } else {",
+                    "        return jt.select(this.path + &quot;.Content&quot;).apply();",
+                    "    }",
+                    "}"
+                ]
+            },
+            {
+                "Title": "'contains()' equivalent (filter function)",
+                "Code": [
+                    "jt.select(this.path + &quot;.*&quot;, function(path, value) {",
+                    "    if(/foo/i.test(name)) {",
+                    "        return true;",
+                    "    } else {",
+                    "        return false;",
+                    "    }",
+                    "}).apply();"
+                ]
+            },
+            {
+                "Title": "Using arithmetic (filter function)",
+                "Code": [
+                    "jt.select(this.path + &quot;.*&quot;, function(path, value) {",
+                    "    if(parseInt(value) * 3 >= 100) {",
+                    "        return true;",
+                    "    } else {",
+                    "        return false;",
+                    "    }",
+                    "}).apply();"
+                ]
+            },
+            {
+                "Title": "Sorting",
+                "Code": [
+                    "jt.select(this.path + &quot;.*&quot;).apply(function(a, b) {",
+                    "    if(a.path > b.path) {",
+                    "        return 1;",
+                    "    } else {",
+                    "        return -1;",
+                    "    }",
+                    "});"
+                ]
+            },
+            {
+                "Title": "Transforming JSON to JSON",
+                "Code": [
+                " var data = {",
+                "    &quot;llama&quot;:[&quot;black&quot;, &quot;white&quot;, &quot;brown&quot;, &quot;pink&quot;],",
+                "    &quot;alpaca&quot;:[&quot;black&quot;, &quot;white&quot;, &quot;brown&quot;, &quot;blue&quot;],",
+                "    &quot;vicuna&quot;:[&quot;black&quot;, &quot;white&quot;, &quot;brown&quot;, &quot;green&quot;],",
+                "    &quot;guanaco&quot;:[&quot;black&quot;, &quot;white&quot;, &quot;brown&quot;, &quot;green&quot;]",
+                "};",
+                "",
+                "var stylesheet = {",
+                "    match: {",
+                "        &quot;.&quot;: function() {",
+                "            return '{&#92;r&#92;n' + jt.call(&quot;bycolor&quot;, {colors:unique(jt.select(&quot;.*[*]&quot;).value()).sort()}) + '&#92;r&#92;n}';",
+                "        }",
+                "    },",
+                "    name: {",
+                "        &quot;bycolor&quot;: function(param) {",
+                "            var a = [];",
+                "            var color;",
+                "            for(var i = 0; i < param.colors.length; i++) {",
+                "                color = param.colors[i];",
+                "                a.push('&#92;t' + color + ':[' + jt.select(&quot;.*.*[=&quot; + color + &quot;].^&quot;).name(',') + ']');",
+                "            }",
+                "            return a.join(',&#92;r&#92;n');",
+                "        }",
+                "    }",
+                "};",
+                "",
+                "var output = jt.transform(stylesheet, data);",
+                "",
+                "/* output string:",
+                "{",
+                "    &quot;black&quot;:[&quot;llama&quot;,&quot;alpaca&quot;,&quot;vicuna&quot;,&quot;guanaco&quot;],",
+                "    &quot;blue&quot;:[&quot;alpaca&quot;],",
+                "    &quot;brown&quot;:[&quot;llama&quot;,&quot;alpaca&quot;,&quot;vicuna&quot;,&quot;guanaco&quot;],",
+                "    &quot;green&quot;:[&quot;vicuna&quot;,&quot;guanaco&quot;],",
+                "    &quot;pink&quot;:[&quot;llama&quot;],",
+                "    &quot;white&quot;:[&quot;llama&quot;,&quot;alpaca&quot;,&quot;vicuna&quot;,&quot;guanaco&quot;]",
+                "}",
+                "*/",
+                "",
+                "function unique(array) {",
+                "    var u = {};",
+                "    var e;",
+                "    for(var i = 0; i < array.length; i++) {",
+                "        e = array[i];",
+                "        u[e] = e;",
+                "    }",
+                "    var a = [];",
+                "    for(var e in u) {",
+                "        a.push(e);",
+                "    }",
+                "    return a;",
+                "}"
+                ]
+            },
+            {
+                "Title": "Selecting objects (array/non-array compatible)",
+                "Code": [
+                " var data = {",
+                "    &quot;A&quot;: {",
+                "        &quot;place&quot;:{",
+                "            &quot;name&quot;: &quot;Antananarivo&quot;,",
+                "            &quot;country&quot;: &quot;Madagascar&quot;",
+                "        }", 
+                "    },",
+                "    &quot;B&quot;: {",
+                "        &quot;place&quot;: [",
+                "            {",
+                "                &quot;name&quot;: &quot;Tokyo&quot;,",
+                "                &quot;country&quot;: &quot;Japan&quot;",
+                "            },",
+                "            {",
+                "                &quot;name&quot;: &quot;Tehran&quot;,",
+                "                &quot;country&quot;: &quot;Iran&quot;",
+                "            },",
+                "            {",
+                "                &quot;name&quot;: &quot;Lima&quot;,",
+                "                &quot;country&quot;: &quot;Peru&quot;",
+                "            }",
+                "        ]",
+                "}",
+                "",
+                "var stylesheet = {",
+                "    match: {",
+                "        &quot;.&quot;: function() {",
+                "            return jt.select(&quot;.(A|B).place[?].name&quot;).value(', ');",
+                "        }",
+                "    },",
+                "",
+                "var output = jt.transform(stylesheet, data);",
+                "",
+                "/* output string:",
+                "&quot;Antananarivo, Tokyo, Tehran, Lima&quot;",
+                "*/"
+                ]
+            },
+            {
+                "Title": "Selecting strings (array/non-array compatible)",
+                "Code": [
+                " var data = {",
+                "    &quot;C&quot;: {",
+                "        &quot;place&quot;:&quot;Helsinki&quot;",
+                "    },",
+                "    &quot;D&quot;: {",
+                "        &quot;place&quot;: [&quot;Jakarta&quot;, &quot;Sri Jayawardenepura Kotte&quot;, &quot;Rio de Janeiro&quot;]",
+                "    }",
+                "}",
+                "",
+                "var stylesheet = {",
+                "    match: {",
+                "        &quot;.&quot;: function() {",
+                "            return jt.select(&quot;.(C|D).place[?]&quot;).value(', ');",
+                "        }",
+                "    },",
+                "",
+                "var output = jt.transform(stylesheet, data);",
+                "",
+                "/* output string:",
+                "&quot;Helsinki, Jakarta, Sri Jayawardenepura Kotte, Rio de Janeiro&quot;",
+                "*/"
+                ]
+            }
+        ],
+
+        "Example Data": {
+            "List" : [
+                "Lorem ipsum dolor sit amet, consectetur adipisicing elit",
+                "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris",
+                "nisi ut aliquip ex ea commodo consequat."
+            ],
+            "Table": [
+                ["Lorem", "ipsum", "dolor", "sit", "amet,", "consectetur", "adipisicing", "elit"],
+                ["sed", "do", "eiusmod", "tempor", "incididunt", "ut", "labore", "et"],
+                ["dolore", "magna", "aliqua.", "Ut", "enim", "ad", "minim", "veniam,"],
+                ["quis", "nostrud", "exercitation", "ullamco", "laboris", "nisi", "ut", "aliquip"]
+            ]
+        }
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
