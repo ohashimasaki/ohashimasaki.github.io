@@ -1,6 +1,4 @@
-﻿Everything I put on https://github.com/ohashimasaki/ is available under the MIT license.
-
-
+Everything I put on https://github.com/ohashimasaki/ is available under the MIT license.
 
 http://choosealicense.com/licenses/mit/
 
@@ -26,3 +24,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+
+
+
+
