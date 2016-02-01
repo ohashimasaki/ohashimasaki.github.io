@@ -1,0 +1,143 @@
+﻿<html>
+<head>
+<meta charset=UTF-8"/>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: Arial;
+    font-size: 10pt;
+    background-color: #cccccc;
+}
+table {
+    margin: 20px auto;
+    width: 90%;
+    border-collapse: collapse;
+}
+th {
+    padding: 2px 5px;
+    border: 1px solid #cccccc;
+    background-color: #bbbbbb;
+}
+td {
+    padding: 2px 5px;
+    border: 1px solid #cccccc;
+    background-color: #ffffff;
+}
+
+@media only screen and (max-width: 320px) {
+    table {
+        font-size: 90%;
+    }
+}
+@media only screen and (max-width: 480px) {
+    table {
+        font-size: 95%;
+    }
+}
+@media only screen and (max-width: 640px) {
+    table {
+        font-size: 98%;
+    }
+}
+@media only screen and (max-width: 768px) {
+    tr {
+        display: block;
+        overflow: hidden;
+    }
+    td {
+        display: block;
+        overflow: hidden;
+        border: none;
+        border-bottom: 1px solid #cccccc;
+    }
+    td:last-child {
+        border-bottom: none;
+    }
+    table.row thead {
+        display: none;
+    }
+    table.row tbody tr {
+        margin: 5px 0;
+    }
+    table.row tbody tr > th:first-child {
+        display: block;
+        overflow: hidden;
+        text-align: left;
+        background-color: transparent;
+        color: #000000;
+        font-size: 110%;
+    }
+    table.row tbody td:before {
+        content: attr(data-as)" ";
+        font-weight: bold;
+        width: 25%;
+        display: inline-block;
+        text-align: right;
+        margin-right: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+</style>
+</head>
+<body>
+
+<table class="row column">
+    <thead>
+    <tr>
+        <td></td>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Job Title</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th>James Matman</th>
+        <td data-as="First Name">James</td>
+        <td data-as="Last Name">Matman</td>
+        <td data-as="Job Title">Chief Sandwich Eater</td>
+    </tr>
+    <tr>
+        <th>The Tick</th>
+        <td data-as="First Name">The</td>
+        <td data-as="Last Name">Tick</td>
+        <td data-as="Job Title">Crimefighter Sorta</td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
