@@ -1,7 +1,6 @@
 ﻿<html>
 <head>
 <meta charset=UTF-8"/>
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <style>
 * {
     margin: 0;
@@ -9,9 +8,14 @@
     box-sizing: border-box;
 }
 body {
+    margin: 20px;
     font-family: Arial;
     font-size: 10pt;
     background-color: #cccccc;
+}
+section {
+    margin: 20px;
+
 }
 table {
     margin: 20px auto;
@@ -20,13 +24,23 @@ table {
 }
 th {
     padding: 2px 5px;
+    height: 1.6em;
     border: 1px solid #cccccc;
     background-color: #bbbbbb;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 td {
     padding: 2px 5px;
+    height: 1.6em;
     border: 1px solid #cccccc;
     background-color: #ffffff;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 @media only screen and (max-width: 320px) {
@@ -85,10 +99,163 @@ td {
         white-space: nowrap;
     }
 }
+
+
+
+
+
+table[major="column"] tr {
+    display: block;
+    overflow: hidden;
+}
+table[major="column"] td,
+table[major="column"] thead th {
+    display: block;
+    overflow: hidden;
+    border: none;
+    border-bottom: 1px solid #cccccc;
+}
+table[major="column"] td:last-child {
+    border-bottom: none;
+}
+table[major="column"] table.row thead {
+    display: none;
+}
+table[major="column"] table.row tbody tr {
+    margin: 5px 0;
+}
+table[major="column"] table.row tbody tr > th:first-child {
+    display: block;
+    overflow: hidden;
+    text-align: left;
+    background-color: transparent;
+    color: #000000;
+    font-size: 110%;
+}
+table[major="column"] table.row tbody td:before {
+    content: attr(data-as)": ";
+    font-weight: bold;
+    width: 25%;
+    display: inline-block;
+    float: left;
+    text-align: right;
+    margin-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+
+
+@media only screen and (min-width: 768px) {
+    table[major="column"] {
+        display: -webkit-flex; /* Safari */
+        display: flex;
+        -webkit-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+    }
+    table[major="column"] thead {
+        dislay: block;
+        float: left;
+    }
+    table[major="column"] tbody {
+        display: -webkit-flex; /* Safari */
+        display: flex;
+        -webkit-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+    }
+    table[major="column"] tr {
+        float: left;
+        border-left: 1px solid #cccccc;
+    }
+    table[major="column"] tbody th {
+        display: block;
+        border: none;
+    }
+}
+
+
+
+
+
+
+
 </style>
 </head>
 <body>
 
+<h1>Responsive Tables</h1>
+
+<section>
+<h2>Column Major Table</h2>
+
+<table class="row column" major="column">
+    <thead>
+    <tr>
+        <td></td>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Job Title</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th>James Matman</th>
+        <td data-as="First Name">James</td>
+        <td data-as="Last Name">Matman</td>
+        <td data-as="Job Title">Chief Sandwich Eater</td>
+    </tr>
+    <tr>
+        <th>The Tick</th>
+        <td data-as="First Name">The</td>
+        <td data-as="Last Name">Tick</td>
+        <td data-as="Job Title">Crimefighter Sorta</td>
+    </tr>
+    <tr>
+        <th>James Matman</th>
+        <td data-as="First Name">James</td>
+        <td data-as="Last Name">Matman</td>
+        <td data-as="Job Title">Chief Sandwich Eater</td>
+    </tr>
+    <tr>
+        <th>The Tick</th>
+        <td data-as="First Name">The</td>
+        <td data-as="Last Name">Tick</td>
+        <td data-as="Job Title">Crimefighter Sorta</td>
+    </tr>
+    <tr>
+        <th>James Matman</th>
+        <td data-as="First Name">James</td>
+        <td data-as="Last Name">Matman</td>
+        <td data-as="Job Title">Chief Sandwich Eater</td>
+    </tr>
+    <tr>
+        <th>The Tick</th>
+        <td data-as="First Name">The</td>
+        <td data-as="Last Name">Tick</td>
+        <td data-as="Job Title">Crimefighter Sorta</td>
+    </tr>
+    <tr>
+        <th>James Matman</th>
+        <td data-as="First Name">James</td>
+        <td data-as="Last Name">Matman</td>
+        <td data-as="Job Title">Chief Sandwich Eater</td>
+    </tr>
+    <tr>
+        <th>The Tick</th>
+        <td data-as="First Name">The</td>
+        <td data-as="Last Name">Tick</td>
+        <td data-as="Job Title">Crimefighter Sorta</td>
+    </tr>
+    </tbody>
+</table>
+</section>
+
+<section>
+
+<h2>Row Major Table</h2>
 <table class="row column">
     <thead>
     <tr>
@@ -113,6 +280,8 @@ td {
     </tr>
     </tbody>
 </table>
+</section>
+
 
 </body>
 </html>
