@@ -164,10 +164,13 @@ h2 {
         overflow: hidden;
         border-right: 1px solid #cccccc;
     }
-    table[major="column"] > thead th {
+    table[major="column"] thead th {
         text-align: right;
     }
-    table[major="column"] > tbody > tr:last-child {
+    table[major="column"] tbody th {
+        text-align: center;
+    }
+    table[major="column"] tbody > tr:last-child {
         border-right: none;
     }
     table[major="column"] th,
