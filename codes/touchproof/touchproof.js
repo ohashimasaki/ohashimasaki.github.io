@@ -44,7 +44,7 @@
             cover.off();
         };
         _cover.onmouseup = function() {
-            alert(cover.on(3000));
+            cover.on(3000);
         };
 
         attachEvent(map, "mousedown", function() {
