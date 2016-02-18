@@ -59,6 +59,9 @@ i {
     font-style: italic;
 }
 
+li {
+    list-style-type: none;
+}
 </style>
 <meta charset="UTF-8" />
 <title>TransitJSON/TransitXML</title>
@@ -79,6 +82,9 @@ TransitJSON is aiming to be as simple as possible so that non-dev people can eas
     "lines|系統": [  <strong>// REQUIRED</strong>
         {
             "name|名称": "LINE NAME",  <em>// OPTIONAL</em>
+            "color|ラインカラー": "#ff0000",  <em>// OPTIONAL</em>
+            "nickname|愛称": "LINE NICKNAME",  <em>// OPTIONAL</em>
+ 
             "href": "LINK TO AN EXTERNAL FILE FOR THIS LINE"
 
             <i>// OR INLINE REPRESENTATION</i>
@@ -108,26 +114,36 @@ TransitJSON is aiming to be as simple as possible so that non-dev people can eas
                             "href": "LINK TO AN EXTERNAL FILE FOR THIS DIRECTION"
 
                             <i>// OR INLINE REPRESENTATION</i>
-                            "services|運行": [  <em>// OPTIONAL (TIMETABLES BY LINE)</em>
+                            "stops|停留所|駅|空港|停泊地|etc.": [  <strong>// REQUIRED</strong>
+                                "a", "b", "c", "d", ...
+                            ],
+
+                            <i>// OR INLINE REPRESENTATION</i>
+                            "periods|運行日": [
                                 {
-                                    "name|名称": "SERVICE NAME",  <em>// OPTIONAL</em>
-                                    "href": "LINK TO AN EXTERNAL FILE FOR THIS SERVICE"
+                                    "name|名称": "SERVICE PERIOD NAME",
+                                    "date|日時|期間": "SERVICE PERIOD DATE (ISO 8601 OR ARBITRARY TEXT)",  <em>// OPTIONAL</em>
+                                    "href": "LINK TO AN EXTERNAL FILE FOR THIS PERIOD",
 
                                     <i>// OR INLINE REPRESENTATION</i>
-                                    "period|運行日|期間": "DATE OF SERVICE (ISO 8601 OR ARBITRARY TEXT)",  <em>// OPTIONAL</em>
-                                    "stops|停留所|駅|空港|停泊地|etc.": [  <strong>// REQUIRED</strong>
-                                        "a", "b", "c", "d", ...
-                                    ],
-                                    "times|日時|時刻": [  <strong>// REQUIRED</strong> (ISO 8601)
-                                        ["09:00", "09:05|09:06", "09:10|09:11", "09:15", ...], <i>// arrival|departure</i>
-                                        ["10:00", "10:05", "10:10|10:11", "10:15", ...],
+                                    "services|便": [  <em>// OPTIONAL (TIMETABLES BY LINE)</em>
+                                        {
+                                            "name|名称": "SERVICE NAME",  <em>// OPTIONAL</em>
+                                            "href": "LINK TO AN EXTERNAL FILE FOR THIS SERVICE"
+
+                                            <i>// OR INLINE REPRESENTATION</i>
+                                            "times|日時|時刻": [  <strong>// REQUIRED</strong> (ISO 8601)
+                                                ["09:00", "09:05|09:06", "09:10|09:11", "09:15", ...], <i>// arrival|departure</i>
+                                                ["10:00", "10:05", "10:10|10:11", "10:15", ...],
+                                                ...
+                                           ]
+                                        },
+                                        {
+                                            // SERVICE
+                                        },
                                         ...
                                     ]
-                                },
-                                {
-                                    // SERVICE
-                                },
-                                ...
+                                }
                             ]
                         },
                         {
@@ -217,7 +233,9 @@ TransitJSON is aiming to be as simple as possible so that non-dev people can eas
 
 
     <h3>Example</h3>
-    <a href="CamelBus.json">CamelBus Transit Data (fictional)</a>
+    <ul>
+        <li><a href="Tomiya-Commuter-Bus.json">富谷町民バス</a></li>
+    </ul>
 </section>
 
 <section>
