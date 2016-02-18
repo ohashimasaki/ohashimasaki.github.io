@@ -1,5 +1,5 @@
 ﻿{
-	"dates": [
+	"services": [
 		{
 			"name":"Weekdays",
 			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/lines/H01/inbound/weekdays.json"
