@@ -70,7 +70,7 @@
                     "name\tName of the selected node",
                     "position\tPosition of the selected node",
                     "type\tData type of the selected node",
-                    "value()\tValue of the selectd node or concatenated string when argument is given as joiner. see below."
+                    "value()\tValue of the selected node, or concatenated string when joiner is given as an argument. see below."
                 ],
                 "Notes":[
                     "'position' is in 'document order', or, if sorted, in sorted order.",
@@ -170,7 +170,7 @@
             {
                 "Name": "jt.select()",
                 "Summary": [
-                    "Select JSON objects by path expression to transform."
+                    "Selects JSON objects by path expression to transform."
                 ],
                 "Syntax": "jt.select(<i>path[, filterFunction]</i>);",
                 "Parameters": [
