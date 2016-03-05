@@ -2,24 +2,29 @@
 
     var touchproof = {};
 
-
+    //----------------------------------------------------------------------------------------------------
     touchproof.attach = function(map, type) {
+
         if(Math.max(screen.width, screen.height) <= 800) {
             type = false;
         }
+
         if(typeof type != "string" || ! /^(?:cloud)$/i.test(type)) {
             type = false;
         }
+
         var cover = Cover(map, type);
         cover.on(0);
+
         return {
             wait: function() {
                 cover.on(3000); 
             }
+
         };
+
     }
-
-
+    //----------------------------------------------------------------------------------------------------
     function Cover(map, type) {
         var transition;
 
@@ -112,7 +117,7 @@
                 _cover.style.top = map.offsetTop + "px";
                 _cover.style.left = map.offsetLeft + "px";
                 if(type) {
-                    transition = transition ? transition :Transition(_cover);
+                    transition = transition ? transition : Transition(_cover);
                     transition.start();
                 }
 
@@ -156,7 +161,6 @@
         });
 
         return cover;
-
     }
 
 
@@ -169,15 +173,15 @@
         }
     }
 
-
     return touchproof;
 
 
 
+    //----------------------------------------------------------------------------------------------------
     function Transition(_base) {
+
         var transition = {};
-        var queue = {};
-        var items = {}; 
+        var timeout = [];
 
         var base = [
             '<svg id="_touchproof-sky" xmlns="http://www.w3.org/2000/svg" ',
@@ -207,96 +211,99 @@
             s.setAttributeNS(null, "height", _base.offsetHeight);
         };
 
-
         transition.start = function() {
-            var id = getCloud();
-            items[id] = id;
-            flow(id);
-            var t = 2000 + parseInt(12 * Math.random()) * 1000;
-            var timeout = setTimeout(function() {
+            (new Cloud(_base)).flow();
+            timeout.push(setTimeout(function() {
                 transition.start();
-            }, t);
-            queue[timeout] = timeout;
-        }
-
-
-        function flow(id) {
-            var e = document.getElementById(id);
-            if( ! e) {
-                clearTimeout(queue[id]);
-                delete queue[id];
-                return;
-            }
-
-            setTimeout(function() {
-                var p = e.getAttributeNS(null, "transform");
-                if(p) {
-                p = p.slice("translate(".length, -1).replace(",", " ").split(" ");
-                x = parseInt(p[0]);
-                y = parseInt(p[1]);
-                x = x + 2;
-                } else {
-                    x = -300;
-                    y = 0;
-                }
-                if(x > _base.offsetWidth + 50) {
-                    if(e && e.parentNode) {
-                        e.parentNode.removeChild(e);
-                    }
-                    clearTimeout(queue[id]);
-                    delete queue[id];
-                } else {
-                    e.setAttributeNS(null, "transform", "translate(" + [x,y].join(" ") + ")");
-                    flow(id);
-                }
-            }, 50);
-        }
-
+            }, 16000));
+        };
 
         transition.stop = function() {
-            for(var id in queue) {
-                clearTimeout(queue[id]);
-                delete queue[id];
+            transition.clear();   
+        };
+
+        transition.clear = function() {
+            for(var i = 0; i < timeout.length; i++) {
+                clearTimeout(timeout[i]);
             }
-            queue = {};
-            for(var id in items) {
-                var e = document.getElementById(id);
-                if(e) {
-                    e.parentNode.removeChild(e);
-                }
+            timeout.length = 0; 
+            var c = document.getElementById("_touchproof-sky").getElementsByTagName("path");
+            for(var i = c.length - 1; i >= 0; i--) {
+                c[i].parentNode.removeChild(c[i]);
             }
         };
 
         return transition;
 
+    }
+    //----------------------------------------------------------------------------------------------------
+    function createSVGPathElement(props) {
 
-        function getCloud(id) {
-            var id = "_touchproof-cloud-" + parseInt(Math.random() * Math.pow(10, 10)).toString(16);
-            var e = document.getElementById(id);
-            if(e) {
-                return id;
-            }
-            var w = parseInt(Math.min((_base.offsetWidth / 5), 100) * (1 + Math.random() * 0.5));
-            var h = parseInt(w * 0.33);
-            var cx = parseInt(w / 2);
-            var cy = parseInt(_base.offsetHeight * Math.random());
-            var d = getCloudPath(cx, cy, w, h);
+        var e;
 
-            var e = document.createElementNS("http://www.w3.org/2000/svg", "path");
-            if( ! document.createElementNS) {
-                var e = document.createNode(1, "path", "http://www.w3.org/2000/svg");
+        if(document.createElementNS) {
+            e = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        } else {
+            e = document.createNode(1, "path", "http://www.w3.org/2000/svg");
+        };
+
+        if(e && props) {
+            for(var p in props) {
+                e.setAttributeNS(null, p, props[p]);
             }
-            document.getElementById("_touchproof-sky").appendChild(e);
-            e.setAttributeNS(null, "id", id);
-            e.setAttributeNS(null, "d", d);
-            e.setAttributeNS(null, "fill", "#ffffff");
-            e.setAttributeNS(null, "filter", "url(#_touchproof-shadow)");
-            e.setAttributeNS(null, "transform", "translate(" + [-1.5 * w, 0].join(" ") + ")");
-            e.style.opacity = "0.92";
-            return id;
         }
 
+        return e;
+
+    }
+    //----------------------------------------------------------------------------------------------------
+    function Cloud(_base) {
+
+        var cloud = {};
+
+        var w = parseInt(Math.min((_base.offsetWidth / 5), 100) * (1 + Math.random() * 0.5));
+        var h = parseInt(w * 0.33);
+        var cx = parseInt(w / 2);
+        var cy = parseInt(_base.offsetHeight * Math.random());
+        var d = getCloudPath(cx, cy, w, h);
+
+        var x = -1.5 * w;
+        var y = 0;
+
+        var e = createSVGPathElement({
+            "d": d,
+            "fill": "#ffffff",
+            "filter": "url(#_touchproof-shadow)",
+            "transform": "translate(" + [x, y].join(" ") + ")"
+        });
+
+        document.getElementById("_touchproof-sky").appendChild(e);
+        e.style.opacity = "0.92";
+
+        cloud.flow = function() {
+            x = x + 2;
+            if(x > _base.offsetWidth + 50) {
+                cloud.remove();
+            } else {
+                e.setAttributeNS(null, "transform", "translate(" + [x, y].join(" ") + ")");
+                setTimeout(function() {
+                    cloud.flow();
+                 }, 50)
+             }
+        };
+
+        cloud.remove = function() {
+            if(e && e.parentNode) {
+                e.parentNode.removeChild(e);
+            }
+        };
+  
+        return cloud;
+
+
+        //----------------------------------------------------------------------------------------------------
         function getCloudPath(cx, cy, w, h) {
+
             var m = [6,7];
             var n = m[parseInt(m.length * Math.random())];
             var a = w / 2;
@@ -304,13 +311,17 @@
             var c = (2 * Math.PI) / n;
             var s = [];
             var g = sign(1);
+
             for(var i = 0; i < n; i++) {
                 s.push((c * i) + g* (0.5 * Math.random() * c));
             }
+
             s.sort(function(s1, s2) {
                 return parseFloat(s1) - parseFloat(s2);
             });
+
             var p = [];
+
             for(var i = 0; i < s.length; i++) {
                 var r = s[i];
                 var x = a * Math.cos(r);
@@ -323,32 +334,44 @@
                 var dt = 30 * Math.PI / 180
                 var dx = depth * Math.cos(dt);
                 var dy = depth * Math.sin(dt);
+
                 p.push([
                     parseInt(dx*cos + dy*sin + x + cx),
                     parseInt(dx*sin - dy*cos + y + cy)
                 ].join(","));
+
                 p.push([
                     parseInt(x + cx),
                     parseInt(y + cy)
                 ].join(","));
+
                 p.push([
                     parseInt(dx*cos - dy*sin + x + cx),
                     parseInt(dx*sin + dy*cos + y + cy)
                 ].join(","));
             }
+
             p.push(p.shift());
             p.push(p[0]);
             p[1] = "C" + p[1];
 
             return "M " + p.join(" ") + " Z";
+
         }
 
-
-        function sign(v) {
-            return parseInt(Math.random() * 10) % 2 == 0 ? v : -1 * v;
-        }
 
     }
+    //----------------------------------------------------------------------------------------------------
+    function sign(v) {
+
+        return parseInt(Math.random() * 10) % 2 == 0 ? v : -1 * v;
+
+    }
+    //----------------------------------------------------------------------------------------------------
+
+
+
+
 
 
 
