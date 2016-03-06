@@ -93,9 +93,15 @@ h5:after {
 
 
 table {
-    margin: 10px;
+    display: block;
+    width: 95%;
+    margin: 10px auto;
     border-collapse: collapse;
     font-size: 10pt;
+    overflow-x: auto;
+}
+tbody {
+    overflow-x: auto;
 }
 th {
     padding: 5px 10px;
@@ -109,8 +115,10 @@ td {
     padding: 5px 10px;
     background-color: #f3f3f0;
     border-bottom: 3px solid #d3cdc6;
-     border-right: 2px solid #d3cdc6;
+    border-right: 2px solid #d3cdc6;
 }
+
+
 table.path th {
     text-align: right;
     white-space: nowrap;
@@ -182,7 +190,7 @@ section {
 }
 section p {
     margin: 0;
-    padding: 10px 10px;
+    padding: 5px;
 }
 b {
     padding: 1px 5px;
@@ -195,17 +203,49 @@ b {
 ul {
     margin: 0px 10px 20px 10px;
     padding: 5px 10px;
-    list-style-position: outside;
+    list-style-position: inside;
     font-size: 10.5pt;
 }
+li {
+    line-height: 140%;
+}
 .method, .tip {
-    margin: 20px 30px 20px 30px;
+    width: 95%;
+    margin: 10px auto;
     padding: 0 0 10px 0;
     border-bottom: 2px groove #ffffff;
 }
 .method:last-child, .tip:last-child {
     border-bottom: none;
 }
+@media only screen and (min-width: 768px) {
+    .method, .tip {
+        margin: 20px 30px 20px 30px;
+    }
+}
+
+
+
+
+.tip table, .tip ul {
+    font-size: 10pt;
+    width: 95%;
+    margin: 10px auto;
+    border-collapse: collapse;
+    font-size: 10pt;
+    overflow-x: auto;
+
+}
+.tip table th {
+    font-weight: bold;
+}
+.tip h4 {
+    margin: 10px 0 0 0;
+    font-size: 13pt;
+    font-weight: normal;
+}
+
+
 section h3 {
     margin: 0 0 10px 0;
 }
@@ -224,19 +264,6 @@ dl.parameters dt {
 }
 
 
-
-.tip table, .tip ul {
-    margin: 0 10px 20px 10px;
-    font-size: 10pt;
-}
-.tip table th {
-    font-weight: bold;
-}
-.tip h4 {
-    margin: 10px 0 0 0;
-    font-size: 13pt;
-    font-weight: normal;
-}
 
 #this_props th {
     text-align: right;
