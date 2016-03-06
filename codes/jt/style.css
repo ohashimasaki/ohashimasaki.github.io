@@ -1,15 +1,23 @@
 ﻿* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: Lucida Sans Unicode, Lucida Grande, Meiryo, "メイリオ", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", Arial, sans-serif;
 }
 body {
-    padding: 30px 50px 300px 50px;
-    font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;
+    padding: 0px 20px 200px 20px;
     font-size: 12pt;
     background-color: #d3cdc6;
     color: #3c2629;
     color: #100000;
 }
+@media only screen and (min-width: 768px) {
+    body {
+        padding: 20px 50px 300px 50px;
+    }
+}
+
+
 div {
     box-sizing: border-box;
     *zoom: 1;
@@ -28,23 +36,37 @@ p {
 h1 {
     margin: 0 0 20px 0;
     font-family: Calibri, Lucida Sans Unicode, sans-serif;
-    font-size: 90pt;
     font-weight: normal;
     color: #fffcfc;
+    font-size: 75pt;
 }
 h2 {
     margin: 0 0 10px 0;
-    font-size: 24pt;
     font-weight: normal;
+    font-size: 19pt;
 }
 h3 {
-    font-size: 22pt;
     color: #00acc6;
     font-weight: bold;
+    font-size: 16pt;
 }
+
+@media only screen and (min-width: 768px) {
+    h1 {
+        font-size: 90pt;
+    }
+    h2 {
+        font-size: 24pt;
+    }
+    h3 {
+        font-size: 22pt;
+    }
+}
+
+
 h4 {
-    font-size: 14pt;
     font-weight: normal;
+    font-size: 14pt;
 }
 h5 {
     font-size: 13pt;
@@ -56,10 +78,19 @@ h4:after {
 h5:after {
     content: ":";
 }
+
+
 #head-note {
     color: #ff0000;
-    font-size: 16pt;
+    font-size: 13pt;
 }
+
+@media only screen and (min-width: 768px) {
+    #head-note {
+        font-size: 16pt;
+    }
+}
+
 
 table {
     margin: 10px;
@@ -92,11 +123,12 @@ code, pre {
     padding: 10px 15px 15px 15px;
     background-color: #f3f3f0;
     color: #000000;
-    font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 10.5pt;
     line-height: 140%;
     letter-spacing: 1px;
+    overflow-x: auto;
+    white-space: pre;
 }
 
 dl {
@@ -106,8 +138,15 @@ dt {
     padding: 1px 0;
 }
 dd {
-    padding: 1px 0 4px 40px;
+    padding: 1px 0 4px 10px;
 }
+@media only screen and (min-width: 768px) {
+    dd {
+        padding: 1px 0 4px 40px;
+    }
+}
+
+
 dd p {
     margin: 4px 0;
     font-size: 10.5pt;
