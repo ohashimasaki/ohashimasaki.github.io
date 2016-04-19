@@ -34,6 +34,11 @@ h2 {
     font-size: 18pt;
     font-weight: normal;
 }
+h3 {
+    margin: 20px 25px;
+    font-size: 15pt;
+    font-weight: normal;
+}
 
 ul {
     margin: 10px;
