@@ -1,0 +1,77 @@
+﻿<html>
+<head>
+<meta charset=UTF-8" />
+<title>漢数字</title>
+</head>
+<body>
+<pre id="pre"></pre>
+</body>
+<script src="ParseChineseNumerals.js"></script>
+<script>
+
+var t = "千二百三十四穣五千〇六秭七百八十垓〇京廿弐兆９千八百〇７億六百〇伍萬四千参百弐拾壱・一二三";
+//var t = "一兆一億一百萬一千一百拾一";
+//var t = "〇・９八〇７六〇伍四参弐壱一二三";
+
+
+for(var i = t.length; i > 0; i--) {
+    t = t.substr(1);
+    var n = ParseChineseNumerals(t);
+    //n = Number(n).toLocaleString(); 
+    document.getElementById("pre").innerText += t + " == " + n + "\r\n";
+}
+
+//var t = "兆億百萬千百拾";
+//var t = "一兆一億一百萬一千一百拾一";
+var t = "千二百三十四穣五千〇六秭七百八十垓廿弐兆９千八百〇７億六百〇伍萬四千参百弐拾壱・一二三";
+
+for(var i = t.length; i > 0; i--) {
+    t = t.substr(0, i);
+    var n = ParseChineseNumerals(t);
+    //n = Number(n).toLocaleString(); 
+    document.getElementById("pre").innerText += t + " == " + n + "\r\n";
+}
+
+
+</script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
