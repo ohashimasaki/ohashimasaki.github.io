@@ -1,4 +1,4 @@
-﻿function ParseChineseNumerals(t) {
+﻿function parseChineseNumerals(t) {
 
     var digits = "(?:" + [
         "\\d?[千阡仟](?:\\d?[百陌佰]|\\d)?(?:\\d?[十拾]|\\d)?\\d?",
@@ -31,24 +31,17 @@
 
     s = s.replace(/[廿卄]/g, "二十").replace(/[卅丗]/g, "三十").replace(/[卌]/g, "四十");
     s = s.replace(/[・点點]/g, ".");
-    s = ReplaceNumerals(s);
+    s = replaceNumerals(s);
 
-    s = s.split(".");
-
-    if(s.length > 2) {
+    if( ! isNumber(s)) {
         return t;
     }
 
-    var f = s[1] || "";
-    s = s[0] || "0";
+    s = s.split(".");
 
-    if(f) {
-        if(/^\d+$/.test(f)) {
-            f = "." + f;
-        } else {
-            return t;
-        }
-    } 
+    var f = s[1] ? "." + s[1] : "";
+
+    s = s[0] || "0";
 
     if(/^\d+$/.test(s)) {
         return s.replace(/^0+([1-9])/g, "$1") + f;
@@ -68,7 +61,7 @@
         } else if(d && d.length >= 2) {
             s = s.substr(0, s.length - d[0].length);
             var v = d[1] ? d[1] : (ranks[i] ? "0001" : "0000");
-            var e = ReplaceDigits(v);
+            var e = replaceDigits(v);
             n.push(e);
         } else {
             n.push("0000");
@@ -78,16 +71,61 @@
         }
     }
 
-
     return n.reverse().join("").replace(/^0+([1-9])/g, "$1") + f;
 
 
-
-
     //----------------------------------------------------------------------------------------------------
-    function ReplaceDigits(t) {
+    function isNumber(t) {
+
+        if((new RegExp("^" + digits + "(?:\.\d+)?$")).test(t)) {
+            return true;
+        }
+
+        if((new RegExp("^(?:(?:" + digits + ")?[垓京兆億万萬])+(?:\.\d+)?$")).test(t)) {
+            return false;
+        }
+
+        if(/垓/.test(t) && ! /^[^垓京兆億万萬]*垓[^垓]*$/.test(t)) {
+            return false;
+        }
+        if(/京/.test(t) && ! /^[^京兆億万萬]*京[^京]*$/.test(t)) {
+            return false;
+        }
+        if(/兆/.test(t) && ! /^[^兆億万萬]*兆[^兆]*$/.test(t)) {
+            return false;
+        }
+        if(/億/.test(t) && ! /^[^億万萬]*億[^億]*$/.test(t)) {
+            return false;
+        }
+        if(/[万萬]/.test(t) && ! /^[^万萬]*[万萬][^万萬]*$/) {
+            return false;
+        }
+
+        if(/[十拾]\d*[百陌佰千阡仟]/.test(t)) {
+            return false;
+        }
+        if(/[百陌佰]\d*[千阡仟]/.test(t)) {
+            return false;
+        }
+
+        if(/\./.test(t) && t.split(".").length > 2) {
+            return false;
+        }
+
+        if(/\./.test(t) && ! /\.\d*$/.test(t)) {
+            return false;
+        }
+
+        //Presumed Innocent
+
+        return true;
+
+    }
+    //----------------------------------------------------------------------------------------------------
+    function replaceDigits(t) {
 
         var n = 0;
+
         t = t.replace(/(\d+|^)[千阡仟]/, function(m, s) {
             n += isNaN(parseInt(s)) ? 1000 : parseInt(s) * 1000; 
         });
@@ -100,13 +138,12 @@
         t = t.replace(/(\d+)$/, function(m, s) {
             n += isNaN(parseInt(s)) ? 0 : parseInt(s) ; 
         });
-        n = ("0000" + n).slice(-4);
 
-        return n;
+        return ("0000" + n).slice(-4);
 
     }
     //----------------------------------------------------------------------------------------------------
-    function ReplaceNumerals(t) {
+    function replaceNumerals(t) {
 
         var numerals = {
             "0": /[０〇零洞]/g,
