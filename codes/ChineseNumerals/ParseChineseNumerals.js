@@ -77,11 +77,11 @@
     //----------------------------------------------------------------------------------------------------
     function isNumber(t) {
 
-        if((new RegExp("^" + digits + "(?:\.\d+)?$")).test(t)) {
+        if((new RegExp("^" + digits + "(?:\\.\\d+)?$")).test(t)) {
             return true;
         }
 
-        if((new RegExp("^(?:(?:" + digits + ")?[垓京兆億万萬])+(?:\.\d+)?$")).test(t)) {
+        if(/[垓京兆億万萬]/.test(t) && ! (new RegExp("^(?:(?:" + digits + ")?[垓京兆億万萬])+(?:" + digits + ")?(?:\\.\\d+)?$")).test(t)) {
             return false;
         }
 
