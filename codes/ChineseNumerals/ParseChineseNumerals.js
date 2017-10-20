@@ -16,11 +16,7 @@
         "垓",
         "[秭𥝱]",
         "穣",
-        "溝",
-        "澗",
-        "正",
-        "載",
-        "極"
+        "溝"
     ];
 
     var s = t.replace(/\s/g, "");
@@ -31,17 +27,21 @@
 
     s = s.replace(/[廿卄]/g, "二十").replace(/[卅丗]/g, "三十").replace(/[卌]/g, "四十");
     s = s.replace(/[・点點]/g, ".");
-    s = replaceNumerals(s);
+
+    s = replaceDigits(s);
 
     if( ! isNumber(s)) {
         return t;
     }
 
-    s = s.split(".");
+    
+    var f = "";
 
-    var f = s[1] ? "." + s[1] : "";
+    if(/\./.test(s)) {
+        f = "." + (s.split(".")[1] || "0");
+        s = s.split(".")[0] || "0";
+    }
 
-    s = s[0] || "0";
 
     if(/^\d+$/.test(s)) {
         return s.replace(/^0+([1-9])/g, "$1") + f;
@@ -61,7 +61,7 @@
         } else if(d && d.length >= 2) {
             s = s.substr(0, s.length - d[0].length);
             var v = d[1] ? d[1] : (ranks[i] ? "0001" : "0000");
-            var e = replaceDigits(v);
+            var e = replaceMyriads(v);
             n.push(e);
         } else {
             n.push("0000");
@@ -81,10 +81,19 @@
             return true;
         }
 
-        if(/[垓京兆億万萬]/.test(t) && ! (new RegExp("^(?:(?:" + digits + ")?[垓京兆億万萬])+(?:" + digits + ")?(?:\\.\\d+)?$")).test(t)) {
+        if(/[[溝穣秭𥝱垓京兆億万萬]/.test(t) && ! (new RegExp("^(?:" + digits + "?[溝穣秭𥝱垓京兆億万萬])+" + digits + "?(?:\\.(?:\\d+)?)?$")).test(t)) {
             return false;
         }
 
+        if(/溝/.test(t) && ! /^[^溝穣秭𥝱垓京兆億万萬]*溝[^溝]*$/.test(t)) {
+            return false;
+        }
+        if(/穣/.test(t) && ! /^[^穣秭𥝱垓京兆億万萬]*穣[^穣]*$/.test(t)) {
+            return false;
+        }
+        if(/[秭𥝱]/.test(t) && ! /^[^秭𥝱垓京兆億万萬]*[秭𥝱][^秭𥝱]*$/.test(t)) {
+            return false;
+        }
         if(/垓/.test(t) && ! /^[^垓京兆億万萬]*垓[^垓]*$/.test(t)) {
             return false;
         }
@@ -122,7 +131,7 @@
 
     }
     //----------------------------------------------------------------------------------------------------
-    function replaceDigits(t) {
+    function replaceMyriads(t) {
 
         var n = 0;
 
@@ -143,7 +152,7 @@
 
     }
     //----------------------------------------------------------------------------------------------------
-    function replaceNumerals(t) {
+    function replaceDigits(t) {
 
         var numerals = {
             "0": /[０〇零洞]/g,
