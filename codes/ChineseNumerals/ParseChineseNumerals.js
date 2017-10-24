@@ -51,35 +51,52 @@
     var n = [];
 
     for(var i = 0; i < ranks.length; i++) {
-        var pattern = "(" + digits + ")?" + ranks[i] + "$";
-        var regex = new RegExp(pattern);
-        var d = s.match(regex);
 
-        if(d && d[1] == "0" && ranks[i]) {
-            s = s.substr(0, s.length - d[0].length);
-            n.push("0000");
-        } else if(d && d.length >= 2) {
-            s = s.substr(0, s.length - d[0].length);
-            var v = d[1] ? d[1] : (ranks[i] ? "0001" : "0000");
-            var e = replaceMyriads(v);
+        var r = ranks[i];
+        var m = s.match(new RegExp("(" + digits + ")?" + ranks[i] + "$"));
+
+        if(m && m[1]) {
+            s = s.substr(0, s.length - m[0].length);
+            var e = replaceMyriads(m[1]);
             n.push(e);
+
+        } else if(m && ! m[1]) {
+            if(i == 0) {
+                n.push("0000");
+            } else {
+                s = s.substr(0, s.length - m[0].length);
+                n.push("0001");
+            }
+
         } else {
             n.push("0000");
         }
+
         if(s.length == 0) {
             break;
         }
     }
 
+
     return n.reverse().join("").replace(/^0+([1-9])/g, "$1") + f;
+
 
 
     //----------------------------------------------------------------------------------------------------
     function isNumber(t) {
 
-        if((new RegExp("^" + digits + "(?:\\.\\d+)?$")).test(t)) {
+        if((new RegExp("^" + digits + "?(?:\\.\\d+)?$")).test(t)) {
             return true;
         }
+
+        if(/\./.test(t) && t.split(".").length > 2) {
+            return false;
+        }
+
+        if(/\./.test(t) && ! /\.\d*$/.test(t)) {
+            return false;
+        }
+
 
         if(/[[溝穣秭𥝱垓京兆億万萬]/.test(t) && ! (new RegExp("^(?:" + digits + "?[溝穣秭𥝱垓京兆億万萬])+" + digits + "?(?:\\.(?:\\d+)?)?$")).test(t)) {
             return false;
@@ -114,14 +131,6 @@
             return false;
         }
         if(/[百陌佰]\d*[千阡仟]/.test(t)) {
-            return false;
-        }
-
-        if(/\./.test(t) && t.split(".").length > 2) {
-            return false;
-        }
-
-        if(/\./.test(t) && ! /\.\d*$/.test(t)) {
             return false;
         }
 
