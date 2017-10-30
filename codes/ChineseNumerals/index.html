@@ -12,35 +12,27 @@
 
 
 var t = "伍十歩百歩万田発酵萬田久子万億田万太郎平成二十六年十月十三日１５時２６分０８秒～大正元年十一月十日正午　五十嵐十三さん";
-
-var regex = /[0-9０-９〇零洞一壱壹弌幺二弐貳貮贰两兩両三参參弎叁叄四肆䦉刀五伍六陆陸七柒漆拐八捌九玖勾廿卄卅丗卌十拾百陌佰千阡仟万萬億兆京垓]+/g;
-
-document.getElementById("pre").innerText += t + "\r\n" + t.replace(regex, function(m, s) {
-return parseChineseNumerals(m);
-});
-
-document.getElementById("pre").innerText += "\r\n\r\n";
+document.getElementById("pre").innerText += t + "\r\n→" + parseChineseNumerals(t) + "\r\n\r\n";
 
 
-var t = "千二百三十四穣五千〇六秭七百八十垓〇京廿弐兆９千八百〇７億六百〇伍萬四千参百弐拾壱・一二三";
 
+var t = "平成三十年の国家予算は、千二百三十四穣五千〇六秭七百八十垓〇京廿弐兆９千八百〇７億六百〇伍萬四千参百弐拾壱・一二三円です。";
+document.getElementById("pre").innerText += t + " == " + parseChineseNumerals(t) + "\r\n";
 for(var i = t.length; i > 0; i--) {
     t = t.substr(1);
-    var n = parseChineseNumerals(t);
-    //n = Number(n).toLocaleString(); 
-    document.getElementById("pre").innerText += t + " == " + n + "\r\n";
+    document.getElementById("pre").innerText += t + " == " + parseChineseNumerals(t) + "\r\n";
 }
 
 document.getElementById("pre").innerText += "\r\n\r\n";
 
-var t = "千二百三十四穣五千〇六秭七百八十垓〇京廿弐兆９千八百〇７億六百〇伍萬四千参百弐拾壱・一二三";
-
+var t = "平成三十年の国家予算は、千二百三十四穣五千〇六秭七百八十垓〇京廿弐兆９千八百〇７億六百〇伍萬四千参百弐拾壱・一二三円です。";
+document.getElementById("pre").innerText += t + " == " + parseChineseNumerals(t) + "\r\n";
 for(var i = t.length; i > 0; i--) {
     t = t.substr(0, i);
-    var n = parseChineseNumerals(t);
-    //n = Number(n).toLocaleString(); 
-    document.getElementById("pre").innerText += t + " == " + n + "\r\n";
+    document.getElementById("pre").innerText += t + " == " + parseChineseNumerals(t) + "\r\n";
 }
+
+
 
 
 </script>
