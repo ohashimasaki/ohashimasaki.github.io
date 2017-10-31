@@ -61,18 +61,14 @@
     }
 
     var p = [];
+
     for(var n in numerals) {
         p.push(numerals[n]);
     }
 
-    var regex = new RegExp("[" + p.join("") + "]+", "g");
-
-    t = t.replace(regex, function(m) {
+    return t.replace(new RegExp("[" + p.join("") + "]+", "g"), function(m) {
         return replaceChineseNumerals(m);
     });
-
-    return t;
-
 
 
 
@@ -125,6 +121,7 @@
             }
         }
 
+
         return n.reverse().join("").replace(/^0+([1-9])/g, "$1") + f;
 
 
@@ -137,9 +134,7 @@
             t = t.replace(regex, n);
         }
 
-        t = t.replace(/両([十百千万億])/g, "2$1");
-
-        return t;
+        return t.replace(/両([十百千万億])/g, "2$1");
 
     }
     //----------------------------------------------------------------------------------------------------
