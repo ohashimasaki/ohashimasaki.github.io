@@ -109,7 +109,7 @@
             } else if(d && d.length >= 2) {
                 s = s.substr(0, s.length - d[0].length);
                 var v = d[1] ? d[1] : (ranks[i] ? "0001" : "0000");
-                var e = replaceMyriads(v);
+                var e = replaceMyriad(v);
                 n.push(e);
 
             } else {
@@ -138,7 +138,7 @@
 
     }
     //----------------------------------------------------------------------------------------------------
-    function replaceMyriads(t) {
+    function replaceMyriad(t) {
 
         var n = 0;
 
