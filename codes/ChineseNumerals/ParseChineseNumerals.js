@@ -38,6 +38,22 @@
 
     var ranks = ["","万","億","兆","京","垓","秭","穣","溝"];
 
+    var is_number = new RegExp([
+        "^",
+        "(?:" + digits + "?溝)?",
+        "(?:" + digits + "?穣)?",
+        "(?:" + digits + "?秭)?",
+        "(?:" + digits + "?垓)?",
+        "(?:" + digits + "?京)?",
+        "(?:" + digits + "?兆)?",
+        "(?:" + digits + "?億)?",
+        "(?:" + digits + "?万)?",
+        digits + "?",
+        "(?:\\.(?:\\d+)?)?",
+        "$"
+    ].join(""));
+
+
     var s = t.replace(/\s/g, "");
 
     if( ! s) {
@@ -65,7 +81,7 @@
 
         var s = normalize(t);
 
-        if( ! isNumber(s)) {
+        if( ! s || ! is_number.test(s)) {
             return t;
         }
 
@@ -124,62 +140,6 @@
         t = t.replace(/両([十百千万億])/g, "2$1");
 
         return t;
-
-    }
-    //----------------------------------------------------------------------------------------------------
-    function isNumber(t) {
-
-        if((new RegExp("^" + digits + "(?:\\.\\d+)?$")).test(t)) {
-            return true;
-        }
-
-        if(/[溝穣秭垓京兆億万]/.test(t) && ! (new RegExp("^(?:" + digits + "?[溝穣秭垓京兆億万])+" + digits + "?(?:\\.(?:\\d+)?)?$")).test(t)) {
-            return false;
-        }
-
-        if(/溝/.test(t) && ! /^[^溝穣秭垓京兆億万]*溝[^溝]*$/.test(t)) {
-            return false;
-        }
-        if(/穣/.test(t) && ! /^[^穣秭垓京兆億万]*穣[^穣]*$/.test(t)) {
-            return false;
-        }
-        if(/秭/.test(t) && ! /^[^秭垓京兆億万]*秭[^秭]*$/.test(t)) {
-            return false;
-        }
-        if(/垓/.test(t) && ! /^[^垓京兆億万]*垓[^垓]*$/.test(t)) {
-            return false;
-        }
-        if(/京/.test(t) && ! /^[^京兆億万]*京[^京]*$/.test(t)) {
-            return false;
-        }
-        if(/兆/.test(t) && ! /^[^兆億万]*兆[^兆]*$/.test(t)) {
-            return false;
-        }
-        if(/億/.test(t) && ! /^[^億万]*億[^億]*$/.test(t)) {
-            return false;
-        }
-        if(/万/.test(t) && ! /^[^万]*万[^万]*$/) {
-            return false;
-        }
-
-        if(/十\d*[百千]/.test(t)) {
-            return false;
-        }
-        if(/百\d*千/.test(t)) {
-            return false;
-        }
-
-        if(/\./.test(t) && t.split(".").length > 2) {
-            return false;
-        }
-
-        if(/\./.test(t) && ! /\.\d*$/.test(t)) {
-            return false;
-        }
-
-        //Presumed Innocent
-
-        return true;
 
     }
     //----------------------------------------------------------------------------------------------------
