@@ -11,6 +11,16 @@
 
 
 
+
+    function N(t) {
+        document.getElementById("pre").innerText += "\r\n" + t + "\r\n";
+        for(var i = t.length; i > 0; i--) {
+            t = t.substr(1);
+            document.getElementById("pre").innerText += "\r\n" + i + " " + t + " => " + parseNumerals(t) + "\r\n";
+        }
+    } 
+
+
 var t = "伍十歩百歩万田発酵萬田久子万億田万太郎平成二十六年十月十三日１５時２６分０８秒～大正元年十一月十日正午　五十嵐十三さん";
 document.getElementById("pre").innerText += t + "\r\n→" + parseChineseNumerals(t) + "\r\n\r\n";
 

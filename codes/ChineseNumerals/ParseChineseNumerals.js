@@ -66,10 +66,11 @@
         p.push(numerals[n]);
     }
 
-    return t.replace(new RegExp("[" + p.join("") + "]+", "g"), function(m) {
+    t = t.replace(new RegExp("[" + p.join("") + "]+", "g"), function(m) {
         return replaceChineseNumerals(m);
     });
 
+    return t;
 
 
    //----------------------------------------------------------------------------------------------------
@@ -122,7 +123,9 @@
         }
 
 
-        return n.reverse().join("").replace(/^0+([1-9])/g, "$1") + f;
+        n = n.reverse().join("").replace(/^0+([1-9])/g, "$1") + f;
+
+        return n;
 
 
     }
@@ -134,7 +137,9 @@
             t = t.replace(regex, n);
         }
 
-        return t.replace(/両([十百千万億])/g, "2$1");
+        t = t.replace(/両([十百千万億])/g, "2$1");
+
+        return t;
 
     }
     //----------------------------------------------------------------------------------------------------
@@ -158,7 +163,9 @@
             n += isNaN(parseInt(s)) ? 0 : parseInt(s) ; 
         });
 
-        return ("0000" + n).slice(-4);
+        n = ("0000" + n).slice(-4);
+
+        return n;
 
     }
     //----------------------------------------------------------------------------------------------------
