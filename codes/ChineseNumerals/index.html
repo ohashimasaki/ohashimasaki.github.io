@@ -16,30 +16,76 @@
         document.getElementById("pre").innerText += "\r\n" + t + "\r\n";
         for(var i = t.length; i > 0; i--) {
             t = t.substr(1);
-            document.getElementById("pre").innerText += "\r\n" + i + " " + t + " => " + parseNumerals(t) + "\r\n";
+            document.getElementById("pre").innerText += "\r\n" + i + " " + t + " = " + parseNumerals(t) + "\r\n";
         }
     } 
 
 
+var q = [
+"万零",
+"一万零",
+"一万零一百",
+"一万零一",
+"一万零一百",
+"下午两点",
+"下午两点二十二",
+"下午两点二十二分",
+"二零零八",
+"二",
+"十二",
+"二十",
+"八十二",
+"二百",
+"两百二",
+"两千",
+"两千五",
+"两千万",
+"两千四百万",
+"两亿",
+"两亿九千万",
+"两个人(二人）",
+"两本书(2冊の本)",
+"两倍(二倍)",
+"第二（第二）",
+"零点二(0.2)",
+"二分之一(2分の1)",
+"一千零一十",
+"万亿",
+"零点五六",
+"十一点八九",
+"二点二二  2.22",
+"二〇一二年二月二十二号",
+"三分之一  3分の1",
+"三又三分之二",
+"百分之八点八",
+"點"
+];
+
+document.getElementById("pre").innerText += "\r\n";
+for(var i = 0; i < q.length; i++) {
+    document.getElementById("pre").innerText += q[i] + " = " + parseChineseNumerals(q[i]) + "\r\n";
+}
+
+
 var t = "伍十歩百歩万田発酵萬田久子万億田万太郎平成二十六年十月十三日１５時２６分０８秒～大正元年十一月十日正午　五十嵐十三さん";
-document.getElementById("pre").innerText += t + "\r\n→" + parseChineseNumerals(t) + "\r\n\r\n";
+document.getElementById("pre").innerText += t + "\r\n = " + parseChineseNumerals(t) + "\r\n\r\n";
 
 
 
 var t = "平成三十年の国家予算は、千二百三十四穣五千〇六秭七百八十垓〇京廿弐兆９千八百〇７億六百〇伍萬四千参百弐拾壱・一二三円です。";
-document.getElementById("pre").innerText += t + " == " + parseChineseNumerals(t) + "\r\n";
+document.getElementById("pre").innerText += t + " = " + parseChineseNumerals(t) + "\r\n";
 for(var i = t.length; i > 0; i--) {
     t = t.substr(1);
-    document.getElementById("pre").innerText += t + " == " + parseChineseNumerals(t) + "\r\n";
+    document.getElementById("pre").innerText += t + " = " + parseChineseNumerals(t) + "\r\n";
 }
 
 document.getElementById("pre").innerText += "\r\n\r\n";
 
 var t = "平成三十年の国家予算は、千二百三十四穣五千〇六秭七百八十垓〇京廿弐兆９千八百〇７億六百〇伍萬四千参百弐拾壱・一二三円です。";
-document.getElementById("pre").innerText += t + " == " + parseChineseNumerals(t) + "\r\n";
+document.getElementById("pre").innerText += t + " = " + parseChineseNumerals(t) + "\r\n";
 for(var i = t.length; i > 0; i--) {
     t = t.substr(0, i);
-    document.getElementById("pre").innerText += t + " == " + parseChineseNumerals(t) + "\r\n";
+    document.getElementById("pre").innerText += t + " = " + parseChineseNumerals(t) + "\r\n";
 }
 
 
