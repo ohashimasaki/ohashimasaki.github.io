@@ -1,179 +1,100 @@
 ﻿function parseChineseNumerals(t) {
 
-    var numerals = {
-        "両": "両\u4E24\u5169", // 两兩
-        "十": "十\u4EC0\u62FE\uF973\uF9FD\u3038", // 什拾拾什〸
-        "百": "百\u4F70\u964C",  // 佰陌
-        "千": "千\u4EDF\u9621",  // 仟阡
-        "万": "万萬",
-        "億": "億\u4EBF", // 亿
-        "兆": "兆",
-        "京": "京",
-        "垓": "垓",
-        "秭": "秭\u{25771}",  // 秭𥝱
-        "穣": "穣",
-        "溝": "溝",
-        "0": "０〇\u96F6\uF9B2",  // 零零 
-        "1": "１一\u58F1\u58F9\u5F0C\u3021", // 壱壹弌〡
-        "2": "２二\u3483\u5F0D\u5F10\u8CAE\u8CB3\u8D30\u{22390}\u3022",  // 㒃弍弐貮貳贰𢎐〢
-        "3": "３三\u4EE8\u53C2\u53C3\u53C4\u5F0E\uF96B\u3023",  // 仨参參叄弎叁參〣
-        "4": "４四\u4E96\u8086\u4989\u3024",  // 亖肆䦉〤
-        "5": "５五\u4F0D\u3025",  // 伍〥
-        "6": "６六\u9646\u9678\uF9D3\u3026",  // 陆陸陸〦
-        "7": "７七\u3B4D\u67D2\u6F06\u3027", // 㭍柒漆〧
-        "8": "８八\u634C\u3028",  // 捌〨
-        "9": "９九\u7396\u3029",  // 玖〩
-        "2十": "\u5344\u5EFF\u3039", // 〹卄廿
-        "3十": "\u5345\u4E17\u303A", // 〺卅丗
-        "4十": "\u534C\u{2098C}\u{2099C}", // 卌𠦌𠦜
-        ".": "\u30FB点\u9EDE" // ・点點
-    };
-
-    var digits = "(?:" + [
-        "\\d?千(?:\\d?百|\\d)?(?:\\d?十|\\d)?\\d?",
-        "\\d?百(?:\\d?十|\\d)?\\d?",
-        "\\d?十\\d?",
-        "\\d{1,4}"
-    ].join("|") + ")";
-
-    var ranks = ["","万","億","兆","京","垓","秭","穣","溝"];
-
-    var is_number = new RegExp([
-        "^",
-        "(?:" + digits + "?溝)?",
-        "(?:" + digits + "?穣)?",
-        "(?:" + digits + "?秭)?",
-        "(?:" + digits + "?垓)?",
-        "(?:" + digits + "?京)?",
-        "(?:" + digits + "?兆)?",
-        "(?:" + digits + "?億)?",
-        "(?:" + digits + "?万)?",
-        digits + "?",
-        "(?:\\.(?:\\d+)?)?",
-        "$"
-    ].join(""));
-
-
-    var s = t.replace(/\s/g, "");
-
-    if( ! s) {
+    if( ! t) {
         return t;
     }
 
-    var p = [];
+    var ranks = [
+        "十\u4EC0\u62FE\uF973\uF9FD\u3038", // 什拾拾什〸
+        "百\u4F70\u964C",  // 佰陌
+        "千\u4EDF\u9621",  // 仟阡
+        "万萬",
+        "億\u4EBF", // 亿
+        "兆",
+        "京",
+        "垓",
+        "秭\u{25771}",  // 秭𥝱
+        "穣",
+        "溝"
+    ];
 
-    for(var n in numerals) {
-        p.push(numerals[n]);
+    var numbers = [
+        "0０〇\u96F6\uF9B2",  // 零零 
+        "1１一\u58F1\u58F9\u5F0C\u3021", // 壱壹弌〡
+        "2２二\u3483\u5F0D\u5F10\u8CAE\u8CB3\u8D30\u{22390}\u3022",  // 㒃弍弐貮貳贰𢎐〢
+        "3３三\u4EE8\u53C2\u53C3\u53C4\u5F0E\uF96B\u3023",  // 仨参參叄弎叁參〣
+        "4４四\u4E96\u8086\u4989\u3024",  // 亖肆䦉〤
+        "5５五\u4F0D\u3025",  // 伍〥
+        "6６六\u9646\u9678\uF9D3\u3026",  // 陆陸陸〦
+        "7７七\u3B4D\u67D2\u6F06\u3027", // 㭍柒漆〧
+        "8８八\u634C\u3028",  // 捌〨
+        "9９九\u7396\u3029"  // 玖〩
+    ];
+
+    var tens = [
+        "\u5344\u5EFF\u3039", // 〹卄廿
+        "\u5345\u4E17\u303A", // 〺卅丗
+        "\u534C\u{2098C}\u{2099C}" // 卌𠦌𠦜
+    ];
+
+    var liang = [
+        "両\u4E24\u5169"
+    ];
+    var point = [
+        ".\u30FB点\u9EDE"
+    ];
+
+    var s = t;
+    s = normalize(s, tens);
+    s = normalize(s, numbers);
+    s = normalize(s, ranks);
+    s = normalize(s, liang);
+    s = normalize(s, point);
+
+    s = s.replace(/\u5344/g, "2十");  // 卄
+    s = s.replace(/\u5345/g, "3十");  // 卅
+    s = s.replace(/\u534C/g, "4十");  // 卌
+    s = s.replace(/万亿/g, "兆");
+    s = s.replace(/万万/g, "億");
+    s = s.replace(new RegExp("両([" + ranks.slice(1).join("") + "])", "g"), "2$1");
+    s = s.replace(/両(?!$)/g, "2");
+
+
+    for(var i = 0; i < ranks.length; i++) {
+        var rank = ranks[i].substr(0, 1);
+        var n = (i <= 3) ? (i + 1) : ((i - 2) * 4);
+        s = s.replace(new RegExp("(.|^)" + rank + "(\\d{1," + n + "}|(?:\\D|$))", "g"), function(m, s1, s2) {
+            return (/^\d$/.test(s1) ? s1 : "1") + getInteriorZeroes(s2, n) + s2;
+        });
     }
 
-    t = t.replace(new RegExp("[" + p.join("") + "]+", "g"), function(m) {
-        return replaceChineseNumerals(m);
-    });
+    return s;
 
-    return t;
+    function getInteriorZeroes(s, n) {
+        var d = s.match(/^\d*/);
+        var c = d ? d[0].length : n;
+        var z = "";
+        for(var i = 0; i < (n - c); i++) {
+            z = z + "0";
+        };
+        return z;
+    }
 
-
-   //----------------------------------------------------------------------------------------------------
-   function replaceChineseNumerals(t) {
-
-        var s = normalize(t);
-
-        if( ! s || ! is_number.test(s) || s == ".") {
-            return t;
-        }
-
-
-        var f = "";
-
-        if(/\./.test(s)) {
-            f = "." + (s.split(".")[1] || "0");
-            s = s.split(".")[0] || "0";
-        }
-
-
-        if(/^\d+$/.test(s)) {
-            return s.replace(/^0+([1-9])/g, "$1") + f;
-        }
-
-
-        var n = [];
-
-        for(var i = 0; i < ranks.length; i++) {
-            var pattern = "(" + digits + ")?" + ranks[i] + "$";
-            var regex = new RegExp(pattern);
-            var d = s.match(regex);
-
-            if(d && d[1] == "0" && ranks[i]) {
-                s = s.substr(0, s.length - d[0].length);
-                n.push("0000");
-
-            } else if(d && d.length >= 2) {
-                s = s.substr(0, s.length - d[0].length);
-                var v = d[1] ? d[1] : (ranks[i] ? "0001" : "0000");
-                var e = replaceMyriad(v);
-                n.push(e);
-
-            } else {
-                n.push("0000");
+    function normalize(s, numerals) {
+        for(var i = 0; i < numerals.length; i++) {
+            var n = numerals[i];
+            if(n.length > 1) {
+                s = s.replace(new RegExp("[" + n.substr(1) + "]", "g"), n.substr(0, 1));
             }
-
-            if(s.length == 0) {
-                break;
-            }
         }
-
-
-        n = n.reverse().join("").replace(/^0+([1-9])/g, "$1") + f;
-
-        return n;
-
-
+        return s;
     }
-    //----------------------------------------------------------------------------------------------------
-    function normalize(t) {
-
-        t = t.replace(/万亿/g, "兆");
-
-        for(var n in numerals) {
-            var regex = new RegExp("[" + numerals[n] + "]", "g");
-            t = t.replace(regex, n);
-        }
-
-        t = t.replace(/両([^両]|$)/g, "2$1");
-        t = t.replace(/([百千万億兆京垓秭穣溝]|^)0+([1-9]*[十百千万億兆京垓秭穣])/g, "$1$2");
-
-        return t;
-
-    }
-    //----------------------------------------------------------------------------------------------------
-    function replaceMyriad(t) {
-
-        var n = 0;
-
-        t = t.replace(/(\d+|^)千/, function(m, s) {
-            n += isNaN(parseInt(s)) ? 1000 : parseInt(s) * 1000; 
-        });
-
-        t = t.replace(/(\d+|^|\D)百/, function(m, s) {
-            n += isNaN(parseInt(s)) ? 100 : parseInt(s) * 100; 
-        });
-
-        t = t.replace(/(\d+|^|\D)十/, function(m, s) {
-            n += isNaN(parseInt(s)) ? 10 : parseInt(s) * 10; 
-        });
-
-        t = t.replace(/(\d+)$/, function(m, s) {
-            n += isNaN(parseInt(s)) ? 0 : parseInt(s) ; 
-        });
-
-        n = ("0000" + n).slice(-4);
-
-        return n;
-
-    }
-    //----------------------------------------------------------------------------------------------------
 
 }
+
+
+
+
 
 
 
