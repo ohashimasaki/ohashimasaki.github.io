@@ -127,7 +127,7 @@ var q = new TabularDataQuery();
 a = q.from(a).where("市区町村", "仙台市青葉区").select("都道府県", "市区町村", "町域");
 
 
-
+    document.body.innerHTML +=  'q.from(a).where("市区町村", "仙台市青葉区").select("都道府県", "市区町村", "町域");' + "<br/><br/>";
 
 for(var i = 0; i < a.length; i++) {
     var t = [];
