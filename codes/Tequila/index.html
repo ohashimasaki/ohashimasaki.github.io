@@ -3,10 +3,18 @@
 <head>
 <meta charset=UTF-8"/>
 <style>
+
 body {
     font-family: Meiryo;
-    font-size: 9pt; 
-} 
+    font-size: 9pt;
+    margin: 0;
+    padding: 30px 30px 100px 30px;    
+}
+pre {
+    background-color: #eeeeee;
+    padding: 20px;
+    font-family: Meiryo;
+}
 </style>
 </head>
 <body>
@@ -118,75 +126,127 @@ var t = [
 '"' +["985003100","4","4203","42030006","985-0031","0","0","宮城県","ミヤギケン","塩竈市","シオガマシ","石堂","イシドウ","","","","","","","","",""].join("\",\"") + '"'
 ].join("\r\n");
 
-    document.body.innerHTML += t.replace(/\r\n/g, "<br/>") + "<br/><br/>";
+    document.body.innerHTML += '<pre>' + t + '</pre>';
 
-var d = new TabularData();
-var a = d.parse(t);
-
-var q = new TabularDataQuery();
-a = q.from(a).where("市区町村", "仙台市青葉区").select("都道府県", "市区町村", "町域");
-
-
-    document.body.innerHTML +=  'q.from(a).where("市区町村", "仙台市青葉区").select("都道府県", "市区町村", "町域");' + "<br/><br/>";
-
-for(var i = 0; i < a.length; i++) {
-    var t = [];
-    for(var e in a[i]) {
-        t.push(a[i][e]);
-    }
-    document.body.innerHTML += t.join(",") + "<br/>\r\n";
-}
+    var d = new TabularData();
+    var a = d.parse(t);
 
 
 
+    var q = new Tequila();
+
+    var b = q.from(a).where(function(e) {
+        return /青葉区|泉区/.test(e["市区町村"]);
+    }).select("都道府県", "市区町村", "町域");
+
+    document.body.innerHTML += '<pre>' + [
+        'var b = q.from(a).where(function(e) {',
+        '    return /青葉区|泉区/.test(e["市区町村"]);',
+        '}).select("都道府県", "市区町村", "町域");'
+    ].join("\r\n") + '</pre>';
+
+    print(b);
+
+
+    var c = q.from(a).where(function(e) {
+        return e["市区町村"] == "仙台市泉区";
+    }).distinct("都道府県", "市区町村", "町域");
+
+    document.body.innerHTML += '<pre>' + [
+        'var c = q.from(a).where(function(e) {',
+        '    return e["市区町村"] == "仙台市泉区";',
+        '}).distinct("都道府県", "市区町村", "町域");'
+    ].join("\r\n") + '</pre>';
+
+    print(c);
+
+
+    var u = q.union(b, c);
+
+    document.body.innerHTML += '<pre>' + [
+        'var u = q.union(b, c);'
+    ].join("\r\n") + '</pre>';
+
+    print(u);
 
 
 
 //----------------------------------------------------------------------------------------------------
-function TabularDataQuery() {
+function print(o) {
 
-    var a = [];
+//    document.body.innerHTML += "------------------------------<br/>\r\n";
+
+    for(var i = 0; i < o.length; i++) {
+        var t = [];
+        for(var e in o[i]) {
+            t.push(o[i][e]);
+        }
+        document.body.innerHTML += ("00" + (i + 1)).slice(-2) + " " + t.join(",") + "<br/>\r\n";
+    }
+
+    document.body.innerHTML += "------------------------------<br/>\r\n";
+
+}
+//----------------------------------------------------------------------------------------------------
+function Tequila() {
 
     this.from = function(d) {
-        a = d;
-        return this;
+        var a = [];
+        for(var i = 0; i < d.length; i++) {
+            a[i] = d[i];
+        }
+        return new _Tequila(a);
     };
 
-    this.where = function(f, v) {
-        for(var i = a.length - 1; i >= 0; i--) {
-            var e = a[i];
-            if( ! e[f] || e[f] != v) {
-                a.splice(i, 1);
+    function _Tequila(a) {
+        this.where = function(evaluator) {
+            if(typeof evaluator != "function") {
+                throw "evaluator must be a function.";
             }
-        }
-        return this;
-    };
-
-    this.select = function() {
-        if(arguments.length == 0) {
-            return this;
-        }
-        var h = {};
-        for(var i = 0; i < arguments.length; i++) {
-            var f = arguments[i];
-            h[f] = true;
-        }
-        for(var i = 0; i < a.length; i++) {
-            var e = {};
-            for(var n in a[i]) {
-                if(h[n]) {
-                    e[n] = a[i][n];
+            for(var i = a.length - 1; i >= 0; i--) {
+                if( ! evaluator(a[i])) {
+                    a.splice(i, 1);
                 }
             }
-            a[i] = e;
+            return this;
+        };
+
+        this.select = function() {
+            if(arguments.length == 0) {
+                return a;
+            }
+            return choose(a, arguments, false);
+        };
+
+        this.distinct = function() {
+            if(arguments.length == 0) {
+                return a;
+            }
+            return choose(a, arguments, true);
+        };
+    }
+
+
+    this.union = function(a, b, all) {
+        var u = [];
+        var s = {};
+        for(var i = 0; i < a.length; i++) {
+            var e = a[i];
+            var h = hash(e);
+            if( ! s[h] || all) {
+                u.push(e);
+                s[h] = true;
+            }
         }
-        return a;
-    };
-
-    this.sum = function() {
-    };
-
-    this.union = function() {
+        for(var i = 0; i < b.length; i++) {
+            var e = b[i];
+            var h = hash(e);
+            if( ! s[h] || all) {
+                u.push(e);
+                s[h] = true;
+            }
+        }
+        return u;
     };
 
     this.intersect = function() {
@@ -194,6 +254,56 @@ function TabularDataQuery() {
 
     this.except = function() {
     };
+
+
+    this.sum = function() {
+    };
+
+
+    function choose(a, fields, distinct) {
+        var _fileds = {};
+        for(var i = 0; i < fields.length; i++) {
+            _fileds[fields[i]] = true;
+        }
+        var s = {};
+        for(var i = a.length - 1; i >= 0; i--) {
+            var e = {};
+            for(var f in a[i]) {
+                if(_fileds[f]) {
+                    e[f] = a[i][f];
+                }
+            }
+            if(distinct) {
+                var h = hash(e);
+                if( ! s[h]) {
+                    a[i] = e;
+                    s[h] = true;
+                } else {
+                    a.splice(i, 1);
+                }
+            } else {
+                a[i] = e;
+            }
+        }
+        return a;
+    }
+
+
+
+    function hash(e) {
+        var h = [];
+        for(var p in e) {
+           var v = e[p];
+            if(/boolean|number|string/.test(typeof v)) {
+                h.push(v);
+            } else if(v == null) {
+                h.push("null");
+            } else if(v.toString()) {
+                h.push(v.toString());
+            }
+        }
+        return h.join(";");
+    }
 
 
 }
