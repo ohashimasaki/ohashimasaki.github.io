@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset=UTF-8"/>
+<title>Tequila.js</title>
 <style>
 
 body {
@@ -9,6 +10,10 @@ body {
     font-size: 9pt;
     margin: 0;
     padding: 30px 30px 100px 30px;    
+}
+section {
+    margin: 50px 0;
+
 }
 pre {
     background-color: #eeeeee;
@@ -18,6 +23,8 @@ pre {
 </style>
 </head>
 <body>
+<h1>Tequila.js</h1>
+<script src="Tequila.js"></script>
 <script>
 
 var t = [
@@ -126,7 +133,17 @@ var t = [
 '"' +["985003100","4","4203","42030006","985-0031","0","0","宮城県","ミヤギケン","塩竈市","シオガマシ","石堂","イシドウ","","","","","","","","",""].join("\",\"") + '"'
 ].join("\r\n");
 
-    document.body.innerHTML += '<pre>' + t + '</pre>';
+
+
+
+    document.body.innerHTML += [
+        '<section>',
+        '<h2>CSV SOURCE</h2>',
+        '<pre>' + t + '</pre>',
+        '</section>'
+    ].join("\r\n");
+
+
 
     var d = new TabularData();
     var a = d.parse(t);
@@ -135,236 +152,200 @@ var t = [
 
     var q = new Tequila();
 
+
     var b = q.from(a).where(function(e) {
         return /青葉区|泉区/.test(e["市区町村"]);
     }).select("都道府県", "市区町村", "町域");
 
-    document.body.innerHTML += '<pre>' + [
+    document.body.innerHTML += [
+        '<section>',
+        '<h2>SELECT</h2>',
+        '<pre>',
         'var b = q.from(a).where(function(e) {',
         '    return /青葉区|泉区/.test(e["市区町村"]);',
-        '}).select("都道府県", "市区町村", "町域");'
-    ].join("\r\n") + '</pre>';
+        '}).select("都道府県", "市区町村", "町域");',
+        '</pre>',
+        print(b),
+        '</section>'
+    ].join("\r\n");
 
-    print(b);
+
 
 
     var c = q.from(a).where(function(e) {
         return e["市区町村"] == "仙台市泉区";
     }).distinct("都道府県", "市区町村", "町域");
 
-    document.body.innerHTML += '<pre>' + [
+    document.body.innerHTML += [
+        '<section>',
+        '<h2>DISTINCT</h2>',
+        '<pre>',
         'var c = q.from(a).where(function(e) {',
         '    return e["市区町村"] == "仙台市泉区";',
-        '}).distinct("都道府県", "市区町村", "町域");'
-    ].join("\r\n") + '</pre>';
+        '}).distinct("都道府県", "市区町村", "町域");',
+        '</pre>',
+        print(c),
+        '</section>'
+    ].join("\r\n");
 
-    print(c);
 
 
-    var u = q.union(b, c);
 
-    document.body.innerHTML += '<pre>' + [
-        'var u = q.union(b, c);'
-    ].join("\r\n") + '</pre>';
 
-    print(u);
+    var z1 = q.from(a).where(function(e) {
+        return e["市区町村"] == "仙台市泉区";
+    }).orderby("郵便番号").select("郵便番号", "市区町村", "町域");
+
+    document.body.innerHTML += [
+        '<section>',
+        '<h2>ORDER BY (ASCENDING)</h2>',
+        '<pre>',
+        'var z1 = q.from(a).where(function(e) {',
+        '    return e["市区町村"] == "仙台市泉区";',
+        '}).orderby("郵便番号").select("郵便番号", "市区町村", "町域");',
+        '</pre>',
+        print(z1),
+        '</section>'
+    ].join("\r\n");
+
+
+
+
+    var z2 = q.from(a).where(function(e) {
+        return e["市区町村"] == "仙台市泉区";
+    }).orderby("郵便番号", "descending").select("郵便番号", "市区町村", "町域");
+
+    document.body.innerHTML += [
+        '<section>',
+        '<h2>ORDER BY (DESCENDING)</h2>',
+        '<pre>',
+        'var z1 = q.from(a).where(function(e) {',
+        '    return e["市区町村"] == "仙台市泉区";',
+        '}).orderby("郵便番号", "descending").select("郵便番号", "市区町村", "町域");',
+        '</pre>',
+        print(z2),
+        '</section>'
+    ].join("\r\n");
+
+
+
+
+    var z3 = q.from(a).where(function(e) {
+        return e["市区町村"] == "仙台市泉区";
+    }).orderby(function(e1, e2) {
+        if(e1["郵便番号"] == e2["郵便番号"]) {
+            return 0;
+        }
+        return (e1["郵便番号"] < e2["郵便番号"]) ? 1 : -1;
+    }).select("郵便番号", "市区町村", "町域");
+
+    document.body.innerHTML += [
+        '<section>',
+        '<h2>ORDER BY (with sort function)</h2>',
+        '<pre>',
+        'var z3 = q.from(a).where(function(e) {',
+        '    return e["市区町村"] == "仙台市泉区";',
+        '}).orderby(function(e1, e2) {',
+        '    if(e1["郵便番号"] == e2["郵便番号"]) {',
+        '        return 0;',
+        '    }',
+        '    return (e1["郵便番号"] < e2["郵便番号"]) ? 1 : -1;',
+        '}).select("郵便番号", "市区町村", "町域");',
+        '</pre>',
+        print(z3),
+        '</section>'
+    ].join("\r\n");
+
+
+
+
+
+    var s1 = q.union(b, c);
+
+    document.body.innerHTML += [
+        '<section>',
+        '<h2>UNION</h2>',
+        '<pre>',
+        'var s1 = q.union(b, c);',
+        '</pre>',
+        print(s1),
+        '</section>'
+    ].join("\r\n");
+
+
+
+    var s2 = q.union(b, c, true);
+
+    document.body.innerHTML += [
+        '<section>',
+        '<h2>UNION (ALL)</h2>',
+        '<pre>',
+        'var s2 = q.union(b, c, true);',
+        '</pre>',
+        print(s2),
+        '</section>'
+    ].join("\r\n");
+
+
+
+    var s3 = q.intersect(b, c);
+
+    document.body.innerHTML += [
+        '<section>',
+        '<h2>INTERSECT</h2>',
+        '<pre>',
+        'var s3 = q.intersect(b, c);',
+        '</pre>',
+        print(s3),
+        '</section>'
+    ].join("\r\n");
+
+
+
+    var s4 = q.except(b, c);
+
+    document.body.innerHTML += [
+        '<section>',
+        '<h2>EXCEPT</h2>',
+        '<pre>',
+        'var s4 = q.except(b, c);',
+        '</pre>',
+        print(s4),
+        '</section>'
+    ].join("\r\n");
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 //----------------------------------------------------------------------------------------------------
 function print(o) {
 
-//    document.body.innerHTML += "------------------------------<br/>\r\n";
+    var t = [];
 
     for(var i = 0; i < o.length; i++) {
-        var t = [];
+        var d = [];
         for(var e in o[i]) {
-            t.push(o[i][e]);
+            d.push(o[i][e]);
         }
-        document.body.innerHTML += ("00" + (i + 1)).slice(-2) + " " + t.join(",") + "<br/>\r\n";
+        t.push(("00" + (i + 1)).slice(-2) + " " + d.join(","));
     }
 
-    document.body.innerHTML += "------------------------------<br/>\r\n";
+    return '<div>' + t.join("<br />\r\n")+ '<div>';
 
 }
 //----------------------------------------------------------------------------------------------------
-function Tequila() {
-
-    this.from = function(d) {
-        var a = [];
-        for(var i = 0; i < d.length; i++) {
-            a[i] = d[i];
-        }
-        return new _Tequila(a);
-    };
-
-    function _Tequila(a) {
-        this.where = function(evaluator) {
-            if(typeof evaluator != "function") {
-                throw "evaluator must be a function.";
-            }
-            for(var i = a.length - 1; i >= 0; i--) {
-                if( ! evaluator(a[i])) {
-                    a.splice(i, 1);
-                }
-            }
-            return this;
-        };
-
-        this.select = function() {
-            if(arguments.length == 0) {
-                return a;
-            }
-            return choose(a, arguments, false);
-        };
-
-        this.distinct = function() {
-            if(arguments.length == 0) {
-                return a;
-            }
-            return choose(a, arguments, true);
-        };
-    }
-
-
-    this.union = function(a, b, all) {
-        var u = [];
-        var s = {};
-        for(var i = 0; i < a.length; i++) {
-            var e = a[i];
-            var h = hash(e);
-            if( ! s[h] || all) {
-                u.push(e);
-                s[h] = true;
-            }
-        }
-        for(var i = 0; i < b.length; i++) {
-            var e = b[i];
-            var h = hash(e);
-            if( ! s[h] || all) {
-                u.push(e);
-                s[h] = true;
-            }
-        }
-        return u;
-    };
-
-    this.intersect = function() {
-    };
-
-    this.except = function() {
-    };
-
-
-    this.sum = function() {
-    };
-
-
-    function choose(a, fields, distinct) {
-        var _fileds = {};
-        for(var i = 0; i < fields.length; i++) {
-            _fileds[fields[i]] = true;
-        }
-        var s = {};
-        for(var i = a.length - 1; i >= 0; i--) {
-            var e = {};
-            for(var f in a[i]) {
-                if(_fileds[f]) {
-                    e[f] = a[i][f];
-                }
-            }
-            if(distinct) {
-                var h = hash(e);
-                if( ! s[h]) {
-                    a[i] = e;
-                    s[h] = true;
-                } else {
-                    a.splice(i, 1);
-                }
-            } else {
-                a[i] = e;
-            }
-        }
-        return a;
-    }
-
-
-
-    function hash(e) {
-        var h = [];
-        for(var p in e) {
-           var v = e[p];
-            if(/boolean|number|string/.test(typeof v)) {
-                h.push(v);
-            } else if(v == null) {
-                h.push("null");
-            } else if(v.toString()) {
-                h.push(v.toString());
-            }
-        }
-        return h.join(";");
-    }
-
-
-}
-//----------------------------------------------------------------------------------------------------
-function TabularData() {
-
-    this.parse = function(t) {
-        var a = [];
-        var regex = /(?:^|,)(?:"((?:[^"]|"")*)"|([^",]*))/g;
-
-        t = t.replace(/\r\n|[\r\n]/g, "\n").split("\n");
-
-        for(var i = 0; i < t.length; i++) {
-            if( ! t[i].replace(/^\s+|\s+$/g, "")) {
-                continue;
-            }
-            var e = [];
-            t[i].replace(regex, function(m,s1, s2) {
-                e.push(s1 || s2 || "");
-            });
-            a.push(e);
-        }
-
-        var c = 0;
-        for(var i = 0; i < a.length; i++) {
-            var w = a[i].length;
-            c = c < w ? w : c;
-        }
-
-        var h = a.shift();
-
-        for(var i = 0; i < a.length; i++) {
-            var e = {};
-            for(var j = 0; j < h.length; j++) {
-                e[h[j]] = (a[i][j]||"");
-            }
-            a[i] = e;
-        }
-
-        return a;
-    };
-
-
-    function trim(t) {
-        if( ! t || typeof t != "string") {
-            return "";
-        }
-        return t.replace(/^\s+|\s+$/g, ""); 
-    }
-
-
-
-}
-//----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
 
 </script>
 </body>
