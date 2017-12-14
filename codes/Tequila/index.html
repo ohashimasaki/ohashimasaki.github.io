@@ -11,6 +11,20 @@ body {
     margin: 0;
     padding: 30px 30px 100px 30px;    
 }
+h1 {
+    margin: 0;
+    font-size: 32pt;
+}
+h2 {
+    margin: 0;
+    font-size: 20pt;
+    color: #aaaaaa;
+    font-weight: normal;
+}
+h3 {
+    font-size: 16pt;
+    color: #006699;
+}
 section {
     margin: 50px 0;
 
@@ -24,6 +38,7 @@ pre {
 </head>
 <body>
 <h1>Tequila.js</h1>
+<h2> Text data query like SQL/LINQ</h2>
 <script src="https://rawgithub.com/ohashimasaki/Tequila/master/Tequila.js"></script>
 <script>
 
@@ -138,7 +153,7 @@ var csv = [
 
     document.body.innerHTML += [
         '<section>',
-        '<h2>CSV SOURCE</h2>',
+        '<h3>CSV SOURCE</h3>',
         '<pre>' + csv + '</pre>',
         '</section>'
     ].join("\r\n");
@@ -160,7 +175,7 @@ var csv = [
 
     document.body.innerHTML += [
         '<section>',
-        '<h2>SELECT</h2>',
+        '<h3>SELECT</h3>',
         '<pre>',
         'var b = q.from(a).where(function(e) {',
         '    return /青葉区|泉区/.test(e["市区町村"]);',
@@ -178,7 +193,7 @@ var csv = [
 
     document.body.innerHTML += [
         '<section>',
-        '<h2>DISTINCT</h2>',
+        '<h3>DISTINCT</h3>',
         '<pre>',
         'var c = q.from(a).where(function(e) {',
         '    return e["市区町村"] == "仙台市泉区";',
@@ -202,7 +217,7 @@ var csv = [
 
     document.body.innerHTML += [
         '<section>',
-        '<h2>GROUP BY</h2>',
+        '<h3>GROUP BY</h3>',
         '<pre>',
         'var g = q.from(a).where(function(e) {',
         '    return /青葉区|泉区/.test(e["市区町村"]);',
@@ -221,7 +236,7 @@ var csv = [
 
     document.body.innerHTML += [
         '<section>',
-        '<h2>ORDER BY (ASCENDING)</h2>',
+        '<h3>ORDER BY (ASCENDING)</h3>',
         '<pre>',
         'var z1 = q.from(a).where(function(e) {',
         '    return e["市区町村"] == "仙台市泉区";',
@@ -240,7 +255,7 @@ var csv = [
 
     document.body.innerHTML += [
         '<section>',
-        '<h2>ORDER BY (DESCENDING)</h2>',
+        '<h3>ORDER BY (DESCENDING)</h3>',
         '<pre>',
         'var z1 = q.from(a).where(function(e) {',
         '    return e["市区町村"] == "仙台市泉区";',
@@ -264,7 +279,7 @@ var csv = [
 
     document.body.innerHTML += [
         '<section>',
-        '<h2>ORDER BY (with sort function)</h2>',
+        '<h3>ORDER BY (with sort function)</h3>',
         '<pre>',
         'var z3 = q.from(a).where(function(e) {',
         '    return e["市区町村"] == "仙台市泉区";',
@@ -287,7 +302,7 @@ var csv = [
 
     document.body.innerHTML += [
         '<section>',
-        '<h2>UNION</h2>',
+        '<h3>UNION</h3>',
         '<pre>',
         'var s1 = q.union(b, c);',
         '</pre>',
@@ -301,7 +316,7 @@ var csv = [
 
     document.body.innerHTML += [
         '<section>',
-        '<h2>UNION (ALL)</h2>',
+        '<h3>UNION (ALL)</h3>',
         '<pre>',
         'var s2 = q.union(b, c, true);',
         '</pre>',
@@ -315,7 +330,7 @@ var csv = [
 
     document.body.innerHTML += [
         '<section>',
-        '<h2>INTERSECT</h2>',
+        '<h3>INTERSECT</h3>',
         '<pre>',
         'var s3 = q.intersect(b, c);',
         '</pre>',
@@ -329,7 +344,7 @@ var csv = [
 
     document.body.innerHTML += [
         '<section>',
-        '<h2>EXCEPT</h2>',
+        '<h3>EXCEPT</h3>',
         '<pre>',
         'var s4 = q.except(b, c);',
         '</pre>',
@@ -345,7 +360,7 @@ var csv = [
 
     document.body.innerHTML += [
         '<section>',
-        '<h2>DELETE</h2>',
+        '<h3>DELETE</h3>',
         '<pre>',
         'var r = q.from(a).where(function(e) {',
         '    return /仙台市/.test(e["市区町村"]);',
