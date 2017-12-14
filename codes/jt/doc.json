@@ -3,7 +3,7 @@
         "meta": {
             "Title": "jt.js",
             "Summary": "JSON Transform like XSLT",
-            "NOTE": "THIS IS JUST A CRAPPY & BUGGY PROTOTYPE."
+            "NOTICE": "THIS IS JUST A CRAPPY & BUGGY PROTOTYPE."
         }
     },
     "body": {
