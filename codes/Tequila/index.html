@@ -24,10 +24,10 @@ pre {
 </head>
 <body>
 <h1>Tequila.js</h1>
-<script src="Tequila.js"></script>
+<script src="https://github.com/ohashimasaki/Tequila/blob/master/Tequila.js"></script>
 <script>
 
-var t = [
+var csv = [
 '"' + ["住所CD","都道府県CD","市区町村CD","町域CD","郵便番号","事業所フラグ","廃止フラグ","都道府県","都道府県カナ","市区町村","市区町村カナ","町域","町域カナ","町域補足","京都通り名","字丁目","字丁目カナ","補足","事業所名","事業所名カナ","事業所住所","新住所CD"].join("\",\"") + '"',
 '"' +["980000000","4","4101","41010000","980-0000","0","0","宮城県","ミヤギケン","仙台市青葉区","センダイシアオバク","","　","（該当なし）","","","","","","","",""].join("\",\"") + '"',
 '"' +["981091600","4","4101","41010001","981-0916","0","0","宮城県","ミヤギケン","仙台市青葉区","センダイシアオバク","青葉町","アオバマチ","","","","","","","","",""].join("\",\"") + '"',
@@ -139,18 +139,19 @@ var t = [
     document.body.innerHTML += [
         '<section>',
         '<h2>CSV SOURCE</h2>',
-        '<pre>' + t + '</pre>',
+        '<pre>' + csv + '</pre>',
         '</section>'
     ].join("\r\n");
 
 
 
     var d = new TabularData();
-    var a = d.parse(t);
+    var a = d.parse(csv);
 
 
 
     var q = new Tequila();
+
 
 
     var b = q.from(a).where(function(e) {
@@ -171,7 +172,6 @@ var t = [
 
 
 
-
     var c = q.from(a).where(function(e) {
         return e["市区町村"] == "仙台市泉区";
     }).distinct("都道府県", "市区町村", "町域");
@@ -188,6 +188,29 @@ var t = [
         '</section>'
     ].join("\r\n");
 
+
+
+    var g = q.from(a).where(function(e) {
+        return /青葉区|泉区/.test(e["市区町村"]);
+    }).groupby("市区町村").select("都道府県", "市区町村", "町域");
+
+    var t = [];
+    for(var k in g) {
+        t.push(k + ":");
+        t.push(print(g[k]));
+    }
+
+    document.body.innerHTML += [
+        '<section>',
+        '<h2>GROUP BY</h2>',
+        '<pre>',
+        'var g = q.from(a).where(function(e) {',
+        '    return /青葉区|泉区/.test(e["市区町村"]);',
+        '}).groupby("市区町村").select("都道府県", "市区町村", "町域");',
+        '</pre>',
+        t.join("<br/>\r\n"),
+        '</section>'
+    ].join("\r\n");
 
 
 
@@ -316,7 +339,21 @@ var t = [
 
 
 
+    var r = q.from(a).where(function(e) {
+        return /仙台市/.test(e["市区町村"]);
+    }).delete("都道府県", "市区町村", "町域");
 
+    document.body.innerHTML += [
+        '<section>',
+        '<h2>DELETE</h2>',
+        '<pre>',
+        'var r = q.from(a).where(function(e) {',
+        '    return /仙台市/.test(e["市区町村"]);',
+        '}).delete("都道府県", "市区町村", "町域");',
+        '</pre>',
+        print(r),
+        '</section>'
+    ].join("\r\n");
 
 
 
@@ -339,7 +376,7 @@ function print(o) {
         for(var e in o[i]) {
             d.push(o[i][e]);
         }
-        t.push(("00" + (i + 1)).slice(-2) + " " + d.join(","));
+        t.push(("00" + (i + 1)).slice(-2) + " " + d.join(", "));
     }
 
     return '<div>' + t.join("<br />\r\n")+ '<div>';
