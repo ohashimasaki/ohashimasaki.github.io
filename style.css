@@ -5,71 +5,56 @@
 }
  body {
     background-color: #ffffff;
-    color: #887f7a;
-    font-family: Meiryo, "メイリオ", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", Arial, sans-serif;
-    font-size: 11pt;
+    color: #000000;
+    font-family: Meiryo, Meiryo, "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", Arial, sans-serif;
+    font-size: 14pt;
 }
 
 main {
     padding: 0;
 }
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 640px) {
     main {
-        padding: 0;
+        padding: 10px;
     }
 }
 
+
 h1 {
-    font-size: 16pt;
-    margin: 20px;
+    margin: 0 0 30px 0;
+    padding: 10px;
     font-weight: normal;
-}
-@media only screen and (min-width: 640px) {
-    h1 {
-        font-size: 32pt;
-    }
+    font-size: 15pt;
 }
 h2 {
-    margin: 20px 25px;
-    font-size: 18pt;
+    margin: 10px;
     font-weight: normal;
+    font-size: 13pt;
 }
 h3 {
-    margin: 20px 25px;
-    font-size: 15pt;
+    margin: 10px;
     font-weight: normal;
+    font-size: 12pt;
+}
+
+@media only screen and (min-width: 640px) {
+    h1 {
+        font-size: 20pt;
+        padding: 10px;
+    }
 }
 
 ul {
     margin: 10px;
     list-style-type: none;
 }
-li {
-    border-bottom: 1px dashed #887f7a;
-}
-li:first-child {
-    border-top: 1px dashed #887f7a;
-}
-
 li a {
     display: block;
-    padding: 20px 30px;
-    text-decoration: none;
-    font-size: 13pt;
-    font-weight: normal;
-}
-li a:link, li a:visited {
-    color: #887f7a;
-}
-li a:hover {
-    background-color: #f8f8f8;
+    padding: 5px;
+    color: #006699;
 }
 
-@media only screen and (min-width: 640px) {
-    li a {
-        font-size: 20pt;
-    }
-}
+
 
 
 
