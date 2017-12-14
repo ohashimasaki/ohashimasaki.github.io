@@ -2,7 +2,7 @@
     "head": {
         "meta": {
             "Title": "jt.js",
-            "Summary": "An XSLT-like JSON Transform with JavaScript",
+            "Summary": "JSON Transform like XSLT",
             "NOTE": "THIS IS JUST A CRAPPY & BUGGY PROTOTYPE."
         }
     },
