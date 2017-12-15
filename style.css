@@ -4,9 +4,9 @@
     box-sizing: border-box;
 }
  body {
-    background-color: #ffffff;
-    color: #000000;
-    font-family: Meiryo, Meiryo, "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", Arial, sans-serif;
+    background-color: #5d7189;
+    color: #ffffff;
+    font-family: Calibri, Lucida Sans Unicode, sans-serif;
     font-size: 14pt;
 }
 
@@ -50,8 +50,10 @@ ul {
 }
 li a {
     display: block;
+    font-family: Calibri, Lucida Sans Unicode, sans-serif;
     padding: 5px;
-    color: #006699;
+    color: #ffffff;
+    text-decoration: none;
 }
 
 
