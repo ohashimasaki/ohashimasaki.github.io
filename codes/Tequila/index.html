@@ -44,7 +44,7 @@ pre {
 <body>
 <h1>Tequila.js</h1>
 <h2> Text data query like SQL/LINQ</h2>
-<script src="https://rawgithub.com/ohashimasaki/Tequila/master/Tequila.js"></script>
+<script src="Tequila.js"></script>
 <script>
 
 var csv = [
@@ -219,7 +219,6 @@ var csv = [
         t.push(k + ":");
         t.push(print(g[k]));
     }
-
     document.body.innerHTML += [
         '<section>',
         '<h3>GROUP BY</h3>',
@@ -298,6 +297,152 @@ var csv = [
         print(z3),
         '</section>'
     ].join("\r\n");
+
+
+
+    var c1 = q.from(a).where(function(e) {
+        return e["市区町村"] == "仙台市泉区";
+    }).count();
+
+    document.body.innerHTML += [
+        '<section>',
+        '<h3>COUNT</h3>',
+        '<pre>',
+        'var c1 = q.from(a).where(function(e) {',
+        '    return e["市区町村"] == "仙台市泉区";',
+        '}).count();',
+        '</pre>',
+        c1,
+        '</section>'
+    ].join("\r\n");
+
+
+    var c2 = q.from(a).groupby("市区町村").count();
+
+    var t = [];
+    for(var k in c2) {
+        t.push(k + ":" + c2[k]);
+    }
+    document.body.innerHTML += [
+        '<section>',
+        '<h3>COUNT</h3>',
+        '<pre>',
+        'var c2 = q.from(a).groupby("市区町村").count();',
+        '</pre>',
+        t.join("<br/>\r\n"),
+        '</section>'
+    ].join("\r\n");
+
+
+
+
+    var m1 = q.from(a).where(function(e) {
+        return /仙台市/.test(e["市区町村"]);
+    }).max("住所CD");
+
+    document.body.innerHTML += [
+        '<section>',
+        '<h3>MAX</h3>',
+        '<pre>',
+        'var m1 = q.from(a).where(function(e) {',
+        '    return /仙台市/.test(e["市区町村"])',
+        '}).max("住所CD");',
+        '</pre>',
+        m1,
+        '</section>'
+    ].join("\r\n");
+
+
+
+    var m2 = q.from(a).groupby("市区町村").max("住所CD");
+
+    var t = [];
+    for(var k in m2) {
+        t.push(k + ":" + m2[k]);
+    }
+    document.body.innerHTML += [
+        '<section>',
+        '<h3>MAX (GROUPED)</h3>',
+        '<pre>',
+        'var m2 = q.from(a).groupby("市区町村").max("住所CD");',
+        '</pre>',
+        t.join("<br/>\r\n"),
+        '</section>'
+    ].join("\r\n");
+
+
+
+    var m3 = q.from(a).where(function(e) {
+        return /仙台市/.test(e["市区町村"]);
+    }).min("住所CD");
+
+    document.body.innerHTML += [
+        '<section>',
+        '<h3>MIN</h3>',
+        '<pre>',
+        'var m3 = q.from(a).where(function(e) {',
+        '    return /仙台市/.test(e["市区町村"]);',
+        '}).min("住所CD");',
+        '</pre>',
+        m3,
+        '</section>'
+    ].join("\r\n");
+
+
+    var m4 = q.from(a).groupby("市区町村").min("住所CD");
+
+    var t = [];
+    for(var k in m4) {
+        t.push(k + ":" + m4[k]);
+    }
+    document.body.innerHTML += [
+        '<section>',
+        '<h3>MIN (GROUPED)</h3>',
+        '<pre>',
+        'var m4 = q.from(a).groupby("市区町村").min("住所CD");',
+        '</pre>',
+        t.join("<br/>\r\n"),
+        '</section>'
+    ].join("\r\n");
+
+
+
+    var avg1 = q.from(a).where(function(e) {
+        return /仙台市青葉区/.test(e["市区町村"]);
+    }).average("住所CD");
+
+    document.body.innerHTML += [
+        '<section>',
+        '<h3>AVERAGE</h3>',
+        '<pre>',
+        'var avg1 = q.from(a).where(function(e) {',
+        '    return /仙台市青葉区/.test(e["市区町村"]);',
+        '}).average("住所CD");',
+        '</pre>',
+        avg1,
+        '</section>'
+    ].join("\r\n");
+
+
+    var avg2 = q.from(a).groupby("市区町村").average("住所CD");
+
+    var t = [];
+    for(var k in avg2) {
+        t.push(k + ":" + avg2[k]);
+    }
+    document.body.innerHTML += [
+        '<section>',
+        '<h3>AVERAGE (GROUPED)</h3>',
+        '<pre>',
+        'var avg2 = q.from(a).groupby("市区町村").average("住所CD");',
+        '</pre>',
+        t.join("<br/>\r\n"),
+        '</section>'
+    ].join("\r\n");
+
+
+
+
 
 
 
