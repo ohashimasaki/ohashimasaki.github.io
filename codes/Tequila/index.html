@@ -193,7 +193,7 @@ var csv = [
 
 
     var c = q.from(a).where(function(e) {
-        return e["市区町村"] == "仙台市泉区";
+        return e["市区町村"] == "仙台市太白区";
     }).distinct("都道府県", "市区町村", "町域");
 
     document.body.innerHTML += [
@@ -201,7 +201,7 @@ var csv = [
         '<h3>DISTINCT</h3>',
         '<pre>',
         'var c = q.from(a).where(function(e) {',
-        '    return e["市区町村"] == "仙台市泉区";',
+        '    return e["市区町村"] == "仙台市太白区";',
         '}).distinct("都道府県", "市区町村", "町域");',
         '</pre>',
         print(c),
@@ -447,6 +447,65 @@ var csv = [
 
 
 
+    var a1 = q.from(a).where(function(e) {
+        return /仙台市青葉区/.test(e["市区町村"]);
+    }).select("住所CD", "都道府県CD", "市区町村CD", "町域CD");
+
+    var b1 = q.from(a).where(function(e) {
+        return /仙台市青葉区/.test(e["市区町村"]);
+    }).select("住所CD", "郵便番号", "市区町村", "町域", "字丁目");
+
+    var j1 = q.from(a1).join(b1, "住所CD", "住所CD").select();
+
+    document.body.innerHTML += [
+        '<section>',
+        '<h3>JOIN (INNER JOIN)</h3>',
+        '<pre>',
+        'var a1 = q.from(a).where(function(e) {',
+        '    return /仙台市/.test(e["市区町村"]);',
+        '}).select("住所CD", "都道府県CD", "市区町村CD", "町域CD");',
+        '',
+        'var b1 = q.from(a).where(function(e) {',
+        '    return /仙台市/.test(e["市区町村"]);',
+        '}).select("住所CD", "郵便番号", "市区町村", "町域", "字丁目");',
+        '',
+        'var j1 = q.from(a1).join(b1, "住所CD", "住所CD").select();',
+        '</pre>',
+        print(j1),
+        '</section>'
+    ].join("\r\n");
+
+
+
+    var a2 = q.from(a).where(function(e) {
+        return /仙台市青葉区|仙台市泉区/.test(e["市区町村"]);
+    }).orderby("郵便番号").select("住所CD");
+
+    var b2 = q.from(a).where(function(e) {
+        return /仙台市青葉区/.test(e["市区町村"]);
+    }).select("住所CD", "郵便番号", "市区町村", "町域", "字丁目");
+
+    var j2 = q.from(a2).join(b2, "住所CD", "住所CD", true).select("住所CD", "市区町村", "町域", "字丁目");
+
+    document.body.innerHTML += [
+        '<section>',
+        '<h3>LEFT OUTER JOIN</h3>',
+        '<pre>',
+        'var a2 = q.from(a).where(function(e) {',
+        '    return /仙台市/.test(e["市区町村"]);',
+        '}).orderby("郵便番号").select("住所CD");',
+        '',
+        'var b2 = q.from(a).where(function(e) {',
+        '    return /仙台市/.test(e["市区町村"]);',
+        '}).select("住所CD", "郵便番号", "市区町村", "町域", "字丁目");',
+        '',
+        'var j2 = q.from(a2).join(b2, "住所CD", "住所CD", true).select("住所CD", "市区町村", "町域", "字丁目");',
+        '</pre>',
+        print(j2),
+        '</section>'
+    ].join("\r\n");
+
+
 
     var s1 = q.union(b, c);
 
@@ -539,7 +598,7 @@ function print(o) {
     for(var i = 0; i < o.length; i++) {
         var d = [];
         for(var e in o[i]) {
-            d.push(o[i][e]);
+            d.push(o[i][e] == null ? "null" : o[i][e]);
         }
         t.push(("00" + (i + 1)).slice(-2) + " " + d.join(", "));
     }
