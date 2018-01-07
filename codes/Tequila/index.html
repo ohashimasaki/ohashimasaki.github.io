@@ -16,7 +16,7 @@ body {
 }
 h1 {
     margin: 0;
-    font-size: 32pt;
+    font-size: 40pt;
     color: #ffffff;
 }
 h2 {
@@ -26,11 +26,12 @@ h2 {
     color: #ffffff;
 }
 h3 {
-    font-size: 16pt;
+    font-size: 18pt;
     color: #ffffff;
 }
 section {
-    margin: 50px 0;
+    display: block;
+    margin: 50px 0 50px 0;
 }
 pre {
     background-color: #fefcf6;
@@ -39,12 +40,25 @@ pre {
     overflow-x: auto;
     color: #000000;
 }
+section h2 {
+    font-size: 25pt;
+    font-weight: bold;
+    color: #ffffff;
+}
+.part {
+    margin: 100px 0 200px 0;
+}
+#part2 {
+    border-top: 1px solid #ffffff;
+}
 </style>
 </head>
 <body>
 <h1>Tequila.js</h1>
-<h2> Text data query like SQL/LINQ</h2>
-<script src="https://rawgit.com/ohashimasaki/Tequila/master/Tequila.js"></script>
+<h2>Text data query like SQL/LINQ</h2>
+<div id="part1" class="part"></div>
+<div id="part2" class="part"></div>
+<script src="Tequila.js"></script>
 <script>
 
 var csv = [
@@ -154,19 +168,17 @@ var csv = [
 ].join("\r\n");
 
 
-
-
-    document.body.innerHTML += [
-        '<section>',
-        '<h3>CSV SOURCE</h3>',
-        '<pre>' + csv + '</pre>',
-        '</section>'
+    var tsv = [
+        ["X","列A","列B","列C","列D","列E","列F"].join("\t"),
+        ["行1",0,1,2,3,4,5].join("\t"),
+        ["行2",0,1,2,3,4,5].join("\t"),
+        ["行3",0,1,2,3,4,5].join("\t"),
+        ["行4",0,1,2,3,4,5].join("\t"),
+        ["行5",0,1,2,3,4,5].join("\t"),
     ].join("\r\n");
 
-
-
-    var d = new TabularData();
-    var a = d.parse(csv);
+    var _part1 = document.getElementById("part1");
+    var _part2 = document.getElementById("part2");
 
 
 
@@ -174,14 +186,27 @@ var csv = [
 
 
 
+    _part1.innerHTML += [
+        '<section>',
+        '<h2>Usage of Quasi-SQL</h2>',
+        '<h4>DATA SOURCE SAMPLE (1)</h4>',
+        '<pre>' + csv + '</pre>',
+        '</section>'
+    ].join("\r\n");
+
+
+    var a = q.parse(csv);
+
     var b = q.from(a).where(function(e) {
         return /青葉区|泉区/.test(e["市区町村"]);
     }).select("都道府県", "市区町村", "町域");
 
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>SELECT</h3>',
         '<pre>',
+        'var q = new Tequila();',
+        'var a = q.parse(csv);',
         'var b = q.from(a).where(function(e) {',
         '    return /青葉区|泉区/.test(e["市区町村"]);',
         '}).select("都道府県", "市区町村", "町域");',
@@ -196,10 +221,12 @@ var csv = [
         return e["市区町村"] == "仙台市太白区";
     }).distinct("都道府県", "市区町村", "町域");
 
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>DISTINCT</h3>',
         '<pre>',
+        'var q = new Tequila();',
+        'var a = q.parse(csv);',
         'var c = q.from(a).where(function(e) {',
         '    return e["市区町村"] == "仙台市太白区";',
         '}).distinct("都道府県", "市区町村", "町域");',
@@ -219,10 +246,12 @@ var csv = [
         t.push(k + ":");
         t.push(print(g[k]));
     }
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>GROUP BY</h3>',
         '<pre>',
+        'var q = new Tequila();',
+        'var a = q.parse(csv);',
         'var g = q.from(a).where(function(e) {',
         '    return /青葉区|泉区/.test(e["市区町村"]);',
         '}).groupby("市区町村").select("都道府県", "市区町村", "町域");',
@@ -238,10 +267,12 @@ var csv = [
         return e["市区町村"] == "仙台市泉区";
     }).orderby("郵便番号").select("郵便番号", "市区町村", "町域");
 
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>ORDER BY (ASCENDING)</h3>',
         '<pre>',
+        'var q = new Tequila();',
+        'var a = q.parse(csv);',
         'var z1 = q.from(a).where(function(e) {',
         '    return e["市区町村"] == "仙台市泉区";',
         '}).orderby("郵便番号").select("郵便番号", "市区町村", "町域");',
@@ -257,10 +288,12 @@ var csv = [
         return e["市区町村"] == "仙台市泉区";
     }).orderby("郵便番号", "descending").select("郵便番号", "市区町村", "町域");
 
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>ORDER BY (DESCENDING)</h3>',
         '<pre>',
+        'var q = new Tequila();',
+        'var a = q.parse(csv);',
         'var z1 = q.from(a).where(function(e) {',
         '    return e["市区町村"] == "仙台市泉区";',
         '}).orderby("郵便番号", "descending").select("郵便番号", "市区町村", "町域");',
@@ -281,10 +314,12 @@ var csv = [
         return (e1["郵便番号"] < e2["郵便番号"]) ? 1 : -1;
     }).select("郵便番号", "市区町村", "町域");
 
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>ORDER BY (with sort function)</h3>',
         '<pre>',
+        'var q = new Tequila();',
+        'var a = q.parse(csv);',
         'var z3 = q.from(a).where(function(e) {',
         '    return e["市区町村"] == "仙台市泉区";',
         '}).orderby(function(e1, e2) {',
@@ -304,10 +339,12 @@ var csv = [
         return e["市区町村"] == "仙台市泉区";
     }).count();
 
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>COUNT</h3>',
         '<pre>',
+        'var q = new Tequila();',
+        'var a = q.parse(csv);',
         'var c1 = q.from(a).where(function(e) {',
         '    return e["市区町村"] == "仙台市泉区";',
         '}).count();',
@@ -323,10 +360,12 @@ var csv = [
     for(var k in c2) {
         t.push(k + ":" + c2[k]);
     }
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>COUNT</h3>',
         '<pre>',
+        'var q = new Tequila();',
+        'var a = q.parse(csv);',
         'var c2 = q.from(a).groupby("市区町村").count();',
         '</pre>',
         t.join("<br/>\r\n"),
@@ -340,10 +379,12 @@ var csv = [
         return /仙台市/.test(e["市区町村"]);
     }).max("住所CD");
 
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>MAX</h3>',
         '<pre>',
+        'var q = new Tequila();',
+        'var a = q.parse(csv);',
         'var m1 = q.from(a).where(function(e) {',
         '    return /仙台市/.test(e["市区町村"])',
         '}).max("住所CD");',
@@ -360,10 +401,12 @@ var csv = [
     for(var k in m2) {
         t.push(k + ":" + m2[k]);
     }
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>MAX (GROUPED)</h3>',
         '<pre>',
+        'var q = new Tequila();',
+        'var a = q.parse(csv);',
         'var m2 = q.from(a).groupby("市区町村").max("住所CD");',
         '</pre>',
         t.join("<br/>\r\n"),
@@ -376,10 +419,12 @@ var csv = [
         return /仙台市/.test(e["市区町村"]);
     }).min("住所CD");
 
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>MIN</h3>',
         '<pre>',
+        'var q = new Tequila();',
+        'var a = q.parse(csv);',
         'var m3 = q.from(a).where(function(e) {',
         '    return /仙台市/.test(e["市区町村"]);',
         '}).min("住所CD");',
@@ -395,10 +440,12 @@ var csv = [
     for(var k in m4) {
         t.push(k + ":" + m4[k]);
     }
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>MIN (GROUPED)</h3>',
         '<pre>',
+        'var q = new Tequila();',
+        'var a = q.parse(csv);',
         'var m4 = q.from(a).groupby("市区町村").min("住所CD");',
         '</pre>',
         t.join("<br/>\r\n"),
@@ -411,10 +458,12 @@ var csv = [
         return /仙台市青葉区/.test(e["市区町村"]);
     }).average("住所CD");
 
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>AVERAGE</h3>',
         '<pre>',
+        'var q = new Tequila();',
+        'var a = q.parse(csv);',
         'var avg1 = q.from(a).where(function(e) {',
         '    return /仙台市青葉区/.test(e["市区町村"]);',
         '}).average("住所CD");',
@@ -430,10 +479,12 @@ var csv = [
     for(var k in avg2) {
         t.push(k + ":" + avg2[k]);
     }
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>AVERAGE (GROUPED)</h3>',
         '<pre>',
+        'var q = new Tequila();',
+        'var a = q.parse(csv);',
         'var avg2 = q.from(a).groupby("市区町村").average("住所CD");',
         '</pre>',
         t.join("<br/>\r\n"),
@@ -457,10 +508,12 @@ var csv = [
 
     var j1 = q.from(a1).join(b1, "住所CD", "住所CD").select();
 
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>JOIN (INNER JOIN)</h3>',
         '<pre>',
+        'var q = new Tequila();',
+        'var a = q.parse(csv);',
         'var a1 = q.from(a).where(function(e) {',
         '    return /仙台市/.test(e["市区町村"]);',
         '}).select("住所CD", "都道府県CD", "市区町村CD", "町域CD");',
@@ -487,10 +540,12 @@ var csv = [
 
     var j2 = q.from(a2).join(b2, "住所CD", "住所CD", true).select("住所CD", "市区町村", "町域", "字丁目");
 
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>LEFT OUTER JOIN</h3>',
         '<pre>',
+        'var q = new Tequila();',
+        'var a = q.parse(csv);',
         'var a2 = q.from(a).where(function(e) {',
         '    return /仙台市/.test(e["市区町村"]);',
         '}).orderby("郵便番号").select("住所CD");',
@@ -509,7 +564,7 @@ var csv = [
 
     var s1 = q.union(b, c);
 
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>UNION</h3>',
         '<pre>',
@@ -523,7 +578,7 @@ var csv = [
 
     var s2 = q.union(b, c, true);
 
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>UNION (ALL)</h3>',
         '<pre>',
@@ -537,7 +592,7 @@ var csv = [
 
     var s3 = q.intersect(b, c);
 
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>INTERSECT</h3>',
         '<pre>',
@@ -551,7 +606,7 @@ var csv = [
 
     var s4 = q.except(b, c);
 
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>EXCEPT</h3>',
         '<pre>',
@@ -567,10 +622,12 @@ var csv = [
         return /仙台市/.test(e["市区町村"]);
     }).delete("都道府県", "市区町村", "町域");
 
-    document.body.innerHTML += [
+    _part1.innerHTML += [
         '<section>',
         '<h3>DELETE</h3>',
         '<pre>',
+        'var q = new Tequila();',
+        'var a = q.parse(csv);',
         'var r = q.from(a).where(function(e) {',
         '    return /仙台市/.test(e["市区町村"]);',
         '}).delete("都道府県", "市区町村", "町域");',
@@ -585,7 +642,95 @@ var csv = [
 
 
 
+    _part2.innerHTML += [
+        '<section>',
+        '<h2>Parsing Text as Tabular Data</h2>',
+        '<h4>DATA SOURCE SAMPLE (2)</h4>',
+        '<pre>' + tsv + '</pre>',
+        '</section>'
+    ].join("\r\n");
 
+
+    var z1 = q.parse(tsv, {
+        delimiter: "\t"
+    });
+
+    _part2.innerHTML += [
+        '<section>',
+        '<h3>Parsing a Row-Major Table with Headers</h3>',
+        '<pre>',
+        'var q = new Tequila();',
+        'var z = q.parse(tsv, {',
+        '    delimiter: "\\t"',
+        '});',
+        '</pre>',
+        print(z1),
+        '</section>'
+    ].join("\r\n");
+
+
+
+    var z2 = q.parse(tsv, {
+        delimiter: "\t",
+        hasHeaders: false
+    });
+
+    _part2.innerHTML += [
+        '<section>',
+        '<h3>Parsing a Row-Major Table without Header</h3>',
+        '<pre>',
+        'var q = new Tequila();',
+        'var z = q.parse(tsv, {',
+        '    delimiter: "\\t"',
+        '    hasHeaders: false',
+        '});',
+        '</pre>',
+        print(z2),
+        '</section>'
+    ].join("\r\n");
+
+
+
+    var z3 = q.parse(tsv, {
+        delimiter: "\t",
+        major: "column"
+    });
+
+    _part2.innerHTML += [
+        '<section>',
+        '<h3>Parsing a Column-Major Table with Headers</h3>',
+        '<pre>',
+        'var q = new Tequila();',
+        'var z = q.parse(tsv, {',
+        '    delimiter: "\\t",',
+        '    major: "column"',
+        '});',
+        '</pre>',
+        print(z3),
+        '</section>'
+    ].join("\r\n");
+
+
+    var z4 = q.parse(tsv, {
+        delimiter: "\t",
+        hasHeaders: false,
+        major: "column"
+    });
+
+    _part2.innerHTML += [
+        '<section>',
+        '<h3>Parsing a Column-Major Table without Header</h3>',
+        '<pre>',
+        'var q = new Tequila();',
+        'var z = q.parse(tsv, {',
+        '    delimiter: "\\t",',
+        '    hasHeaders: false,',
+        '    major: "column"',
+        '});',
+        '</pre>',
+        print(z4),
+        '</section>'
+    ].join("\r\n");
 
 
 
@@ -600,7 +745,8 @@ function print(o) {
         for(var e in o[i]) {
             d.push(o[i][e] == null ? "null" : o[i][e]);
         }
-        t.push(("00" + (i + 1)).slice(-2) + " " + d.join(", "));
+//        t.push(("00" + (i + 1)).slice(-2) + " " + d.join(", "));
+        t.push(d.join(", "));
     }
 
     return '<div>' + t.join("<br />\r\n")+ '<div>';
