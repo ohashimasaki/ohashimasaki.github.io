@@ -22,8 +22,9 @@ var s = "";
 for(var i = 0; i < 140; i++) {
     s += t.substr(Math.random() * t.length, 1);
 }
-document.getElementById("p").value = s;
-document.getElementById("p").select();
+var _p = document.getElementById("p");
+_p.value = s;
+_p.select();
 
 </script>
 </body>
