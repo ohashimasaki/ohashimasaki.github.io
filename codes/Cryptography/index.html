@@ -1,0 +1,750 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset=UTF-8"/>
+<title>Tequila.js</title>
+<style>
+
+body {
+    background-color: #5d7189;
+    background-color: #495c75;
+    color: #dddddd;
+    font-family: Meiryo;
+    font-size: 9pt;
+    margin: 0;
+    padding: 30px 30px 100px 30px;    
+}
+h1 {
+    margin: 0;
+    font-size: 40pt;
+    color: #ffffff;
+}
+h2 {
+    margin: 0;
+    font-size: 20pt;
+    font-weight: normal;
+    color: #ffffff;
+}
+h3 {
+    font-size: 18pt;
+    color: #ffffff;
+}
+h2 a  {
+    color: #ffffff;
+}
+h2 a:link, h2 a:visited {
+    color: #ffffff;
+}
+
+section {
+    display: block;
+    margin: 50px 0 50px 0;
+}
+pre {
+    background-color: #fefcf6;
+    padding: 20px;
+    font-family: Meiryo;
+    overflow-x: auto;
+    color: #000000;
+}
+section h2 {
+    font-size: 25pt;
+    font-weight: bold;
+    color: #ffffff;
+}
+</style>
+</head>
+<body>
+<h1>Using Cryptography on Excel VBA</h1>
+
+<section>
+<h2>Usage</h2>
+</section>
+<pre>
+With CreateObject("Scripting.FileSystemObject").openTextFile("Data.vbs", 1)
+    ExecuteGlobal .ReadAll
+    .Close
+End With
+
+
+
+'暗号化（パスワード＝対称キー方式）
+b = GetBytes("Prince - Purple Rain (Official Video) | プリンス／パープル・レイン")
+e = EncryptSymmetric(b, "PASSWORD")
+t = ToBase64String(e)
+msgbox t, vbOKOnly, "暗号化（パスワード＝対称キー方式）"
+
+'復号
+b = DecryptSymmetric(e, "PASSWORD")
+t = GetString(b)
+msgbox t, vbOKOnly, "復号（パスワード＝対称キー方式）"
+
+
+
+'暗号化（非対称キー方式）
+b = GetBytes("Prince - Purple Rain (Official Video) | プリンス／パープル・レイン")
+Set key = CreateKey
+e = EncryptAsymmetric(b, key("Public"))
+t = ToBase64String(e)
+msgbox t, vbOKOnly, "暗号化（非対称キー方式）"
+
+'復号
+b = DecryptAsymmetric(e, key("Private"))
+t = GetString(b)
+msgbox t, vbOKOnly, "復号（パスワード＝対称キー方式）"
+
+
+
+'暗号化（ハイブリッド方式）
+b = GetBytes("Prince - Purple Rain (Official Video) | プリンス／パープル・レイン")
+Set e = Encrypt(b)
+t = ToBase64String(e("Data"))
+msgbox t, vbOKOnly, "暗号化（ハイブリッド方式）"
+
+'復号
+b = Decrypt(e("Data"), e("Key"), e("IV"))
+t = GetString(b)
+msgbox t, vbOKOnly, "復号（ハイブリッド方式）"
+
+
+
+'----------------------------------------------------------------------------------------------------
+
+'ファイルをバイト配列に
+b = ReadAllBytes("test.txt")
+
+'Base64に
+t = ToBase64String(b)
+msgbox t, vbOKOnly, "Base64"
+
+'16進表記に
+t = ToHexString(b)
+msgbox t, vbOKOnly, "16進表記"
+
+'SHA1ハッシュに
+t = ToHexString(SHA1(b))
+msgbox t, vbOKOnly, "SHA1ハッシュ"
+
+'SHA256ハッシュに
+t = ToHexString(SHA256(b))
+msgbox t, vbOKOnly, "SHA256ハッシュ"
+
+'別のファイルに保存
+WriteAllBytes "test2.txt", b
+
+
+'----------------------------------------------------------------------------------------------------
+
+'テキストをバイト配列に
+b = GetBytes("Prince - Purple Rain (Official Video) | プリンス／パープル・レイン")
+
+'Base64に
+t = ToBase64String(b)
+msgbox t, vbOKOnly, "Base64"
+
+'16進表記に
+t = ToHexString(b)
+msgbox t, vbOKOnly, "16進表記"
+
+'SHA1ハッシュに
+t = ToHexString(SHA1(b))
+msgbox t, vbOKOnly, "SHA1ハッシュ"
+
+'SHA256ハッシュに
+t = ToHexString(SHA256(b))
+msgbox t, vbOKOnly, "SHA256ハッシュ"
+
+
+'----------------------------------------------------------------------------------------------------
+
+msgbox "おしまい"
+
+
+</pre>
+<section>
+<h2><a href="Data.vbs">VBScript</a></h2>
+<pre>
+'----------------------------------------------------------------------------------------------------
+Function ToBase64String(bytes)
+
+    If IsNull(bytes) Then
+        ToBase64String = ""
+        Exit Function
+    End If
+
+    Dim xml, e
+    Set xml = CreateObject("MSXML2.DOMDocument.6.0")
+    Set e = xml.createElement("data")
+    e.DataType = "bin.base64"
+    e.nodeTypedValue = bytes
+    ToBase64String = Trim(e.Text)
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function FromBase64String(t)
+
+    Dim xml, e
+    Set xml = CreateObject("MSXML2.DOMDocument.6.0")
+    Set e = xml.createElement("data")
+    e.DataType = "bin.base64"
+    e.Text = Trim(t)
+    FromBase64String = e.nodeTypedValue
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function ToHexString(bytes)
+
+    If IsNull(bytes) Then
+        ToHexString = ""
+        Exit Function
+    End If
+
+    Dim xml, e
+    Set xml = CreateObject("MSXML2.DOMDocument.6.0")
+    Set e = xml.createElement("data")
+    e.DataType = "bin.hex"
+    e.nodeTypedValue = bytes
+    ToHexString = LCase(Trim(e.Text))
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function FromHexString(t)
+
+    Dim xml, e
+    Set xml = CreateObject("MSXML2.DOMDocument.6.0")
+    Set e = xml.createElement("data")
+    e.DataType = "bin.hex"
+    e.Text = Trim(t)
+    FromHexString = e.nodeTypedValue
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function ReadAllBytes(path)
+
+    Set stream = CreateObject("ADODB.Stream")
+    stream.Type = 1
+    stream.Open
+    stream.LoadFromFile path
+    ReadAllBytes = stream.Read
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function WriteAllBytes(path, bytes)
+
+    If IsNull(bytes) Then
+        Set fso = CreateObject("Scripting.FileSystemObject")
+        With fso.CreateTextFile(path, 2, True)
+            .Close
+        End With
+        Exit Function
+    End If
+
+    Set stream = CreateObject("ADODB.Stream")
+    stream.Type = 1
+    stream.Open
+    stream.Write bytes
+    stream.SaveToFile path, 2
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function GetByteCount(t)
+
+    GetByteCount = CreateObject("System.Text.UTF8Encoding").GetByteCount_2(t)
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function GetBytes(t)
+
+    GetBytes = CreateObject("System.Text.UTF8Encoding").GetBytes_4(t)
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function GetString(bytes)
+
+    GetString = CreateObject("System.Text.UTF8Encoding").GetString((bytes))
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function SHA1(bytes)
+
+    SHA1 = CreateObject("System.Security.Cryptography.SHA1CryptoServiceProvider").ComputeHash_2((bytes))
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function SHA256(bytes)
+
+    SHA256 = CreateObject("System.Security.Cryptography.SHA256Managed").ComputeHash_2((bytes))
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function SHA512(bytes)
+
+    SHA512 = CreateObject("System.Security.Cryptography.SHA512Managed").ComputeHash_2((bytes))
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function EncryptAsymmetric(bytes, key)
+
+    Set rsa = CreateObject("System.Security.Cryptography.RSACryptoServiceProvider")
+    rsa.PersistKeyInCsp = False
+    rsa.FromXmlString key
+    e = rsa.Encrypt((bytes), True)
+    rsa.Clear
+    EncryptAsymmetric = e
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function DecryptAsymmetric(bytes, key)
+
+    Set rsa = CreateObject("System.Security.Cryptography.RSACryptoServiceProvider")
+    rsa.PersistKeyInCsp = False
+    rsa.FromXmlString key
+    e = rsa.Decrypt((bytes), True)
+    rsa.Clear
+    DecryptAsymmetric = e
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function EncryptSymmetric(bytes, password)
+
+    key = SHA256(GetBytes(password)) '256bits = 32Bytes
+    Set a = CreateObject("System.Security.Cryptography.RijndaelManaged")
+    a.KeySize = 256  '256bits = 32Bytes
+    a.BlockSize = 128  '128bits = 16Bytes
+    a.Key = key
+    a.GenerateIV
+    e = a.CreateEncryptor.TransformFinalBlock((bytes), 0, Count(bytes))
+    data = FromHexString(ToHexString(a.IV) + ToHexString(e))
+    a.Clear
+    EncryptSymmetric = data
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function DecryptSymmetric(bytes, password)
+
+    key = SHA256(GetBytes(password))  '256bits = 32Bytes
+    Set a = CreateObject("System.Security.Cryptography.RijndaelManaged")
+    a.KeySize = 256  '256bits = 32Bytes
+    a.BlockSize = 128  '128bits = 16Bytes
+    a.Key = key
+    h = ToHexString(bytes)
+    iv = FromHexString(Mid(h, 1, 32))
+    b = FromHexString(Mid(h, 33))
+    a.IV = iv
+    e = a.CreateDecryptor.TransformFinalBlock((b), 0, Count(b))
+    a.Clear
+    DecryptSymmetric = e
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function Encrypt(bytes)
+
+    Dim a, Data
+
+    Set a = CreateObject("System.Security.Cryptography.RijndaelManaged")
+    a.KeySize = 256
+    a.BlockSize = 128
+    a.GenerateKey
+    a.GenerateIV
+
+    Set e = CreateObject("Scripting.Dictionary")
+    e.Add "Key", a.Key
+    e.Add "IV", a.IV
+    e.Add "Data", a.CreateEncryptor.TransformFinalBlock((bytes), 0, Count(bytes))
+    a.Clear
+
+    Set Encrypt = e
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function Decrypt(bytes, key, iv)
+
+    Set a = CreateObject("System.Security.Cryptography.RijndaelManaged")
+    a.KeySize = 256
+    a.BlockSize = 128
+    a.Key = key
+    a.IV = iv
+    e = a.CreateDecryptor.TransformFinalBlock((bytes), 0, Count(bytes))
+    a.Clear
+    Decrypt = e
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function Unzip(path)
+
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    path = fso.GetAbsolutePathName(path)
+
+    If LCase(fso.GetExtensionName(path)) <> "zip" Then
+        Unzip = Null
+        Exit Function
+    End If
+
+    Set sh = CreateObject("Shell.Application")
+    Set entries = sh.NameSpace(path).items
+
+    folder = fso.GetParentFolderName(path)
+    name = fso.GetBaseName(path)
+
+    If entries.Count = 1 Then
+        sh.NameSpace(folder).CopyHere entries, 20
+    Else
+        folder = folder & "\" & name
+        If fso.FolderExists(folder) = False Then
+            fso.CreateFolder folder
+        End If
+        sh.NameSpace(folder).CopyHere entries, 20
+    End If
+
+    Unzip = folder
+
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function CreateKey()
+
+    Set rsa = CreateObject("System.Security.Cryptography.RSACryptoServiceProvider")
+    rsa.PersistKeyInCsp = False
+    Set Key = CreateObject("Scripting.Dictionary")
+    key.Add "Private", rsa.ToXmlString(true)
+    key.Add "Public", rsa.ToXmlString(false)
+    rsa.Clear
+    Set CreateKey = key
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function GetKey(path)
+
+    Dim xml
+    Set xml = CreateObject("MSXML2.DOMDocument.6.0")
+    If xml.Load(path) Then
+        GetKey = xml.xml
+    Else
+        GetKey = Null
+    End If
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function Count(bytes)
+
+    Count = Len(ToHexString(bytes)) / 2
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function GetGuid()
+
+    GetGuid = LCase(Replace(Mid(CreateObject("Scriptlet.TypeLib").Guid, 2, 36), "-", ""))
+
+End Function
+'----------------------------------------------------------------------------------------------------
+</pre>
+</section>
+
+
+
+<section>
+<h2><a href="Data.js">JScript / JavaScript</a></h2>
+<pre>
+//----------------------------------------------------------------------------------------------------
+var Convert = {
+
+    ToBase64String: function(bytes) {
+        if(bytes == null) {
+            return "";
+        }
+        var xml = new ActiveXObject("MSXML2.DOMDocument.6.0");
+        var e = xml.createElement("data");
+        e.dataType = "bin.base64";
+        e.nodeTypedValue = bytes;
+        return trim(e.text);
+    },
+    FromBase64String: function(t) {
+        var xml = new ActiveXObject("MSXML2.DOMDocument.6.0");
+        var e = xml.createElement("data");
+        e.dataType = "bin.base64";
+        e.text = trim(t);
+        return e.nodeTypedValue;
+    },
+    ToHexString: function(bytes) {
+        if(bytes == null) {
+            return "";
+        }
+        var xml = new ActiveXObject("MSXML2.DOMDocument.6.0");
+        var e = xml.createElement("data");
+        e.dataType = "bin.hex";
+        e.nodeTypedValue = bytes;
+        return trim(e.text).toLowerCase();
+    },
+    FromHexString: function(t) {
+        var xml = new ActiveXObject("MSXML2.DOMDocument.6.0");
+        var e = xml.createElement("data");
+        e.dataType = "bin.hex";
+        e.text = trim(t);
+        return e.nodeTypedValue;
+    }
+
+};
+//----------------------------------------------------------------------------------------------------
+var File = {
+
+    ReadAllBytes: function(path) {
+        var stream = new ActiveXObject("ADODB.Stream");
+        stream.Type = 1;
+        stream.Open();
+        stream.LoadFromFile(path);
+        return stream.Read();
+    },
+    WriteAllBytes: function(path, bytes) {
+        if(bytes == null) {
+            var fso = new ActiveXObject("Scripting.FileSystemObject");
+            var f = fso.CreateTextFile(path, 2, true);
+            f.Close();
+            return;
+        }
+        var stream = new ActiveXObject("ADODB.Stream");
+        stream.Type = 1;
+        stream.Open();
+        stream.Write(bytes);
+        stream.SaveToFile(path, 2);
+    }
+
+};
+//----------------------------------------------------------------------------------------------------
+var Encoding = {
+
+    //adTypeText = 2
+    //adTypeBinary = 1
+
+    GetByteCount: function(t) {
+        var utf8 = new ActiveXObject("System.Text.UTF8Encoding");
+        return utf8.GetByteCount_2(t);
+    },
+    GetBytes: function(t) {
+        var utf8 = new ActiveXObject("System.Text.UTF8Encoding");
+        return utf8.GetBytes_4(t);
+    },
+    GetString: function(bytes) {
+        var utf8 = new ActiveXObject("System.Text.UTF8Encoding");
+        return utf8.GetString((bytes));
+    }
+
+};
+//----------------------------------------------------------------------------------------------------
+var Cryptography = {
+
+    SHA1: function(bytes) {
+        var crypto = new ActiveXObject("System.Security.Cryptography.SHA1CryptoServiceProvider");
+        return crypto.ComputeHash_2((bytes));
+    },
+    SHA256: function(bytes) {
+        var crypto = new ActiveXObject("System.Security.Cryptography.SHA256Managed");
+        return crypto.ComputeHash_2((bytes));
+    },
+    SHA512: function(bytes) {
+        var crypto = new ActiveXObject("System.Security.Cryptography.SHA512Managed");
+        return crypto.ComputeHash_2((bytes));
+    },
+    Asymmetric: {
+        Encrypt: function(bytes, key) {
+            var rsa = new ActiveXObject("System.Security.Cryptography.RSACryptoServiceProvider");
+            rsa.PersistKeyInCsp = false;
+            rsa.FromXmlString(key);
+            e = rsa.Encrypt((bytes), true);
+            rsa.Clear();
+            return e;
+        },
+        Decrypt: function(bytes, key) {
+            var rsa = new ActiveXObject("System.Security.Cryptography.RSACryptoServiceProvider");
+            rsa.PersistKeyInCsp = false;
+            rsa.FromXmlString(key);
+            e = rsa.Decrypt((bytes), true);
+            rsa.Clear();
+            return e;
+        }
+    },
+    Symmetric: {
+        Encrypt: function(bytes, password) {
+            var key = Cryptography.SHA256(Encoding.GetBytes(password));  // 256bits = 32Bytes
+            var a = new ActiveXObject("System.Security.Cryptography.RijndaelManaged");
+            a.KeySize = 256; // 256bits = 32Bytes
+            a.BlockSize = 128; // 128bits = 16Bytes
+            a.Key = key;
+            a.GenerateIV();
+            //a.Padding = PaddingMode.Zeros; // Default = PaddingMode.PKCS7
+            var e = a.CreateEncryptor().TransformFinalBlock((bytes), 0, Count(bytes));
+            var data = Convert.FromHexString(Convert.ToHexString(a.IV) + Convert.ToHexString(e));
+            a.Clear();
+            return data;
+        },
+        Decrypt: function(bytes, password) {
+            var key = Cryptography.SHA256(Encoding.GetBytes(password));  // 256bits = 32Bytes
+            var a = new ActiveXObject("System.Security.Cryptography.RijndaelManaged");
+            a.KeySize = 256; // 256bits = 32Bytes
+            a.BlockSize = 128; // 128bits = 16Bytes
+            a.Key = key;
+            var data = Convert.ToHexString(bytes);
+            var iv = Convert.FromHexString(data.substr(0, 32));
+            var b = Convert.FromHexString(data.substr(32));
+            a.IV = iv;
+            //a.Padding = PaddingMode.Zeros; // Default = PaddingMode.PKCS7
+            var e = a.CreateDecryptor().TransformFinalBlock((b), 0, Count(b));
+            a.Clear();
+            return e;
+        }
+    },
+    Encrypt: function(bytes) {
+        var a = new ActiveXObject("System.Security.Cryptography.RijndaelManaged");
+        a.KeySize = 256;
+        a.BlockSize = 128;
+        a.GenerateKey();
+        a.GenerateIV();
+        var key = a.Key;
+        var iv = a.IV;
+        var data = a.CreateEncryptor().TransformFinalBlock((bytes), 0, Count(bytes));
+        a.Clear();
+        return {
+            Key: key,
+            IV: iv,
+            Data: data
+        };
+    },
+    Decrypt: function(bytes, key, iv) {
+        var a = new ActiveXObject("System.Security.Cryptography.RijndaelManaged");
+        a.KeySize = 256;
+        a.BlockSize = 128;
+        a.Key = key;
+        a.IV = iv;
+        var e = a.CreateDecryptor().TransformFinalBlock((bytes), 0, Count(bytes));
+        a.Clear();
+        return e;
+    }
+
+
+}
+//----------------------------------------------------------------------------------------------------
+var Compression = {
+
+    Unzip: function(path) {
+        var fso = new ActiveXObject("Scripting.FileSystemObject");
+        path = fso.GetAbsolutePathName(path);
+        if( ! /^zip$/i.test(fso.GetExtensionName(path))) {
+            return null;
+        }
+        var sh = new ActiveXObject("Shell.Application");
+        var entries = sh.NameSpace(path).Items();
+        var folder = fso.GetParentFolderName(path);
+        var name = fso.GetBaseName(path);
+        if(entries.Count == 1) {
+            sh.NameSpace(folder).CopyHere(entries, 20);
+        } else {
+            folder = folder + "/" + name
+            if( ! fso.FolderExists(folder)) {
+                fso.CreateFolder(folder);
+            }
+            sh.NameSpace(folder).CopyHere(entries, 20);
+        }
+        return folder;
+    }
+
+}
+//----------------------------------------------------------------------------------------------------
+function CreateKey(path) {
+
+    var rsa = new ActiveXObject("System.Security.Cryptography.RSACryptoServiceProvider");
+    rsa.PersistKeyInCsp = false;
+    var key = {
+        Private: rsa.ToXmlString(true),
+        Public: rsa.ToXmlString(false)
+    };
+    rsa.Clear();
+    return key;
+
+}
+//----------------------------------------------------------------------------------------------------
+function GetKey(path) {
+
+    var xml = new ActiveXObject("MSXML2.DOMDocument.6.0");
+    if(xml.load(path)) {
+        return trim(xml.xml);
+    } else {
+        return null;
+    }
+
+}
+//----------------------------------------------------------------------------------------------------
+function Count(bytes) {
+
+    return Convert.ToHexString(bytes).length / 2;
+
+}
+//----------------------------------------------------------------------------------------------------
+function GetGuid() {
+
+    var typelib = new ActiveXObject("Scriptlet.TypeLib");
+    return typelib.Guid.substr(1, 36).replace(/\-/g, "").toLowerCase();
+
+}
+//----------------------------------------------------------------------------------------------------
+function trim(t) {
+
+    if( ! t || typeof t != "string") {
+        return t;
+    }
+
+    return t.replace(/^\s+|\s+$/g, "");
+
+}
+//----------------------------------------------------------------------------------------------------
+</pre>
+</section>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
