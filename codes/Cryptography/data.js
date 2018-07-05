@@ -241,7 +241,7 @@ function GetGuid() {
 function GetTimestamp() {
 
     var date = new Date;
-    var t = date.getYear();
+    var t = date.getFullYear();
     t += "-" + ("00" + (date.getMonth() + 1)).slice(-2);
     t += "-" + ("00" + date.getDate()).slice(-2);
     t += "T" + ("00" + date.getHours()).slice(-2);
