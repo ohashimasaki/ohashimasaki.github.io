@@ -240,14 +240,14 @@ function GetGuid() {
 //----------------------------------------------------------------------------------------------------
 function GetTimestamp() {
 
-    dt = Now
-    t = Year(dt)
-    t = t & "-" & Right("00" & Month(dt), 2)
-    t = t & "-" & Right("00" & Day(dt), 2)
-    t = t & "T" & Right("00" & Hour(dt), 2)
-    t = t & ":" & Right("00" & Minute(dt), 2)
-    t = t & ":" & Right("00" & Second(dt), 2)
-    GetDate = t
+    var date = new Date;
+    var t = date.getYear();
+    t += "-" + ("00" + (date.getMonth() + 1)).slice(-2);
+    t += "-" + ("00" + date.getDate()).slice(-2);
+    t += "T" + ("00" + date.getHours()).slice(-2);
+    t += ":" + ("00" + date.getMinutes()).slice(-2);
+    t += ":" + ("00" + date.getSeconds()).slice(-2);
+    return t;
 
 }
 //----------------------------------------------------------------------------------------------------
