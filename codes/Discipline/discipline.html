@@ -1,0 +1,277 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>Discipline.js &amp; Cascade.js Example</title>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" />
+<style>
+body {
+    font-family: Meiryo;
+    font-size: 10pt;
+}
+input[type=radio] {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+}
+input[type=checkbox] {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+}
+input[type=text] {
+    border: 1px solid #000000;
+    height: 1.6em;
+    padding: 1px;
+}
+select {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+}
+
+
+
+</style>
+</head>
+<body>
+<form>
+
+<fieldset>
+<legend>A</legend>
+<input type="radio" id="radio1" name="radio" value="A1" />
+<input type="radio" id="radio2" name="radio" value="A2" />
+<input type="radio" id="radio3" name="radio" value="A3" />
+</fieldset>
+
+<fieldset>
+<legend>B</legend>
+<input type="checkbox" id="checkbox1" name="checkbox1" value="B1" />
+<input type="checkbox" id="checkbox2" name="checkbox2" value="B2" />
+<input type="checkbox" id="checkbox3" name="checkbox3" value="B3" />
+try checking all.
+</fieldset>
+
+<fieldset>
+<legend>C</legend>
+<input type="text" id="textbox1" name="textbox1" />
+<input type="text" id="textbox2" name="textbox2" />
+<input type="text" id="textbox3" name="textbox3" />
+try making 3rd textbox blank or changed.
+</fieldset>
+
+<fieldset>
+<legend>D</legend>
+
+<select id="select1">
+<option value="">---</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+</select>
+
+<select id="select2">
+<option value="">---</option>
+<option value="11" data-class="1">11</option>
+<option value="12" data-class="1">12</option>
+<option value="13" data-class="1">13</option>
+<option value="21" data-class="2">21</option>
+<option value="22" data-class="2">22</option>
+<option value="31" data-class="3">31</option>
+<option value="32" data-class="3">32</option>
+</select>
+
+<select id="select3">
+<option value="">---</option>
+<option value="111" data-class="11">111</option>
+<option value="112" data-class="11">112</option>
+<option value="121" data-class="12">121</option>
+<option value="122" data-class="12">122</option>
+<option value="211" data-class="21">211</option>
+<option value="212" data-class="21">212</option>
+<option value="221" data-class="22">221</option>
+<option value="222" data-class="22">222</option>
+<option value="311" data-class="31">311</option>
+<option value="312" data-class="31">312</option>
+<option value="321" data-class="32">321</option>
+<option value="322" data-class="32">322</option>
+</select>
+
+<select id="select4">
+<option value="">---</option>
+<option value="1111" data-class="111">1111</option>
+<option value="1112" data-class="111">1112</option>
+<option value="1121" data-class="112">1111</option>
+<option value="1122" data-class="112">1112</option>
+
+<option value="1211" data-class="121">1211</option>
+<option value="1212" data-class="121">1212</option>
+<option value="1221" data-class="122">1221</option>
+<option value="1222" data-class="122">1222</option>
+
+<option value="2111" data-class="211">2111</option>
+<option value="2112" data-class="211">2112</option>
+<option value="2121" data-class="212">2121</option>
+<option value="2122" data-class="212">2122</option>
+
+<option value="2211" data-class="221">2211</option>
+<option value="2212" data-class="221">2212</option>
+<option value="2221" data-class="222">2221</option>
+<option value="2222" data-class="222">2222</option>
+
+<option value="3111" data-class="311">3111</option>
+<option value="3112" data-class="311">3112</option>
+<option value="3121" data-class="312">3121</option>
+<option value="3122" data-class="312">3122</option>
+
+<option value="3211" data-class="321">3211</option>
+<option value="3212" data-class="321">3212</option>
+<option value="3221" data-class="322">3221</option>
+<option value="3222" data-class="322">3222</option>
+</select>
+try changing each dropdowns.
+</fieldset>
+
+
+<fieldset>
+<legend>E</legend>
+
+<select id="select5">
+<option value=""></option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+</select>
+
+<select id="select6">
+<option value="11" data-class="1">11</option>
+<option value="12" data-class="1">12</option>
+<option value="13" data-class="1">13</option>
+<option value="21" data-class="2">21</option>
+<option value="22" data-class="2">22</option>
+<option value="31" data-class="3">31</option>
+<option value="32" data-class="3">32</option>
+</select>
+
+<select id="select7">
+<option value="111" data-class="11">111</option>
+<option value="112" data-class="11">112</option>
+<option value="121" data-class="12">121</option>
+<option value="122" data-class="12">122</option>
+<option value="211" data-class="21">211</option>
+<option value="212" data-class="21">212</option>
+<option value="221" data-class="22">221</option>
+<option value="222" data-class="22">222</option>
+<option value="311" data-class="31">311</option>
+<option value="312" data-class="31">312</option>
+<option value="321" data-class="32">321</option>
+<option value="322" data-class="32">322</option>
+</select>
+
+<select id="select8">
+<option value="1111" data-class="111">1111</option>
+<option value="1112" data-class="111">1112</option>
+<option value="1121" data-class="112">1111</option>
+<option value="1122" data-class="112">1112</option>
+
+<option value="1211" data-class="121">1211</option>
+<option value="1212" data-class="121">1212</option>
+<option value="1221" data-class="122">1221</option>
+<option value="1222" data-class="122">1222</option>
+
+<option value="2111" data-class="211">2111</option>
+<option value="2112" data-class="211">2112</option>
+<option value="2121" data-class="212">2121</option>
+<option value="2122" data-class="212">2122</option>
+
+<option value="2211" data-class="221">2211</option>
+<option value="2212" data-class="221">2212</option>
+<option value="2221" data-class="222">2221</option>
+<option value="2222" data-class="222">2222</option>
+
+<option value="3111" data-class="311">3111</option>
+<option value="3112" data-class="311">3112</option>
+<option value="3121" data-class="312">3121</option>
+<option value="3122" data-class="312">3122</option>
+
+<option value="3211" data-class="321">3211</option>
+<option value="3212" data-class="321">3212</option>
+<option value="3221" data-class="322">3221</option>
+<option value="3222" data-class="322">3222</option>
+</select>
+try changing each dropdowns.
+</fieldset>
+
+</form>
+<div id="d"></div>
+<script src="rules.js"></script>
+<script src="discipline.js"></script>
+<script src="cascade.js"></script>
+<script>
+
+    window.resizeTo(650,400);
+
+    document.onkeydown = function(event) {
+        if(event.keyCode == 116) {
+            location.reload(true);
+        }
+    }
+
+    var discipline = new Discipline(rules);
+    discipline.constrain();
+
+
+    var cascade = new Cascade();
+    cascade.add("select1").add("select2").add("select3").add("select4").set();
+
+
+    var cascade = new Cascade();
+    cascade.add("select5").add("select6").add("select7").add("select8").set();
+
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
