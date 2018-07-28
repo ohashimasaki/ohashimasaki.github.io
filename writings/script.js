@@ -1,11 +1,11 @@
 ﻿(function() {
 
     fetch("Pages.txt", function(t) {
-        list(document.getElementById("pages"), t.split("\r\n"), "Pages");
+        list(document.getElementById("pages"), t.split(/\r\n|[\r\n]/), "Pages");
     });
 
     fetch("Tags.txt", function(t) {
-        list(document.getElementById("tags"), t.split("\r\n"), "Tags");
+        list(document.getElementById("tags"), t.split(/\r\n|[\r\n]/), "Tags");
     });
 
 
@@ -92,7 +92,7 @@ function unfold(id) {
 function show(ref) {
 
     fetch(ref, function(t) {
-        page(document.getElementById("content"), t.split("\r\n"));
+        page(document.getElementById("content"), t.split(/\r\n|[\r\n]/));
     });
 
 }
