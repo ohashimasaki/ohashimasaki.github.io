@@ -84,7 +84,7 @@ function unfold(id) {
     var e = document.getElementById(id);
 
     fetch(url, function(t) {
-        e.innerHTML = t.replace(/\r\n/g, "<br />");
+        e.innerHTML = t.replace(/\r\n|[\r\n]/g, "<br />");
     });
 
 }
