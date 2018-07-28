@@ -1,0 +1,137 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    font-family: Meiryo;
+    font-size: 10pt;
+    box-sizing: border-box;
+}
+html {
+    height: 100%;
+}
+body {
+    display: block;
+    height: 100%;
+    position: relative;
+    background-color: #ffffff;
+    color: #444466;
+    padding: 30px;
+}
+
+header {
+    display: block;
+    position: relative;
+    height: 40px;
+    zoom: 1;
+}
+main {
+    display: block;
+    zoom: 1;
+    min-height: calc(100% - 80px);
+}
+footer {
+    display: block;
+    height: 40px;
+    zoom: 1;
+}
+
+ul {
+    list-style-type: none;
+}
+
+h1 {
+    font-size: 15pt;
+    font-weight: normal;
+}
+
+#index {
+    margin: 20px 0 20px 0;
+    width: 15%;
+    height: 100%;
+    float: left;
+}
+#index h3 {
+    margin: 0 0 5px 0;
+    font-size: 13pt;
+    font-weight: bold;
+}
+#pages {
+    margin: 10px 0 10px 10px;
+}
+#tags {
+    margin: 30px 0 10px 10px;
+}
+
+#index li {
+    padding: 0 0 0 10px;
+    cursor: pointer;
+    color: #9999aa;
+    font-size: 10.5pt;
+}
+#index li:hover {
+    color: #000000;
+    text-decoration: underline;
+}
+
+
+#content {
+    margin: 20px 20px 20px 0;
+    width: calc(100% - 15% - 40px - 20px);
+    height: 100%;
+    float: right;
+}
+
+
+
+#content section {
+    padding: 20px 20px 15px 20px;
+    min-height: 60px;
+    border-bottom: 1px solid #eeeeee;
+    overflow: hidden;
+}
+#content section:first-of-type {
+    border-top: 1px solid #eeeeee;
+}
+#content section.fold:hover {
+    background-color: #f6f9fc;
+    cursor: pointer;
+}
+
+#content section h3 {
+    font-size: 15pt;
+    font-weight: normal;
+}
+#content section.fold .entry {
+    display: none;
+    padding: 0;
+}
+#content section .entry {
+    display: block;
+    padding: 20px 5px;
+    font-size: 10.5pt;
+}
+#content section .date {
+    float: left;
+}
+#content section.fold .top {
+    display: none;
+}
+#content section .top {
+    display: block;
+    float: right;
+    cursor: pointer;
+    font-size: 10pt;
+    color: #aabbcc;
+}
+#content section .top:hover {
+    color: #000000;
+}
+
+
+
+
+
+
+
+
+
+
