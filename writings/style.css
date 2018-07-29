@@ -2,7 +2,6 @@
     margin: 0;
     padding: 0;
     font-family: Meiryo;
-    font-size: 10pt;
     box-sizing: border-box;
 }
 html {
@@ -14,8 +13,16 @@ body {
     position: relative;
     background-color: #ffffff;
     color: #444466;
-    padding: 30px;
+    padding: 15px;
+    font-size: 9pt;
 }
+@media only screen and (min-width: 768px) {
+    body {
+        padding: 20px;
+        font-size: 10.5pt;
+    }
+}
+
 
 header {
     display: block;
@@ -39,26 +46,75 @@ ul {
 }
 
 h1 {
-    font-size: 15pt;
+    margin: 0 10px;
+    font-size: 13pt;
     font-weight: normal;
 }
+@media only screen and (min-width: 768px) {
+    h1 {
+        font-size: 15pt;
+        font-weight: normal;
+    }
+}
+
+
 
 #index {
-    margin: 20px 0 400px 0;
-    width: 15%;
-    height: 100%;
+    margin: 0;
+    width: 100%;
+    height: auto;
+    float: none;
+}
+@media only screen and (min-width: 768px) {
+    #index {
+        margin: 20px 0 400px 0;
+        width: 15%;
+        height: 100%;
+        float: left;
+    }
+}
+
+#pages {
+    margin: 0 0 10px 10px;
+    width: calc(50% - 10px);
+    float: left;
+}
+#tags {
+    margin: 0 0 10px 10px;
+    width: calc(50% - 10px);
     float: left;
 }
 #index h3 {
-    margin: 0 0 5px 0;
-    font-size: 13pt;
+    margin: 0 20px 10px 0;
+    font-size: 12pt;
     font-weight: bold;
+    cursor: pointer;
 }
-#pages {
-    margin: 10px 0 10px 10px;
+#index ul {
+    display: none;
+    margin: 0 0 20px 0;
 }
-#tags {
-    margin: 30px 0 10px 10px;
+
+@media only screen and (min-width: 768px) {
+    #pages {
+        margin: 10px 0 10px 10px;
+        width: 100%;
+        float: none;
+    }
+    #tags {
+        margin: 30px 0 10px 10px;
+        width: 100%;
+        float: none;
+    }
+    #index h3 {
+        margin: 0 0 5px 0;
+        font-size: 13pt;
+        font-weight: bold;
+        cursor: default;
+    }
+    #index ul {
+        display: block;
+    }
 }
 
 #index li {
@@ -73,18 +129,37 @@ h1 {
 }
 
 
+
+
 #content {
-    margin: 20px 20px 400px 0;
-    width: calc(100% - 15% - 40px - 20px);
+    margin: 10px 0 200px 0;
+    width: 100%;
     height: 100%;
-    float: right;
+    float: none;
+}
+#content h2 {
+    clear:both;
+    margin: 0 10px 10px 10px;
+    font-size: 15pt;
+}
+@media only screen and (min-width: 768px) {
+    #content {
+        margin: 20px 20px 400px 0;
+        width: calc(100% - 15% - 40px - 20px);
+        height: 100%;
+        float: right;
+    }
+    #content h2 {
+        margin: 0 0 20px 0;
+        font-size: 30pt;
+    }
 }
 
 
 
 #content section {
-    padding: 20px 20px 15px 20px;
-    min-height: 60px;
+    padding: 15px 10px 20px 10px;
+    min-height: 40px;
     border-bottom: 1px solid #eeeeee;
     overflow: hidden;
 }
@@ -95,20 +170,41 @@ h1 {
     background-color: #f6f9fc;
     cursor: pointer;
 }
-
 #content section h3 {
-    font-size: 15pt;
+    font-size: 12pt;
     font-weight: normal;
 }
+
+@media only screen and (min-width: 768px) {
+    #content section {
+        padding: 20px 20px 15px 20px;
+        min-height: 60px;
+        border-bottom: 1px solid #eeeeee;
+        overflow: hidden;
+    }
+    #content section h3 {
+        font-size: 18pt;
+        font-weight: normal;
+    }
+}
+
+
 #content section.fold .entry {
     display: none;
     padding: 0;
 }
 #content section .entry {
     display: block;
-    padding: 20px 5px;
-    font-size: 10.5pt;
+    padding: 20px 0;
+    font-size: 10pt;
 }
+@media only screen and (min-width: 768px) {
+    #content section .entry {
+        font-size: 10.5pt;
+    }
+}
+
+
 #content section .date {
     float: left;
 }

@@ -1,8 +1,8 @@
-﻿Tags/Five.txt
-Tags/Four.txt
-Tags/One.txt
-Tags/Seven.txt
-Tags/Six.txt
-Tags/Three.txt
-Tags/Two.txt
-Tags/Zero.txt
+﻿Tags/Five
+Tags/Four
+Tags/One
+Tags/Seven
+Tags/Six
+Tags/Three
+Tags/Two
+Tags/Zero
