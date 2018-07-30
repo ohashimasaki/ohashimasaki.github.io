@@ -291,7 +291,7 @@ h1 {
     border: 1px solid #cccccc;
     padding: 2px 4px;
     font-size: 10pt;
-    word-break: break-all;
+    word-break: keep-all;
 }
 #content section th.wrap {
     word-break: break-all;
