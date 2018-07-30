@@ -28,6 +28,7 @@ header {
     display: block;
     position: relative;
     height: 40px;
+    overflow: hidden;
     zoom: 1;
 }
 main {
@@ -38,6 +39,7 @@ main {
 footer {
     display: block;
     height: 40px;
+    overflow: hidden;
     zoom: 1;
 }
 
@@ -46,6 +48,7 @@ ul {
 }
 
 h1 {
+    display: inline-block;
     margin: 0 10px;
     font-size: 13pt;
     font-weight: normal;
@@ -55,6 +58,21 @@ h1 {
         font-size: 15pt;
         font-weight: normal;
     }
+}
+
+#parts {
+    float: right;
+    margin: 0 20px 0 0;
+    min-width: 300px;
+    overflow: hidden;
+}
+#parts li {
+    margin: 0 0 0 10px;
+    padding: 0 10px;
+    float: left;
+    font-size: 12pt;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 
@@ -260,10 +278,12 @@ h1 {
     margin: 10px 0;
     width: 100%;
     border-collapse: collapse;
+    font-size: 9pt;
 }
 #content section th {
     border: 1px solid #cccccc;
     padding: 2px 5px;
+    font-size: 9pt;
     word-break: keep-all;
 }
 #content section td {
