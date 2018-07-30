@@ -2,12 +2,14 @@
 
     var query = parseQuery(location.search);
 
-    fetch("Pages.txt").then(function(t) {
+    fetch("Pages.txt", function(t) {
         list(document.getElementById("pages"), t.split(/\r\n|[\r\n]/), "Pages");
-        fetch("Tags.txt").then(function(t) {
+
+        fetch("Tags.txt", function(t) {
             list(document.getElementById("tags"), t.split(/\r\n|[\r\n]/), "Tags");
             selectPage();
         });
+
     });
 
 
@@ -85,6 +87,16 @@ function list(u, a, h) {
 
 }
 //----------------------------------------------------------------------------------------------------
+function show(id) {
+
+    var url = id + ".txt";
+
+    fetch(url, function(t, options) {
+        page(document.getElementById("content"), t.split(/\r\n|[\r\n]/), id);
+    });
+
+}
+//----------------------------------------------------------------------------------------------------
 function page(u, a, id) {
 
     var e = document.getElementById(id);
@@ -151,11 +163,12 @@ function page(u, a, id) {
 //----------------------------------------------------------------------------------------------------
 function unfold(id) {
 
-    var url = "Sections/" + id.substr(0, 2) + "/" + id.substr(2) + ".txt";
+    var url = "Sections/" + id.substr(0, 2) + "/" + id.substr(2) + ".html";
 
-    fetch(url).then(function(t) {
+    fetch(url, function(t) {
         var e = document.getElementById(id + "-entry");
-        e.innerHTML = html(t, true);
+console.log(t)
+        e.innerHTML = t;
         e.parentNode.className = "";
 
         var q = parseQuery(location.search);
@@ -166,35 +179,24 @@ function unfold(id) {
 
 }
 //----------------------------------------------------------------------------------------------------
-function show(id) {
+function fetch(url, callback) {
 
-    var url = id + ".txt";
+    var request = new XMLHttpRequest();
+    request.open("GET", url, true);
 
-    fetch(url).then(function(t, options) {
-        page(document.getElementById("content"), t.split(/\r\n|[\r\n]/), id);
-    });
+    request.onload = function() {
+        if(this.status == 200 && callback && typeof callback == "function") {
+            callback(trim(this.responseText));
+        } else {
+            callback(null);
+        }
+    };
 
-}
-//----------------------------------------------------------------------------------------------------
-function fetch(url) {
+    request.onerror = function() {
+        callback(null);
+    };
 
-    return new Promise(function(resolve, reject) {
-        var request = new XMLHttpRequest();
-        request.open("GET", url, true);
-
-        request.onload = function() {
-            if(request.status == 200) {
-                resolve(trim(request.responseText));
-            } else {
-                reject(Error(request.statusText));
-            }
-        };
-        request.onerror = function() {
-            reject(Error("Network Error"));
-        };
-
-        request.send();
-    });
+    request.send();
 
 }
 //----------------------------------------------------------------------------------------------------
