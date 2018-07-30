@@ -140,7 +140,7 @@ h1 {
 #content h2 {
     clear:both;
     margin: 0 10px 10px 10px;
-    font-size: 15pt;
+    font-size: 18pt;
 }
 @media only screen and (min-width: 768px) {
     #content {
@@ -150,8 +150,8 @@ h1 {
         float: right;
     }
     #content h2 {
-        margin: 0 0 20px 0;
-        font-size: 30pt;
+        margin: 0 0 20px 20px;
+        font-size: 36pt;
     }
 }
 
@@ -231,7 +231,7 @@ h1 {
 
 #content section small {
     display: block;
-    margin: 0 0 20px 0;
+    margin: 0 5px 20px 5px;
     font-size: 9pt;
     color: #999999;
 }
