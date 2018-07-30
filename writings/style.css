@@ -231,18 +231,19 @@ h1 {
 
 #content section small {
     display: block;
-    margin: 0 5px 20px 5px;
+    margin: 0 1px 20px 1px;
     font-size: 9pt;
     color: #999999;
 }
 #content section pre {
-    margin: 10px 0 5px 0;
-    padding: 10px;
+    margin: 10px 0px 5px 0px;
+    padding: 20px;
     background-color: #f0f0f0;
     overflow: auto;
 }
 #content section figure {
-    margin: 30px 10px 5px 10px;
+    margin: 30px 0px 5px 0px;
+    overflow: auto;
 }
 #content section figcaption {
     display: block;
@@ -251,7 +252,8 @@ h1 {
 #content section img {
     display: block;
     margin: 10px 0;
-    max-width: 70%;
+    max-width: 60%;
+    max-height: 640px;
 }
 
 #content section table {
@@ -262,15 +264,20 @@ h1 {
 #content section th {
     border: 1px solid #cccccc;
     padding: 2px 5px;
-    word-break: break-all;
+    word-break: keep-all;
 }
 #content section td {
     border: 1px solid #cccccc;
     padding: 2px 4px;
     font-size: 9pt;
+    word-break: keep-all;
+}
+#content section th.wrap {
     word-break: break-all;
 }
-
+#content section td.wrap {
+    word-break: break-all;
+}
 
 
 
