@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div>
+	<p>グスコーブドリは、イーハトーヴの大きな森のなかに生まれました。おとうさんは、グスコーナドリという名高い木こりで、どんな大きな木でも、まるで赤ん坊を寝かしつけるようにわけなく切ってしまう人でした。</p>
+	<small>グスコーブドリは、イーハトーヴの大きな森のなかに生まれました。</small>
+	<p>ブドリにはネリという妹があって、二人は毎日森で遊びました。ごしっごしっとおとうさんの木を挽く音が、やっと聞こえるくらいな遠くへも行きました。二人はそこで木いちごの実をとってわき水につけたり、空を向いてかわるがわる山鳩の鳴くまねをしたりしました。するとあちらでもこちらでも、ぽう、ぽう、と鳥が眠そうに鳴き出すのでした。</p>
+	<pre>
+Dim strFileName As String
+StrFileName = GetNameFromPath("C:\Letters\New\Coverletter.doc")
+
+Function GetNameFromPath(strPath As String) As String
+    Dim strTemp As String
+    Dim intPos As Integer
+    ' If string contains a "\" then return that portion
+    ' of the string after the last "\":
+    If InStr(strPath, "\")&gt; 0 Then
+        intPos = InStrRev(strPath, "\") + 1
+        strTemp = Mid$(strPath, intPos)
+        GetNameFromPath = strTemp
+    Else
+        ' Invalid path submitted so return 0.
+        GetNameFromPath = 0
+    End If
+End Function
+    </pre>
+	<figure>
+		<figcaption>Figure 1</figcaption>
+		<image src="images/5667db507a5d40bda3ab60d346ccb510.png"/>
+	</figure>
+	<p>おかあさんが、家の前の小さな畑に麦を播いているときは、二人はみちにむしろをしいてすわって、ブリキかんで蘭の花を煮たりしました。するとこんどは、もういろいろの鳥が、二人のぱさぱさした頭の上を、まるで挨拶するように鳴きながらざあざあざあざあ通りすぎるのでした。</p>
+	<small>グスコーブドリは、イーハトーヴの大きな森のなかに生まれました。</small>
+	<figure>
+		<caption>Figure 1</caption>
+		<img src="images/20e8817dfd9c4d06a6a3acbc0e7bb36e.jpg"/>
+	</figure>
+	<p>ブドリが学校へ行くようになりますと、森はひるの間たいへんさびしくなりました。そのかわりひるすぎには、ブドリはネリといっしょに、森じゅうの木の幹に、赤い粘土や消し炭で、木の名を書いてあるいたり、高く歌ったりしました。</p>
+	<small>グスコーブドリは、イーハトーヴの大きな森のなかに生まれました。</small>
+	<figure>
+		<figcaption>Figure 2</figcaption>
+		<table responsive="row">
+			<thead>
+				<tr>
+					<th>完全修飾型名</th>
+					<th>名前空間</th>
+					<th>クラス</th>
+					<th>説明</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th data-label="完全修飾型名">Microsoft.JScript.Closure</th>
+					<td data-label="名前空間">Microsoft.JScript</td>
+					<td data-label="クラス">Closure</td>
+					<td data-label="説明">この API は 製品 インフラストラクチャをサポートします。コードから直接使用するためのものではありません。 クロージャの関数を表します。 このクラスは、オブジェクトと関数のカテゴリに属します。</td>
+				</tr>
+				<tr>
+					<th data-label="完全修飾型名">Microsoft.JScript.CmdLineException</th>
+					<td data-label="名前空間">Microsoft.JScript</td>
+					<td data-label="クラス">CmdLineException</td>
+					<td data-label="説明">この API は 製品 インフラストラクチャをサポートします。コードから直接使用するためのものではありません。 コマンド ライン コンパイラ jsc.exe を実行したときに発生するエラーを表します。</td>
+				</tr>
+				<tr>
+					<th data-label="完全修飾型名">Microsoft.JScript.CmdLineOptionParser</th>
+					<td data-label="名前空間">Microsoft.JScript</td>
+					<td data-label="クラス">CmdLineOptionParser</td>
+					<td data-label="説明">この API は 製品 インフラストラクチャをサポートします。コードから直接使用するためのものではありません。 コマンド ライン コンパイラ jsc.exe に指定されているオプションが正しく書式設定、および存在する場合、引数の読み取り回数が含まれるかどうかを判断します。</td>
+				</tr>
+				<tr>
+					<th data-label="完全修飾型名">Microsoft.JScript.COMCharStream</th>
+					<td data-label="名前空間">Microsoft.JScript</td>
+					<td data-label="クラス">COMCharStream</td>
+					<td data-label="説明">この API は 製品 インフラストラクチャをサポートします。コードから直接使用するためのものではありません。 そのデータを送信するストリームを表す、IMessageReceiverです。 データは、データがフラッシュされるか、ストリームが閉じられるまで、バッファーに格納されます。</td></tr>
+				<tr>
+					<th data-label="完全修飾型名">Microsoft.JScript.COMFieldInfo</th>
+					<td data-label="名前空間">Microsoft.JScript</td>
+					<td data-label="クラス">COMFieldInfo</td>
+					<td data-label="説明">この API は 製品 インフラストラクチャをサポートします。コードから直接使用するためのものではありません。 JScript が外部の COM フィールドと通信を有効にします。 このクラスは、外部の COM 実装がそれ自身のオブジェクトを JScript に公開するために使用されます。これは、JScript が外部のオブジェクトにバインドするために、管理された MemberInfo を必要とするからです。</td></tr>
+			</tbody>
+		</table>
+	</figure>
+</div>

@@ -1,0 +1,148 @@
+﻿
+
+@media only screen and (max-width: 768px) {
+    table[responsive] {
+        display: block;
+        overflow: hidden;
+    }
+    table[responsive] thead {
+        display: none;
+    }
+    table[responsive] tbody {
+        display: block;
+        overflow: hidden;
+    }
+    table[responsive] tr {
+        display: block;
+        overflow: hidden;
+    }
+    table[responsive] tbody tr {
+        margin: 20px 0;
+    }
+    table[responsive] tbody th {
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        height: 1.8em;
+        border: none;
+        background-color: transparent;
+        border: none !important;
+        padding: 0 !important;
+    }
+    table[responsive] tbody td {
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-break: break-all;
+        height: 1.8em;
+        border-top: none !important;
+        border-left: 1px solid inherit !important;
+        border-right: 1px solid #cccccc !important;
+        border-bottom: 1px solid #cccccc !important;
+        padding: 0 !important;
+        vertical-align: middle;
+    }
+    table[responsive] tbody > tr > td:first-of-type {
+        border-top: 1px solid #cccccc !important;
+    }
+
+    table[responsive] tbody th:first-child {
+        text-align: left;
+        font-size: 110%;
+    }
+    table[responsive] tbody td:before {
+/*        content: attr(data-label)": ";  */
+        content: attr(data-label);
+        font-weight: bold;
+        width: 25%;
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        float: left;
+        text-align: right;
+        margin-right: 10px;
+        font-weight: normal;
+        background-color: #f6f9fc;
+        height: inherit;
+        padding: 2px 5px;
+        border-right: 1px solid #cccccc !important;
+    }
+}
+
+
+
+@media only screen and (min-width: 768px) {
+    table[responsive=column] {
+        margin: 0 auto;
+        width: 100%;
+        overflow: hidden;
+        display: -webkit-flex;
+        -webkit-flex-direction: row;
+        -webkit-flex-wrap: nowrap;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+    table[responsive=column] thead {
+        display: block;
+        overflow: hidden;
+    }
+    table[responsive=column] tbody {
+        overflow: hidden;
+        display: -webkit-flex;
+        -webkit-flex-direction: row;
+        -webkit-flex-wrap: nowrap;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+    table[responsive] thead tr th {
+        background-color: #f6f9fc;
+    }
+    table[responsive=column] thead th {
+        text-align: right;
+        border-top: none !important;
+    }
+    table[responsive] tbody th {
+        text-align: left;
+    }
+    table[responsive=column] tbody th:first-child {
+        border-left: none;
+        text-align: center;
+    }
+    table[responsive=column] tbody td {
+        border-top: none !important;
+        border-left: none !important;
+    }
+    table[responsive=column] tr {
+        display: block;
+        overflow: hidden;
+    }
+
+    table[responsive=column] th,
+    table[responsive=column] td {
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        height: 1.8em;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<link rel="stylesheet" href="responsive-table.css" />
 <style>
 * {
     margin: 0;
@@ -51,137 +52,6 @@ td {
     background-color: #ffffff;
     border: 1px solid #000000;
 }
-
-
-
-
-@media only screen and (max-width: 768px) {
-    table[responsive] {
-        display: block;
-        overflow: hidden;
-    }
-    table[responsive] thead {
-        display: none;
-    }
-    table[responsive] tbody {
-        display: block;
-        overflow: hidden;
-    }
-    table[responsive] tr {
-        display: block;
-        overflow: hidden;
-    }
-    table[responsive] tbody tr {
-        margin: 20px 0;
-    }
-    table[responsive] tbody th {
-        display: block;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        height: 1.8em;
-        border: none;
-        background-color: transparent;
-    }
-    table[responsive] td {
-        display: block;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        height: 1.8em;
-        border: none;
-        border-left: 1px solid #000000;
-        border-right: 1px solid #000000;
-        border-bottom: 1px solid #000000;
-        padding: 0;
-        vertical-align: middle;
-    }
-    table[responsive] tbody > tr > td:first-of-type {
-        border-top: 1px solid #000000;
-    }
-
-    table[responsive] tbody th:first-child {
-        text-align: left;
-        font-size: 110%;
-    }
-    table[responsive] tbody td:before {
-/*        content: attr(data-label)": ";  */
-        content: attr(data-label);
-        font-weight: bold;
-        width: 25%;
-        display: inline-block;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        float: left;
-        text-align: right;
-        margin-right: 10px;
-        font-weight: normal;
-        background-color: #25b7c0;
-        height: inherit;
-        padding: 2px 5px;
-        border-right: 1px solid #000000;
-    }
-}
-
-
-
-@media only screen and (min-width: 768px) {
-    table[responsive=column] {
-        margin: 0 auto;
-        width: 100%;
-        overflow: hidden;
-        display: -webkit-flex;
-        -webkit-flex-direction: row;
-        -webkit-flex-wrap: nowrap;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-    }
-    table[responsive=column] thead {
-        display: block;
-        overflow: hidden;
-    }
-    table[responsive=column] tbody {
-        overflow: hidden;
-        display: -webkit-flex;
-        -webkit-flex-direction: row;
-        -webkit-flex-wrap: nowrap;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-    }
-    table[responsive=column] thead th {
-        text-align: right;
-        border-top: none;
-    }
-    table[responsive=column] tbody th:first-child {
-        border-left: none;
-        text-align: center;
-    }
-    table[responsive=column] tbody td {
-        border-top: none;
-        border-left: none;
-    }
-    table[responsive=column] tr {
-        display: block;
-        overflow: hidden;
-    }
-
-    table[responsive=column] th,
-    table[responsive=column] td {
-        display: block;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        height: 1.8em;
-    }
-}
-
-
-
-
-
 </style>
 </head>
 <body>
@@ -190,7 +60,7 @@ td {
 
 <section>
 <h2>Row-Major Table</h2>
-<table responsive="row">
+<table responsive>
     <thead>
     <tr>
         <td></td>
