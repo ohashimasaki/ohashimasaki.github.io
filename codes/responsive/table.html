@@ -32,60 +32,49 @@ h2 {
     font-weight: normal;
     color: #25b7c0;
 }
-
-    table {
-        margin: 0 auto;
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 90%;
-    }
-    th {
-        padding: 2px 5px;
-        background-color: #25b7c0;
-        font-size: inherit;
-        border-right: 1px solid #cccccc;
-        border-bottom: 1px solid #cccccc;
-    }
-    tbody th {
-        text-align: right;
-    }
-    td {
-        padding: 2px 5px;
-        background-color: #ffffff;
-        font-size: inherit;
-        border-right: 1px solid #cccccc;
-        border-bottom: 1px solid #cccccc;
-    }
-    tbody > tr:last-child > td, tbody > tr:last-child > th {
-        border-bottom: none;
-    }
-    tr > th:last-child, tr > td:last-child {
-        border-right: none;
-    }
+table {
+    margin: 0 auto;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 90%;
+}
+th {
+    padding: 2px 5px;
+    background-color: #25b7c0;
+    border: 1px solid #000000;
+}
+tbody th {
+    text-align: right;
+}
+td {
+    padding: 2px 5px;
+    background-color: #ffffff;
+    border: 1px solid #000000;
+}
 
 
 
 
 @media only screen and (max-width: 768px) {
-    table {
+    table[responsive] {
         display: block;
         overflow: hidden;
     }
-    thead {
+    table[responsive] thead {
         display: none;
     }
-    tbody {
+    table[responsive] tbody {
         display: block;
         overflow: hidden;
     }
-    tr {
+    table[responsive] tr {
         display: block;
         overflow: hidden;
     }
-    tbody tr {
+    table[responsive] tbody tr {
         margin: 20px 0;
     }
-     tbody th {
+    table[responsive] tbody th {
         display: block;
         overflow: hidden;
         white-space: nowrap;
@@ -94,27 +83,30 @@ h2 {
         border: none;
         background-color: transparent;
     }
-     td {
+    table[responsive] td {
         display: block;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
         height: 1.8em;
         border: none;
-        border-bottom: 1px solid #cccccc;
+        border-left: 1px solid #000000;
+        border-right: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        padding: 0;
+        vertical-align: middle;
     }
-    tbody > tr:last-child > td {
-        border-bottom: 1px solid #cccccc;
+    table[responsive] tbody > tr > td:first-of-type {
+        border-top: 1px solid #000000;
     }
-    tbody > tr > td:last-child {
-        border-bottom: none;
-    }
-    tbody th:first-child {
+
+    table[responsive] tbody th:first-child {
         text-align: left;
         font-size: 110%;
     }
-    tbody td:before {
-        content: attr(data-label)": ";
+    table[responsive] tbody td:before {
+/*        content: attr(data-label)": ";  */
+        content: attr(data-label);
         font-weight: bold;
         width: 25%;
         display: inline-block;
@@ -125,33 +117,20 @@ h2 {
         text-align: right;
         margin-right: 10px;
         font-weight: normal;
+        background-color: #25b7c0;
+        height: inherit;
+        padding: 2px 5px;
+        border-right: 1px solid #000000;
     }
 }
 
 
 
-
-
 @media only screen and (min-width: 768px) {
-    table[major="column"] {
+    table[responsive=column] {
         margin: 0 auto;
         width: 100%;
         overflow: hidden;
-
-        display: -webkit-flex;
-        -webkit-flex-direction: row;
-        -webkit-flex-wrap: nowrap;
-
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-    }
-    table[major="column"] thead {
-        display: block;
-        overflow: hidden;
-    }
-    table[major="column"] tbody {
-        overflow: hidden;
         display: -webkit-flex;
         -webkit-flex-direction: row;
         -webkit-flex-wrap: nowrap;
@@ -159,62 +138,45 @@ h2 {
         flex-direction: row;
         flex-wrap: nowrap;
     }
-    table[major="column"] tr {
+    table[responsive=column] thead {
         display: block;
         overflow: hidden;
-        border-right: 1px solid #cccccc;
     }
-    table[major="column"] thead th {
+    table[responsive=column] tbody {
+        overflow: hidden;
+        display: -webkit-flex;
+        -webkit-flex-direction: row;
+        -webkit-flex-wrap: nowrap;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+    table[responsive=column] thead th {
         text-align: right;
+        border-top: none;
     }
-    table[major="column"] tbody th {
+    table[responsive=column] tbody th:first-child {
+        border-left: none;
         text-align: center;
     }
-    table[major="column"] tbody > tr:last-child {
-        border-right: none;
+    table[responsive=column] tbody td {
+        border-top: none;
+        border-left: none;
     }
-    table[major="column"] th,
-    table[major="column"] td {
+    table[responsive=column] tr {
+        display: block;
+        overflow: hidden;
+    }
+
+    table[responsive=column] th,
+    table[responsive=column] td {
         display: block;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
         height: 1.8em;
-        border: none;
-    }
-    table[major="column"] th,
-    table[major="column"] td,
-    table[major="column"] > thead > tr > th,
-    table[major="column"] > tbody > tr > th,
-    table[major="column"] > tbody > tr:last-child > td {
-        border-bottom: 1px solid #cccccc;
-    }
-    table[major="column"] > tbody > tr > td:last-child {
-        border-bottom: none;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -227,8 +189,8 @@ h2 {
 
 
 <section>
-<h2>Column-Major Table</h2>
-<table class="row column" major="column">
+<h2>Row-Major Table</h2>
+<table responsive="row">
     <thead>
     <tr>
         <td></td>
@@ -250,38 +212,15 @@ h2 {
         <td data-label="Last Name">Tick</td>
         <td data-label="Job Title">Crimefighter Sorta</td>
     </tr>
-    <tr>
-        <th>James Matman</th>
-        <td data-label="First Name">James</td>
-        <td data-label="Last Name">Matman</td>
-        <td data-label="Job Title">Chief Sandwich Eater</td>
-    </tr>
-    <tr>
-        <th>The Tick</th>
-        <td data-label="First Name">The</td>
-        <td data-label="Last Name">Tick</td>
-        <td data-label="Job Title">Crimefighter Sorta</td>
-    </tr>
-    <tr>
-        <th>James Matman</th>
-        <td data-label="First Name">James</td>
-        <td data-label="Last Name">Matman</td>
-        <td data-label="Job Title">Chief Sandwich Eater</td>
-    </tr>
-    <tr>
-        <th>The Tick</th>
-        <td data-label="First Name">The</td>
-        <td data-label="Last Name">Tick</td>
-        <td data-label="Job Title">Crimefighter Sorta</td>
-    </tr>
     </tbody>
 </table>
 </section>
+
 
 
 <section>
-<h2>Row-Major Table</h2>
-<table class="row column">
+<h2>Column-Major Table</h2>
+<table responsive="column">
     <thead>
     <tr>
         <td></td>
@@ -303,9 +242,34 @@ h2 {
         <td data-label="Last Name">Tick</td>
         <td data-label="Job Title">Crimefighter Sorta</td>
     </tr>
+    <tr>
+        <th>James Matman</th>
+        <td data-label="First Name">James</td>
+        <td data-label="Last Name">Matman</td>
+        <td data-label="Job Title">Chief Sandwich Eater</td>
+    </tr>
+    <tr>
+        <th>The Tick</th>
+        <td data-label="First Name">The</td>
+        <td data-label="Last Name">Tick</td>
+        <td data-label="Job Title">Crimefighter Sorta</td>
+    </tr>
+    <tr>
+        <th>James Matman</th>
+        <td data-label="First Name">James</td>
+        <td data-label="Last Name">Matman</td>
+        <td data-label="Job Title">Chief Sandwich Eater</td>
+    </tr>
+    <tr>
+        <th>The Tick</th>
+        <td data-label="First Name">The</td>
+        <td data-label="Last Name">Tick</td>
+        <td data-label="Job Title">Crimefighter Sorta</td>
+    </tr>
     </tbody>
 </table>
 </section>
+
 
 
 
