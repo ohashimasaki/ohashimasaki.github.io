@@ -115,6 +115,30 @@ var Cryptography = {
             return e;
         }
     },
+    Sign: function(hash, privatekey) {
+        var rsa = new ActiveXObject("System.Security.Cryptography.RSACryptoServiceProvider");
+        rsa.PersistKeyInCsp = false;
+        rsa.FromXmlString(privatekey);
+
+        var formatter = new ActiveXObject("System.Security.Cryptography.RSAPKCS1SignatureFormatter");
+        formatter.SetHashAlgorithm("SHA1");
+        formatter.SetKey(rsa);
+        var signature = formatter.CreateSignature_2((hash));
+        rsa.Clear();
+        return signature;
+    },
+    Verify: function(hash, signature, publickey) {
+        var rsa = new ActiveXObject("System.Security.Cryptography.RSACryptoServiceProvider");
+        rsa.PersistKeyInCsp = false;
+        rsa.FromXmlString(publickey);
+
+        var deformatter = new ActiveXObject("System.Security.Cryptography.RSAPKCS1SignatureDeformatter");
+        deformatter.SetHashAlgorithm("SHA1");
+        deformatter.SetKey(rsa);
+        var result = deformatter.VerifySignature_2((hash), (signature));
+        rsa.Clear();
+        return result;
+    },
     Symmetric: {
         Encrypt: function(bytes, password) {
             var key = Cryptography.SHA256(Encoding.GetBytes(password));  // 256bits = 32Bytes

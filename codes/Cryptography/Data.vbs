@@ -117,6 +117,36 @@ Function SHA512(bytes)
 
 End Function
 '----------------------------------------------------------------------------------------------------
+Function Sign(hash, privatekey)
+
+    Set rsa = CreateObject("System.Security.Cryptography.RSACryptoServiceProvider")
+    rsa.PersistKeyInCsp = False
+    rsa.FromXmlString privatekey
+
+    Set formatter = CreateObject("System.Security.Cryptography.RSAPKCS1SignatureFormatter")
+    formatter.SetHashAlgorithm("SHA1")
+    formatter.SetKey(rsa)
+    signature = formatter.CreateSignature_2((hash))
+    rsa.Clear
+    Sign = signature
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function Verify(hash, signature, publickey)
+
+    Set rsa = CreateObject("System.Security.Cryptography.RSACryptoServiceProvider")
+    rsa.PersistKeyInCsp = False
+    rsa.FromXmlString publickey
+
+    Set deformatter = CreateObject("System.Security.Cryptography.RSAPKCS1SignatureDeformatter")
+    deformatter.SetHashAlgorithm("SHA1")
+    deformatter.SetKey(rsa)
+    result = deformatter.VerifySignature_2((hash), (signature))
+    rsa.Clear
+    Verify = result
+
+End Function
+'----------------------------------------------------------------------------------------------------
 Function EncryptAsymmetric(bytes, key)
 
     Set rsa = CreateObject("System.Security.Cryptography.RSACryptoServiceProvider")
