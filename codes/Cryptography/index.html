@@ -592,24 +592,6 @@ var Cryptography = {
         var crypto = new ActiveXObject("System.Security.Cryptography.SHA512Managed");
         return crypto.ComputeHash_2((bytes));
     },
-    Asymmetric: {
-        Encrypt: function(bytes, key) {
-            var rsa = new ActiveXObject("System.Security.Cryptography.RSACryptoServiceProvider");
-            rsa.PersistKeyInCsp = false;
-            rsa.FromXmlString(key);
-            e = rsa.Encrypt((bytes), true);
-            rsa.Clear();
-            return e;
-        },
-        Decrypt: function(bytes, key) {
-            var rsa = new ActiveXObject("System.Security.Cryptography.RSACryptoServiceProvider");
-            rsa.PersistKeyInCsp = false;
-            rsa.FromXmlString(key);
-            e = rsa.Decrypt((bytes), true);
-            rsa.Clear();
-            return e;
-        }
-    },
     Sign: function(hash, privatekey) {
         var rsa = new ActiveXObject("System.Security.Cryptography.RSACryptoServiceProvider");
         rsa.PersistKeyInCsp = false;
@@ -633,6 +615,24 @@ var Cryptography = {
         var result = deformatter.VerifySignature_2((hash), (signature));
         rsa.Clear();
         return result;
+    },
+    Asymmetric: {
+        Encrypt: function(bytes, key) {
+            var rsa = new ActiveXObject("System.Security.Cryptography.RSACryptoServiceProvider");
+            rsa.PersistKeyInCsp = false;
+            rsa.FromXmlString(key);
+            e = rsa.Encrypt((bytes), true);
+            rsa.Clear();
+            return e;
+        },
+        Decrypt: function(bytes, key) {
+            var rsa = new ActiveXObject("System.Security.Cryptography.RSACryptoServiceProvider");
+            rsa.PersistKeyInCsp = false;
+            rsa.FromXmlString(key);
+            e = rsa.Decrypt((bytes), true);
+            rsa.Clear();
+            return e;
+        }
     },
     Symmetric: {
         Encrypt: function(bytes, password) {
