@@ -154,6 +154,24 @@ msgbox t, vbOKOnly, "SHA1ハッシュ"
 t = ToHexString(SHA256(b))
 msgbox t, vbOKOnly, "SHA256ハッシュ"
 
+'----------------------------------------------------------------------------------------------------
+
+'ファイルをバイト配列に
+b = ReadAllBytes("test.txt")
+
+'SHA1ハッシュに
+hash = SHA1(b)
+
+'ハッシュを署名
+'秘密鍵は実際には暗号化またはキーコンテナに保存しておく必要があります。
+privatekey = fso.opentextFile("privatekey.xml", 1).ReadAll
+signature = Sign(hash, privatekey)
+msgbox ToBase64String(signature)
+
+'署名を検証
+publickey = fso.opentextFile("publickey.xml", 1).ReadAll
+msgbox Verify(hash, signature, publickey)
+
 
 '----------------------------------------------------------------------------------------------------
 
@@ -280,6 +298,36 @@ End Function
 Function SHA512(bytes)
 
     SHA512 = CreateObject("System.Security.Cryptography.SHA512Managed").ComputeHash_2((bytes))
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function Sign(hash, privatekey)
+
+    Set rsa = CreateObject("System.Security.Cryptography.RSACryptoServiceProvider")
+    rsa.PersistKeyInCsp = False
+    rsa.FromXmlString privatekey
+
+    Set formatter = CreateObject("System.Security.Cryptography.RSAPKCS1SignatureFormatter")
+    formatter.SetHashAlgorithm("SHA1")
+    formatter.SetKey(rsa)
+    signature = formatter.CreateSignature_2((hash))
+    rsa.Clear
+    Sign = signature
+
+End Function
+'----------------------------------------------------------------------------------------------------
+Function Verify(hash, signature, publickey)
+
+    Set rsa = CreateObject("System.Security.Cryptography.RSACryptoServiceProvider")
+    rsa.PersistKeyInCsp = False
+    rsa.FromXmlString publickey
+
+    Set deformatter = CreateObject("System.Security.Cryptography.RSAPKCS1SignatureDeformatter")
+    deformatter.SetHashAlgorithm("SHA1")
+    deformatter.SetKey(rsa)
+    result = deformatter.VerifySignature_2((hash), (signature))
+    rsa.Clear
+    Verify = result
 
 End Function
 '----------------------------------------------------------------------------------------------------
@@ -561,6 +609,30 @@ var Cryptography = {
             rsa.Clear();
             return e;
         }
+    },
+    Sign: function(hash, privatekey) {
+        var rsa = new ActiveXObject("System.Security.Cryptography.RSACryptoServiceProvider");
+        rsa.PersistKeyInCsp = false;
+        rsa.FromXmlString(privatekey);
+
+        var formatter = new ActiveXObject("System.Security.Cryptography.RSAPKCS1SignatureFormatter");
+        formatter.SetHashAlgorithm("SHA1");
+        formatter.SetKey(rsa);
+        var signature = formatter.CreateSignature_2((hash));
+        rsa.Clear();
+        return signature;
+    },
+    Verify: function(hash, signature, publickey) {
+        var rsa = new ActiveXObject("System.Security.Cryptography.RSACryptoServiceProvider");
+        rsa.PersistKeyInCsp = false;
+        rsa.FromXmlString(publickey);
+
+        var deformatter = new ActiveXObject("System.Security.Cryptography.RSAPKCS1SignatureDeformatter");
+        deformatter.SetHashAlgorithm("SHA1");
+        deformatter.SetKey(rsa);
+        var result = deformatter.VerifySignature_2((hash), (signature));
+        rsa.Clear();
+        return result;
     },
     Symmetric: {
         Encrypt: function(bytes, password) {
