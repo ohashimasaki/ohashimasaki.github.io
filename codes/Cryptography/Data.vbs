@@ -124,7 +124,7 @@ Function Sign(hash, privatekey)
     rsa.FromXmlString privatekey
 
     Set formatter = CreateObject("System.Security.Cryptography.RSAPKCS1SignatureFormatter")
-    formatter.SetHashAlgorithm("SHA1")
+    formatter.SetHashAlgorithm("SHA256")
     formatter.SetKey(rsa)
     signature = formatter.CreateSignature_2((hash))
     rsa.Clear
@@ -139,7 +139,7 @@ Function Verify(hash, signature, publickey)
     rsa.FromXmlString publickey
 
     Set deformatter = CreateObject("System.Security.Cryptography.RSAPKCS1SignatureDeformatter")
-    deformatter.SetHashAlgorithm("SHA1")
+    deformatter.SetHashAlgorithm("SHA256")
     deformatter.SetKey(rsa)
     result = deformatter.VerifySignature_2((hash), (signature))
     rsa.Clear

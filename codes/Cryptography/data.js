@@ -121,7 +121,7 @@ var Cryptography = {
         rsa.FromXmlString(privatekey);
 
         var formatter = new ActiveXObject("System.Security.Cryptography.RSAPKCS1SignatureFormatter");
-        formatter.SetHashAlgorithm("SHA1");
+        formatter.SetHashAlgorithm("SHA256");
         formatter.SetKey(rsa);
         var signature = formatter.CreateSignature_2((hash));
         rsa.Clear();
@@ -133,7 +133,7 @@ var Cryptography = {
         rsa.FromXmlString(publickey);
 
         var deformatter = new ActiveXObject("System.Security.Cryptography.RSAPKCS1SignatureDeformatter");
-        deformatter.SetHashAlgorithm("SHA1");
+        deformatter.SetHashAlgorithm("SHA256");
         deformatter.SetKey(rsa);
         var result = deformatter.VerifySignature_2((hash), (signature));
         rsa.Clear();
