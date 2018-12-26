@@ -6,11 +6,9 @@
 <body>
 <pre id="pre"></pre>
 </body>
-<script src="https://rawgit.com/ohashimasaki/ChineseNumerals/master/ChineseNumerals.js"></script>
+<!--script src="https://rawgit.com/ohashimasaki/ChineseNumerals/master/ChineseNumerals.js"></script-->
+<script src="https://cdn.jsdelivr.net/gh/ohashimasaki/ChineseNumerals@master/ChineseNumerals.js"></script>
 <script>
-
-
-
 
     function N(t) {
         document.getElementById("pre").innerText += "\r\n" + t + "\r\n";
@@ -19,7 +17,6 @@
             document.getElementById("pre").innerText += "\r\n" + i + " " + t + " = " + parseNumerals(t) + "\r\n";
         }
     } 
-
 
 var q = [
 "万零",
@@ -87,8 +84,6 @@ for(var i = t.length; i > 0; i--) {
     t = t.substr(0, i);
     document.getElementById("pre").innerText += t + " = " + parseChineseNumerals(t) + "\r\n";
 }
-
-
 
 
 </script>
