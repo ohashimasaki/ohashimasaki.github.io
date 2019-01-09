@@ -18,6 +18,8 @@ $RECYCLE.BIN/
 *.lnk
 
 *.pdf
+*.hta
+blog/editor/
 
 
 # =========================
