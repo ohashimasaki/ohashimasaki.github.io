@@ -37,13 +37,20 @@ footer {
 
 header > h1 {
     margin: 0 20px 20px 20px;
-    font-size: 15pt;
+}
+header > h1 > a {
+    font-size: 40pt;
     font-weight: normal;
     color: #fafafa;
     font-family: Cagliostro;
+    text-decoration: none;
+}
+header > h1 > a:link,
+header > h1 > a:visited {
+    color: #fafafa;
 }
 @media only screen and (min-width: 768px) {
-    header > h1 {
+    header > h1 > a {
         font-size: 50pt;
     }
 }
@@ -86,8 +93,15 @@ ul {
 
 
 #entries {
-    margin: 20px;
+    margin: 20px 25px 20px 20px;
 }
+@media only screen and (min-width: 768px) {
+    #entries {
+        margin: 20px;
+    }
+}
+
+
 #entries li {
     margin: 0 0 1px 0;
     padding: 20px 25px;
@@ -131,7 +145,12 @@ ul {
 
 
 #categories {
-    margin: 20px;
+    margin: 20px 25px 20px 20px;
+}
+@media only screen and (min-width: 768px) {
+    #categories {
+        margin: 20px;
+    }
 }
 #categories li {
     margin: 1px 0;
@@ -161,11 +180,30 @@ ul {
 
 article {
     display: block;
-    margin: 20px;
-    padding: 40px 50px 100px 50px;
+    margin: 20px 25px 20px 20px;
+    padding: 20px 30px 40px 30px;
     background-color: #fcfcfc;
     box-shadow:  0 2px 10px 0 rgba(0, 0, 0, 0.1);
 }
+@media only screen and (min-width: 640px) {
+    article {
+        padding: 30px 40px 50px 40px;
+    }
+}
+@media only screen and (min-width: 768px) {
+    article {
+        padding: 30px 40px 50px 40px;
+    }
+}
+@media only screen and (min-width: 1080px) {
+    article {
+        margin: 20px;
+        padding: 40px 50px 60px 50px;
+    }
+}
+
+
+
 article > h1 {
     margin: 0 0 30px 0;
     padding: 5px;
