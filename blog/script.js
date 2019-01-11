@@ -6,7 +6,7 @@
 
     var query = parseQuery(location.search);
 
-    $selected = $selected || query.category;
+    $selected = $selected || decodeURIComponent(query.category);
 
     fetch("category.json", function(data) {
         if(data) {
