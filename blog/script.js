@@ -51,8 +51,12 @@
                 var a = document.getElementById("content").getElementsByTagName("article")[0];
                 if(a) {
                     var published = a.getAttribute("published");
+                    var category = a.getAttribute("category").replace(/,/g, ", ");
                     if(published) {
-                        a.insertAdjacentHTML("beforeend", '<time>' + html(published) + '</time>');
+                        a.insertAdjacentHTML("beforeend", [
+                            '<time id="published">' + html(published) + '</time>',
+                            '<div id="category">カテゴリー: ' + category + '</div>'
+                        ].join("\r\n"));
                     }
                 }
                 return;

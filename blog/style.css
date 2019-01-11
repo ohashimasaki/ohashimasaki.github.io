@@ -234,10 +234,10 @@ article > p {
     padding: 0 10px;
     font-size: 11pt;
 }
-article > div {
-    margin: 10px 0 40px 0;
-}
+
 article > div > small {
+    display: block;
+    margin: 10px 0 40px 0;
     padding: 0 10px;
     font-size: 11pt;
     font-family: Alconica, Segoe UI, Meiryo, "Hiragino Kaku Gothic Pro", Arial, sans-serif;
@@ -250,6 +250,7 @@ article > pre {
     font-size: 11pt;
     font-family: Alconica, Segoe UI, Meiryo, "Hiragino Kaku Gothic Pro", Arial, sans-serif;
     background-color: #f7f6f5;
+    overflow: scroll;
 }
 article > blockquote {
     margin: 20px 0 10px 0;
@@ -258,45 +259,143 @@ article > blockquote {
     font-family: Alconica, Segoe UI, Meiryo, "Hiragino Kaku Gothic Pro", Arial, sans-serif;
     background-color: #e8ecef;
     border-radius: 20px;
+    quotes: ''"', ''"';
 }
+article > blockquote::before {
+  content: open-quote;
+}
+article > blockquote:after {
+  content: close-quote;
+}
+
 article > ul {
     margin: 20px 0 10px 0;
     padding: 10px 30px;
     list-style-type: disc;
-    
 }
 article > ul li {
 }
 
-article > time {
+article > time#published {
     display: block;
     margin: 50px 0 0 0;
     font-size: 11pt;
     text-align: right;
 }
+article > div#category {
+    display: block;
+    margin: 20px;
+    font-size: 10pt;
+    color: #aaaaaa;
+}
+
+
+
+
+/* TABLE */
 
 article > figure table {
+    table-layout: fixed;
     margin: 10px 0;
     width: 100%;
     border-collapse: collapse;
     font-size: 10.5pt;
 }
+article > figure table tr {
+    display: block;
+    margin: 10px 0;
+}
+article > figure table tr:first-of-type {
+    display: none;
+}
 article > figure table th {
-    padding: 4px 8px;
-    font-size: 10.5pt;
-    word-break: keep-all;
-    background-color: #a1d8e2;
+    display: block;
     border: 1px solid #000000;
+}
+article > figure table tr th:first-of-type {
+    border: none;
+    padding: 4px 4px;
+    font-weight: bold;
+    text-align: left;
+    font-size: 12pt;
 }
 article > figure table td {
-    padding: 4px 8px;
-    font-size: 10.5pt;
-    word-break: keep-all;
+    display: block;
     border: 1px solid #000000;
+    border-bottom: none;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    height: 1.8em;
 }
-article > figure table tr > th:first-of-type {
+article > figure table td:last-of-type {
+    border-bottom: 1px solid #000000;
+}
+article > figure table td::before {
+    display: inline-block;
+    content: attr(data-label);
+    width: 25%;
+    float: left;
     text-align: right;
+    margin-right: 10px;
+    font-weight: normal;
+    background-color: #a1d8e2;
+    height: inherit;
+    padding: 2px 5px;
+    border-right: 1px solid #000000;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
 }
+
+@media only screen and (min-width: 768px) {
+    article > figure table tr:first-of-type {
+        display: block;
+    }
+    article > figure table tr {
+        display: table-row;
+    }
+    article > figure table tr:first-of-type {
+        display: table-row;
+    }
+    article > figure table th {
+        display: table-cell;
+        padding: 4px 8px;
+        font-size: 10.5pt;
+        background-color: #a1d8e2;
+        white-space: normal;
+        word-break: break-all;
+        vertical-align: middle;
+        border: 1px solid #000000;
+    }
+    article > figure table td {
+        display: table-cell;
+        padding: 4px 8px;
+        font-size: 10.5pt;
+        overflow: hidden;
+        white-space: normal;
+        word-break: break-all;
+        vertical-align: top;
+        border: 1px solid #000000;
+    }
+    article > figure table td::before {
+        display: none;
+    }
+    article > figure table tr th:first-of-type {
+        border: table-cell;
+        padding: 4px 4px;
+        font-weight: bold;
+        text-align: right;
+        font-size: 12pt;
+        border: 1px solid #000000;
+    }
+}
+
+
+
+
 
 
 
