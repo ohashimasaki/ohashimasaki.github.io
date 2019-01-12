@@ -250,7 +250,7 @@ article > pre {
     font-size: 11pt;
     font-family: Alconica, Segoe UI, Meiryo, "Hiragino Kaku Gothic Pro", Arial, sans-serif;
     background-color: #f7f6f5;
-    overflow: scroll;
+    overflow-x: auto;
 }
 article > blockquote {
     margin: 20px 0 10px 0;

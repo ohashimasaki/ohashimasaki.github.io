@@ -55,7 +55,7 @@
                     if(published) {
                         a.insertAdjacentHTML("beforeend", [
                             '<time id="published">' + html(published) + '</time>',
-                            '<div id="category">カテゴリー: ' + category + '</div>'
+                            '<div id="category">Category: ' + category + '</div>'
                         ].join("\r\n"));
                     }
                 }

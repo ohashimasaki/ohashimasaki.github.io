@@ -1,188 +1,11 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-<meta charset=UTF-8"/>
-<title>Using Cryptography in Excel VBA</title>
-<style>
-
-body {
-    background-color: #5d7189;
-    background-color: #495c75;
-    color: #dddddd;
-    font-family: Meiryo;
-    font-size: 9pt;
-    margin: 0;
-    padding: 30px 30px 100px 30px;    
-}
-h1 {
-    margin: 0;
-    font-size: 40pt;
-    color: #ffffff;
-}
-h2 {
-    margin: 0;
-    font-size: 20pt;
-    font-weight: normal;
-    color: #ffffff;
-}
-h3 {
-    font-size: 18pt;
-    color: #ffffff;
-}
-h2 a  {
-    color: #ffffff;
-}
-h2 a:link, h2 a:visited {
-    color: #ffffff;
-}
-
-section {
-    display: block;
-    margin: 50px 0 50px 0;
-}
-pre {
-    background-color: #fefcf6;
-    padding: 20px;
-    font-family: Meiryo;
-    overflow-x: auto;
-    color: #000000;
-}
-section h2 {
-    font-size: 25pt;
-    font-weight: bold;
-    color: #ffffff;
-}
-</style>
-</head>
-<body>
-<h1>Using Cryptography in Excel VBA</h1>
-
-<section>
-<h2>Usage</h2>
-</section>
-<pre>
-With CreateObject("Scripting.FileSystemObject").openTextFile("Data.vbs", 1)
-    ExecuteGlobal .ReadAll
-    .Close
-End With
-
-
-
-'暗号化（パスワード＝対称キー方式）
-b = GetBytes("Prince - Purple Rain (Official Video) | プリンス／パープル・レイン")
-e = EncryptSymmetric(b, "PASSWORD")
-t = ToBase64String(e)
-msgbox t, vbOKOnly, "暗号化（パスワード＝対称キー方式）"
-
-'復号
-b = DecryptSymmetric(e, "PASSWORD")
-t = GetString(b)
-msgbox t, vbOKOnly, "復号（パスワード＝対称キー方式）"
-
-
-
-'暗号化（非対称キー方式）
-b = GetBytes("Prince - Purple Rain (Official Video) | プリンス／パープル・レイン")
-Set key = CreateKey
-e = EncryptAsymmetric(b, key("Public"))
-t = ToBase64String(e)
-msgbox t, vbOKOnly, "暗号化（非対称キー方式）"
-
-'復号
-b = DecryptAsymmetric(e, key("Private"))
-t = GetString(b)
-msgbox t, vbOKOnly, "復号（パスワード＝対称キー方式）"
-
-
-
-'暗号化（ハイブリッド方式）
-b = GetBytes("Prince - Purple Rain (Official Video) | プリンス／パープル・レイン")
-Set e = Encrypt(b)
-t = ToBase64String(e("Data"))
-msgbox t, vbOKOnly, "暗号化（ハイブリッド方式）"
-
-'復号
-b = Decrypt(e("Data"), e("Key"), e("IV"))
-t = GetString(b)
-msgbox t, vbOKOnly, "復号（ハイブリッド方式）"
-
-
-
-'----------------------------------------------------------------------------------------------------
-
-'ファイルをバイト配列に
-b = ReadAllBytes("test.txt")
-
-'Base64に
-t = ToBase64String(b)
-msgbox t, vbOKOnly, "Base64"
-
-'16進表記に
-t = ToHexString(b)
-msgbox t, vbOKOnly, "16進表記"
-
-'SHA1ハッシュに
-t = ToHexString(SHA1(b))
-msgbox t, vbOKOnly, "SHA1ハッシュ"
-
-'SHA256ハッシュに
-t = ToHexString(SHA256(b))
-msgbox t, vbOKOnly, "SHA256ハッシュ"
-
-'別のファイルに保存
-WriteAllBytes "test2.txt", b
-
-
-'----------------------------------------------------------------------------------------------------
-
-'テキストをバイト配列に
-b = GetBytes("Prince - Purple Rain (Official Video) | プリンス／パープル・レイン")
-
-'Base64に
-t = ToBase64String(b)
-msgbox t, vbOKOnly, "Base64"
-
-'16進表記に
-t = ToHexString(b)
-msgbox t, vbOKOnly, "16進表記"
-
-'SHA1ハッシュに
-t = ToHexString(SHA1(b))
-msgbox t, vbOKOnly, "SHA1ハッシュ"
-
-'SHA256ハッシュに
-t = ToHexString(SHA256(b))
-msgbox t, vbOKOnly, "SHA256ハッシュ"
-
-'----------------------------------------------------------------------------------------------------
-
-'ファイルをバイト配列に
-b = ReadAllBytes("test.txt")
-
-'SHA1ハッシュに
-hash = SHA256(b)
-
-'ハッシュを署名
-'秘密鍵は実際には暗号化またはキーコンテナに保存しておく必要があります。
-privatekey = fso.opentextFile("privatekey.xml", 1).ReadAll
-signature = Sign(hash, privatekey)
-msgbox ToBase64String(signature)
-
-'署名を検証
-publickey = fso.opentextFile("publickey.xml", 1).ReadAll
-msgbox Verify(hash, signature, publickey)
-
-
-'----------------------------------------------------------------------------------------------------
-
-msgbox "おしまい"
-
-
-</pre>
-<section>
-<h2><a href="Data.vbs">VBScript</a></h2>
-<pre>
-'----------------------------------------------------------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<article title="Using Cryptography in Excel VBA" published="2019-01-12T09:37:54+09:00" updated="2019-01-12T13:29:11+09:00" category="VBA,VBScript,JScript,JavaScript,Cryptography,暗号化">
+	<h1>Using Cryptography in Excel VBA</h1>
+		<p>VBA/VBScript で暗号化やデジタル署名を使用することができます。<br/>
+VBScript / VBA<br/>
+		<br/>
+	</p>
+	<pre>'----------------------------------------------------------------------------------------------------
 Function ToBase64String(bytes)
 
     If IsNull(bytes) Then
@@ -423,7 +246,7 @@ Function Unzip(path)
     Set fso = CreateObject("Scripting.FileSystemObject")
     path = fso.GetAbsolutePathName(path)
 
-    If LCase(fso.GetExtensionName(path)) <> "zip" Then
+    If LCase(fso.GetExtensionName(path)) &lt;&gt; "zip" Then
         Unzip = Null
         Exit Function
     End If
@@ -437,7 +260,7 @@ Function Unzip(path)
     If entries.Count = 1 Then
         sh.NameSpace(folder).CopyHere entries, 20
     Else
-        folder = folder & "\" & name
+        folder = folder &amp; "\" &amp; name
         If fso.FolderExists(folder) = False Then
             fso.CreateFolder folder
         End If
@@ -484,16 +307,119 @@ Function GetGuid()
     GetGuid = LCase(Replace(Mid(CreateObject("Scriptlet.TypeLib").Guid, 2, 36), "-", ""))
 
 End Function
+'----------------------------------------------------------------------------------------------------</pre>
+	<p>Usage / 使い方</p>
+	<pre>With CreateObject("Scripting.FileSystemObject").openTextFile("Data.vbs", 1)
+    ExecuteGlobal .ReadAll
+    .Close
+End With
+
+'encrypt with symmetric keys / 対称キー方式
+b = GetBytes("Prince - Purple Rain (Official Video) | プリンス／パープル・レイン")
+e = EncryptSymmetric(b, "PASSWORD")
+t = ToBase64String(e)
+msgbox t, vbOKOnly, "'Encrypted with symmetric key"
+
+'decrypt / 復号
+b = DecryptSymmetric(e, "PASSWORD")
+t = GetString(b)
+msgbox t, vbOKOnly, "Decrypted"
+
+'encrypt with asymmetric keys / 暗号化（非対称キー方式）
+b = GetBytes("Prince - Purple Rain (Official Video) | プリンス／パープル・レイン")
+Set key = CreateKey
+e = EncryptAsymmetric(b, key("Public"))
+t = ToBase64String(e)
+msgbox t, vbOKOnly, "Encrypted with asymmetric keys"
+
+'decrypt
+b = DecryptAsymmetric(e, key("Private"))
+t = GetString(b)
+msgbox t, vbOKOnly, "Decrypted"
+
+'encrypt (hybrid) / 暗号化（ハイブリッド方式）
+b = GetBytes("Prince - Purple Rain (Official Video) | プリンス／パープル・レイン")
+Set e = Encrypt(b)
+t = ToBase64String(e("Data"))
+msgbox t, vbOKOnly, "Encrypted (hybrid)"
+
+'decrypt
+b = Decrypt(e("Data"), e("Key"), e("IV"))
+t = GetString(b)
+msgbox t, vbOKOnly, "Decrypted"
+
 '----------------------------------------------------------------------------------------------------
+
+'file to byte array / ファイルをバイト配列に
+b = ReadAllBytes("test.txt")
+
+'byte array to Base64 / Base64に
+t = ToBase64String(b)
+msgbox t, vbOKOnly, "Base64"
+
+'to hexadecimal string / 16進表記に
+t = ToHexString(b)
+msgbox t, vbOKOnly, "Hex"
+
+'to SHA1 / SHA1ハッシュに
+t = ToHexString(SHA1(b))
+msgbox t, vbOKOnly, "SHA1"
+
+'to SHA256 / SHA256ハッシュに
+t = ToHexString(SHA256(b))
+msgbox t, vbOKOnly, "SHA256"
+
+'save to file / 別のファイルに保存
+WriteAllBytes "test2.txt", b
+
+'----------------------------------------------------------------------------------------------------
+
+'text to byte array / テキストをバイト配列に
+b = GetBytes("Prince - Purple Rain (Official Video) | プリンス／パープル・レイン")
+
+'byte array to Base64 / Base64に
+t = ToBase64String(b)
+msgbox t, vbOKOnly, "Base64"
+
+'Base64 to Hexadecimal string / 16進表記に
+t = ToHexString(b)
+msgbox t, vbOKOnly, "Hex"
+
+'to SAH1 / SHA1ハッシュに
+t = ToHexString(SHA1(b))
+msgbox t, vbOKOnly, "SHA1"
+
+'to SHA256 / SHA256ハッシュに
+t = ToHexString(SHA256(b))
+msgbox t, vbOKOnly, "SHA256"
+
+'----------------------------------------------------------------------------------------------------
+
+'file to byte array / ファイルをバイト配列に
+b = ReadAllBytes("test.txt")
+
+'byte array to SHA1 / SHA1ハッシュに
+hash = SHA256(b)
+
+'sign the hash / ハッシュを署名
+'you should encrypt your private keys and save them in the machine's key container for security.
+'秘密鍵は暗号化またはキーコンテナに保存しておく必要があります。
+privatekey = fso.opentextFile("privatekey.xml", 1).ReadAll
+signature = Sign(hash, privatekey)
+msgbox ToBase64String(signature)
+
+'Verify signature / 署名を検証
+publickey = fso.opentextFile("publickey.xml", 1).ReadAll
+msgbox Verify(hash, signature, publickey)
+
+'----------------------------------------------------------------------------------------------------
+
+msgbox "Done."
+
 </pre>
-</section>
-
-
-
-<section>
-<h2><a href="Data.js">JScript / JavaScript</a></h2>
-<pre>
-//----------------------------------------------------------------------------------------------------
+	<p>JScript / JavaScript<br/>
+		<a href="./resources/Crypt.js" target="_blank" rel="noopener">source code</a></p>
+	<pre>//----------------------------------------------------------------------------------------------------
 var Convert = {
 
     ToBase64String: function(bytes) {
@@ -766,57 +692,5 @@ function trim(t) {
     return t.replace(/^\s+|\s+$/g, "");
 
 }
-//----------------------------------------------------------------------------------------------------
-</pre>
-</section>
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------------------------------</pre>
+</article>

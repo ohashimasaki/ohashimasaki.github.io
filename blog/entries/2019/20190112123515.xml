@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article title="ChineseNumerals.js" published="2019-01-12T12:48:55+09:00" updated="2019-01-12T12:48:55+09:00" category="JavaScript,漢数字">
+		<h1>ChineseNumerals.js</h1>
+	
+		
+		
+		
+		
+		<p>ChineseNumerals.js can convert Chinese/Japanese numerals into Arabic numerals.<br/>
+漢数字をアラビア数字に置換します。<br/>
+		<a href="./resources/ChineseNumerals.js" target="_blank" rel="noopener">source code</a></p>
+	
+	
+	
+		
+		<pre>function parseChineseNumerals(t) {
+
+    if( ! t) {
+        return t;
+    }
+
+    var ranks = [
+        "十\u4EC0\u62FE\uF973\uF9FD\u3038", // 什拾拾什〸
+        "百\u4F70\u964C",  // 佰陌
+        "千\u4EDF\u9621",  // 仟阡
+        "万萬",
+        "億\u4EBF", // 亿
+        "兆",
+        "京",
+        "垓",
+        "秭\u{25771}",  // 秭𥝱
+        "穣",
+        "溝"
+    ];
+
+    var digits = [
+        "0０〇\u96F6\uF9B2",  // 零零 
+        "1１一\u58F1\u58F9\u5F0C\u3021", // 壱壹弌〡
+        "2２二\u3483\u5F0D\u5F10\u8CAE\u8CB3\u8D30\u{22390}\u3022",  // 㒃弍弐貮貳贰𢎐〢
+        "3３三\u4EE8\u53C2\u53C3\u53C4\u5F0E\uF96B\u3023",  // 仨参參叄弎叁參〣
+        "4４四\u4E96\u8086\u4989\u3024",  // 亖肆䦉〤
+        "5５五\u4F0D\u3025",  // 伍〥
+        "6６六\u9646\u9678\uF9D3\u3026",  // 陆陸陸〦
+        "7７七\u3B4D\u67D2\u6F06\u3027", // 㭍柒漆〧
+        "8８八\u634C\u3028",  // 捌〨
+        "9９九\u7396\u3029"  // 玖〩
+    ];
+
+    var tens = [
+        "\u5344\u5EFF\u3039", // 〹卄廿
+        "\u5345\u4E17\u303A", // 〺卅丗
+        "\u534C\u{2098C}\u{2099C}" // 卌𠦌𠦜
+    ];
+
+    var liang = [
+        "両\u4E24\u5169"
+    ];
+    var point = [
+        ".\u30FB点\u9EDE"
+    ];
+
+    var s = t;
+    s = normalize(s, tens);
+    s = normalize(s, digits);
+    s = normalize(s, ranks);
+    s = normalize(s, liang);
+    s = normalize(s, point);
+
+    s = s.replace(/\u5344/g, "2十");  // 卄
+    s = s.replace(/\u5345/g, "3十");  // 卅
+    s = s.replace(/\u534C/g, "4十");  // 卌
+    s = s.replace(/万亿/g, "兆");
+    s = s.replace(/万万/g, "億");
+    s = s.replace(new RegExp("両([" + ranks.slice(1).join("") + "])", "g"), "2$1");
+    s = s.replace(/両(?!$)/g, "2");
+
+    for(var i = 0; i &lt; ranks.length; i++) {
+        var rank = ranks[i].substr(0, 1);
+        var n = (i &lt;= 3) ? (i + 1) : ((i - 2) * 4);
+        s = s.replace(new RegExp("(.|^)" + rank + "(\\d{1," + n + "}|(?:\\D|$))", "g"), function(m, s1, s2) {
+            return (/^\d$/.test(s1) ? s1 : s1 + "1") + getInteriorZeroes(s2, n) + s2;
+        });
+    }
+
+    return s;
+
+    function getInteriorZeroes(s, n) {
+        var d = s.match(/^\d*/);
+        var c = d ? d[0].length : n;
+        var z = "";
+        for(var i = 0; i &lt; (n - c); i++) {
+            z = z + "0";
+        };
+        return z;
+    }
+
+    function normalize(s, numerals) {
+        for(var i = 0; i &lt; numerals.length; i++) {
+            var n = numerals[i];
+            if(n.length &gt; 1) {
+                s = s.replace(new RegExp("[" + n.substr(1) + "]", "g"), n.substr(0, 1));
+            }
+        }
+        return s;
+    }
+
+}</pre>
+	
+		<p>Usage / 使い方</p>
+	
+		<pre>parseChineseNumerals("万零"); // 10000
+parseChineseNumerals("一万零"); // 10000
+parseChineseNumerals("一万零一百"); // 10100
+parseChineseNumerals("一万零一"); // 10001
+parseChineseNumerals("一万零一百"); // 10100
+parseChineseNumerals("下午两点"); // 下午2.
+parseChineseNumerals("下午两点二十二"); // 下午2.22
+parseChineseNumerals("下午两点二十二分"); // 下午2.22分
+parseChineseNumerals("二零零八"); // 2008
+parseChineseNumerals("二"); // 2
+parseChineseNumerals("十二"); // 12
+parseChineseNumerals("二十"); // 20
+parseChineseNumerals("八十二"); // 82
+parseChineseNumerals("二百"); // 200
+parseChineseNumerals("两百二"); // 202
+parseChineseNumerals("两千"); // 2000
+parseChineseNumerals("两千五"); // 2005
+parseChineseNumerals("两千万"); // 20000000
+parseChineseNumerals("两千四百万"); // 24000000
+parseChineseNumerals("两亿"); // 200000000
+parseChineseNumerals("两亿九千万"); // 290000000
+parseChineseNumerals("两个人(二人）"); // 2个人(2人）
+parseChineseNumerals("两本书(2冊の本)"); // 2本书(2冊の本)
+parseChineseNumerals("两倍(二倍)"); // 2倍(2倍)
+parseChineseNumerals("第二（第二）"); // 第2（第2）
+parseChineseNumerals("零点二(0.2)"); // 0.2(0.2)
+parseChineseNumerals("二分之一(2分の1)"); // 2分之1(2分の1)
+parseChineseNumerals("一千零一十"); // 1010
+parseChineseNumerals("万亿"); // 1000000000000
+parseChineseNumerals("零点五六"); // 0.56
+parseChineseNumerals("十一点八九"); // 11.89
+parseChineseNumerals("二点二二  2.22"); // 2.22  2.22
+parseChineseNumerals("二〇一二年二月二十二号"); // 2012年2月22号
+parseChineseNumerals("三分之一  3分の1"); // 3分之1  3分の1
+parseChineseNumerals("三又三分之二"); // 3又3分之2
+parseChineseNumerals("百分之八点八"); // 100分之8.8
+parseChineseNumerals("點"); // .
+
+parseChineseNumerals("伍十歩百歩万田発酵萬田久子万億田万太郎平成二十六年十月十三日１５時２６分０８秒～大正元年十一月十日正午　五十嵐十三さん");
+ // 50歩100歩10000田発酵10000田久子1000000000000田10000太郎平成26年10月十3日15時26分08秒～大正元年11月10日正午　50嵐十3さん
+
+parseChineseNumerals("平成三十年の国家予算は、千二百三十四穣五千〇六秭七百八十垓〇京廿弐兆９千八百〇７億六百〇伍萬四千参百弐拾壱・一二三円です。");
+// 平成30年の国家予算は、12345006078000000022980706054321.123円です。</pre>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	</article>

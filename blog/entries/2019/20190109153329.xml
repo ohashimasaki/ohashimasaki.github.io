@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<article updated="2019-01-11T17:34:23+09:00" title="first post (test)" category="llama,test,A" published="2019-01-09T23:19:20+09:00">
+<article updated="2019-01-12T12:15:02+09:00" title="first post (test)" category="" published="2019-01-09T23:19:20+09:00">
 	<h1>first post (test)</h1>
-	<p>mic test 1,2 1,2</p>
-	<pre>function foo() {
-
-    / /some codes here
-
-}</pre>
 	<figure>
 		<img src="images/SEiiCDIGIP.png"/>
 		<figcaption>"llamas christmas"</figcaption></figure>
-</article>
+		
+		
+		
+		<p>mic test 1,2 1,2</p>
+	
+	
+	
+	</article>

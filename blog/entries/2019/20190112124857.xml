@@ -1,66 +1,25 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-<link rel="stylesheet" type="text/css" href="../../style.css" />
-<style>
-body {
-    padding: 20px 30px 300px 30px;
-}
-main {
-    margin: 30px;
-}
-p {
-    margin: 5px 40px;
-}
-img {
-    margin: 5px;
-}
-pre {
-    margin: 30px;
-    padding: 20px;
-    background-color: #f0f0f0;
-    overflow: auto;
-}
-dl {
-    margin: 5px 50px;
-}
-dt {
-    float: left;
-    margin-right: 10px; 
-}
-dt:after {
-    content: ":";
-}
-</style>
-<title>DMS2DEC (Excel user defined function)</title>
-</head>
-<body>
-<header></header>
-<main>
-
-<h1>DMS2DEC (Excel user defined function)</h1>
-
-<h2>DMS2DEC is a VBA function to convert DMS degree into decimal degree on Excel sheets.</h2>
-<h3>How to use</h3>
-
-<p>1. Import <a href ="GEO.bas">"GEO.bas"</a> into your Excel file.</p>
-<p>2. Enter formula on sheets as below.<br />
-<img src="1.png" />
-</p>
-
-<p><b>=GEO.DMS2DEC(address, digits)</b></p>
-<dl>
-    <dt>address</dt>
-    <dd>Required. Cell address on the sheet.</dd>
-    <dt>digits</dt>
-    <dd>Required. Number of digits after decial point. Digits must be greater than or equal to 0.</dd>
-</dl>
-
-
-<pre>
-Attribute VB_Name = "GEO"
+<?xml version="1.0" encoding="UTF-8"?>
+<article title="DMS2DEC" published="2019-01-12T12:54:46+09:00" updated="2019-01-12T13:31:22+09:00" category="VBA,Geolocation">
+	<h1>DMS2DEC</h1>
+		<p>DMS2DEC is a VBA function to convert DMS degree into decimal degree on Excel sheets.<br/>
+Excel シート上で、度分秒表記の座標を10進数表記に変換します。<br/>
+		<br/>
+	</p>
+	<figure>
+		<img src="images/vwpwVl3g5J.png"/>
+		<figcaption></figcaption>
+	</figure>
+	<p>Usage / 使い方<br/>
+1. Import "GEO.bas" into your Excel file.<br/>
+2. Enter formula on sheets as below.<br/>
+		<br/>
+=GEO.DMS2DEC(address, digits)<br/>
+		<br/>
+address<br/>
+    Required. Cell address on the sheet.<br/>
+digits<br/>
+    Required. Number of digits after decial point. Digits must be greater than or equal to 0.</p>
+	<pre>Attribute VB_Name = "GEO"
 Function DMS2DEC(r As Range, p As Integer)
 
     t = r.Text
@@ -110,48 +69,5 @@ Function DMS2DEC(r As Range, p As Integer)
 
     DMS2DEC = Fix((d + m + s) * (10 ^ p)) / (10 ^ p)
 
-End Function
-</pre>
-
-</main>
-<footer></footer>
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+End Function</pre>
+</article>
