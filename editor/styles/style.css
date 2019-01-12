@@ -1,0 +1,643 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    font-family: Meiryo;
+    font-size: 10pt;
+    box-sizing: border-box;
+}
+html {
+    height: 100%;
+}
+body {
+    display: block;
+    height: 100%;
+    position: relative;
+    background-color: #ffffff;
+}
+
+header {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    zoom: 1;
+    overflow: hidden;
+    z-index: 300000;
+    background-color: #ffffff;
+    opacity: 0.9;
+    box-shadow: 0 0 4px 0 rgba(0,0,0,0.4);
+}
+main {
+    display: block;
+    zoom: 1;
+    min-height: calc(100% - 80px);
+}
+footer {
+    display: block;
+    height: 40px;
+    zoom: 1;
+}
+
+
+header h1 {
+    display: inline-block;
+    float: left;
+    margin: 7px 20px;
+    font-size: 11pt;
+    font-weight: bold;
+    color: #aaaaaa;
+}
+#menu {
+    display: inline-block;
+    float: right;
+    margin: 5px 20px;
+}
+#menu button {
+    float: right;
+    margin: 2px 0 0 4px;
+    padding: 3px 15px;
+    min-width: 60px;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    color: #404040;
+}
+#menu button:hover,
+#menu button:focus {
+    background-color: #f3f3f3;
+    color: #000000;
+    border-radius: 14px;
+}
+#menu button:disabled {
+    display: none;
+}
+
+#statusbar {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 25px;
+    width: 100%;
+    zoom: 1;
+    font-size: 9pt;
+    line-height: 25px;
+    vertical-align: middle;
+    padding: 0px 15px;
+    background-color: #000000;
+    opacity: 0.7;
+    color: #ffffff;
+}
+input[type=file] {
+    display: none;
+}
+
+
+#editor {
+    padding: 50px 100px 200px 120px;
+}
+
+
+textarea#category {
+    display: block;
+    margin: 40px 120px 0 60px;
+    padding: 10px;
+    border: 1px solid #000000;
+    height: 3.4em;
+    width: calc(100% - 120px - 60px);
+    resize: none;
+    overflow: hidden;
+    word-break: break-all;
+}
+
+
+section {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    background-repeat: no-repeat;
+    background-position: 20px 10px;
+    background-size: 18px 18px;
+}
+section:first-of-type {
+}
+section:hover {
+    background-color: #fcfcfc;
+}
+
+
+section:hover.paragraph {
+    background-image: url("icons/paragraph.png");
+}
+section:hover.quote {
+    background-image: url("icons/quote.png");
+}
+section:hover.preformatted {
+    background-image: url("icons/preformatted.png");
+}
+section:hover.note {
+    background-image: url("icons/note.png");
+}
+section:hover.list {
+    background-image: url("icons/list.png");
+}
+section:hover.image {
+    background-image: url("icons/image.png");
+}
+section:hover.table {
+    background-image: url("icons/table.png");
+}
+
+
+
+section > .view {
+    margin: 0 120px 0 60px;
+    padding: 10px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    min-height: 42px;
+    width: calc(100% - 120px - 60px);
+    word-break: break-all;
+}
+section .view[empty] {
+    color: #cccccc;
+}
+section .view[empty]:hover {
+    border: 1px dashed #cccccc;
+}
+
+
+section textarea {
+    display: block;
+    margin: 0 120px 0 60px;
+    padding: 10px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    min-height: 42px;
+    width: calc(100% - 120px - 60px);
+    resize: none;
+    overflow: hidden;
+    word-break: break-all;
+}
+section > textarea.write {
+    overflow: hidden;
+}
+section textarea:focus {
+    border: 1px dashed #cccccc;
+}
+
+
+section.title {
+    margin: 40px 0 70px 0;
+}
+section.title > .view h1 {
+    font-size: 20pt;
+    font-weight: normal;
+}
+section.title > .view[empty] {
+    color: #cccccc;
+}
+section.title > .view[empty]:hover {
+    border: 1px dashed #cccccc;
+}
+section.title > .write {
+    font-size: 20pt;
+    font-weight: normal;
+}
+
+
+section.note > div {
+    color: #999999;
+}
+section.note > div.view {
+    padding: 10px 15px;
+}
+section.note > textarea.write {
+    padding: 10px 15px;
+}
+
+section.preformatted > div.view > pre {
+    padding: 20px;
+    background-color: #faf8f6;
+}
+section.preformatted > textarea.write {
+    padding: 30px;
+}
+section.preformatted > textarea.write:empty {
+    padding: 30px;
+}
+section.preformatted > textarea:focus.write {
+    background-color: transparent;
+}
+
+
+section.quote > .view > blockquote {
+    padding: 20px;
+    background-color: #f7fafe;
+    border-radius: 10px;
+    color: #555555;
+    font-style: italic;
+    font-size: 10pt;
+    min-height: 42px;
+}
+section.quote .view[empty] > blockquote {
+    color: #cccccc;
+}
+
+section.quote > textarea.write {
+    padding: 30px;
+    background-color: #f7fafe;
+}
+section.quote > textarea:focus.write {
+    background-color: transparent;
+}
+section.quote > textarea.write:empty {
+    padding: 30px;
+}
+
+
+.figure {
+    position: relative;
+    margin: 0 120px 0 60px;
+    padding: 10px 10px 0 10px;
+}
+.caption {
+    position: relative;
+    margin: 0 120px 0 60px;
+    padding: 0;
+}
+.caption > .view {
+    margin: 10px 0;
+    padding: 10px 15px;
+    min-height: 42px;
+    border: 1px solid transparent;
+}
+.caption > .view[empty] {
+    color: #cccccc;
+}
+.caption > .view[empty]:hover {
+    border: 1px dashed #cccccc;
+}
+
+.caption > textarea.write {
+    margin: 10px 0;
+    padding: 10px 15px;
+    width: 100%;
+    min-height: 42px;
+    border: 1px solid transparent;
+}
+
+
+section.image img {
+    display: block;
+    min-width: 100px;
+    max-width: 50%;
+    min-height: 100px;
+    max-height: 500px;
+/*    max-height: 60%;  */
+
+    cursor: pointer;
+    border: 1px solid #e9d9cb;
+    background-color: #ffffff;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 64px 64px;
+    background-image: url("icons/picture.png");
+}
+section.image button.remove-image {
+    position: absolute;
+    top: 25px;
+    left: 0;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #e9d9cb;
+    background-color: #ffffff;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 18px 18px;
+    background-image: url("icons/delete.png");
+    z-index: 100;
+}
+section.image button.remove-image:hover {
+    border: 1px solid #000000;
+}
+
+section.image img.noimage {
+    min-width: 100px;
+    max-width: 100px;
+    min-height: 100px;
+    max-height: 100px;
+}
+section.image img.noimage+button {
+    display: none;
+}
+
+
+section.table div.figure {
+    position: relative;
+    margin: 0 120px 0 60px;
+}
+section.table table {
+    width: 100%;
+    min-height: 42px;
+    border: 1px solid transparent;
+    border-collapse: collapse;
+}
+section.table table td {
+    padding: 2px 8px;
+    border: 1px solid #000000;
+    word-break: break-all;
+}
+section.table table th {
+    padding: 2px 5px;
+    border: 1px solid #000000;
+    text-align: left;
+    word-break: break-all;
+    font-weight: bold;
+    background-color: #f0fafc;
+}
+section.table table tr:fist-child th {
+    text-align: center;
+}
+section.table div.figure > textarea.write {
+    margin: 0;
+    padding: 10px;
+    width: 100%;
+    overflow-x: auto;
+    word-break: keep-all;
+    line-break: normal;
+    word-wrap: normal; /* required */
+    white-space: pre;
+    overflow-x: auto;
+}
+section.table table.view[empty] td {
+    border: 1px solid transparent;
+}
+section.table table.view[empty] td:hover {
+    border: 1px dashed #cccccc;
+}
+
+
+section.list ul.view {
+    margin: 0 120px 0 60px;
+    padding: 10px;
+    min-height: 42px;
+    border: 1px solid transparent;
+    list-style-type: disc;
+}
+section.list ul.view[empty] {
+    color: #cccccc;
+}
+section.list ul.view[empty]:hover {
+    border: 1px dashed #cccccc;
+}
+
+section.list ul.view li {
+    margin: 0 20px;
+    padding: 0;
+}
+section.list textarea.write {
+    padding: 10px 15px;
+}
+
+
+ul.section-menu {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    list-style-type: none;
+}
+ul.section-menu li {
+    display: inline-block;
+    float: left;
+    width: 23px;
+    margin-left: 3px;
+    text-align: center;
+    border: 1px solid #e9d9cb;
+    color: #24140e;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    background-color: #ffffff;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 18px 18px;
+}
+ul.section-menu li:hover {
+    border: 1px solid #24140e;
+    background-color: #f9f6f5;
+    font-weight: bold;
+}
+
+section:first-of-type li.up {
+    display: none;
+}
+section:last-of-type li.down {
+    display: none;
+}
+
+
+ul.insert-menu {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    list-style-type: none;
+    border: 1px solid #e9d9cb;
+    background-color: #ffffff;
+    z-index: 1000;
+}
+ul.insert-menu li {
+    padding: 3px 12px;
+    cursor: pointer;
+}
+ul.insert-menu li:hover {
+    background-color: #f9f6f5;
+}
+
+ul.section-menu li.delete {
+    background-image: url("icons/delete.png");
+}
+ul.section-menu li.insert {
+    background-image: url("icons/insert.png");
+}
+ul.section-menu li.up {
+    background-image: url("icons/up.png");
+}
+ul.section-menu li.down {
+    background-image: url("icons/down.png");
+}
+
+
+#files {
+    padding: 100px 100px 200px 120px;
+}
+#files h3 {
+    margin: 1px 0;
+}
+#files h3 > a {
+    display: inline-block;
+    padding: 0 30px 0 8px;
+    font-size: 18pt;
+    font-weight: normal;
+    color: #505050;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: 95% 50%;
+    background-size: 18px 18px;
+    background-image: url("icons/unfold.png");
+    opacity: 0.5;
+}
+#files h3 > a.unfolded {
+    background-image: url("icons/fold.png");
+    opacity: 1.0;
+}
+#files h3 > a:hover {
+    opacity: 1.0;
+}
+#files ul {
+    display: none;
+    margin: 0;
+    padding: 3px 30px 20px 30px;
+    list-style-type: none;
+    font-size: 10.5pt;
+}
+#files li {
+    margin: 1px 0;
+}
+#files li > a {
+    display: inline-block;
+    padding: 4px 12px;
+    cursor: pointer;
+}
+#files li > a * {
+    font-size: 11pt;
+}
+#files li:hover a {
+    background-color: #fafafa;
+}
+#files li > a > span.file-date {
+    margin: 0 0 0 15px;
+    color: #aaaaaa;
+}
+
+
+.windowshade {
+    position:fixed;
+    display: none;
+    z-index: 100000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #cccccc;
+    overflow: hidden;
+    opacity: 0.5;
+}
+
+
+.popup {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    margin: 0 auto;
+    padding: 10px;
+    width: 40%;
+    min-width: 480px;
+    z-index: 200000;
+}
+.popup-content {
+    padding: 10px;
+    background-color: #ffffff;
+    color: #000000;
+    box-shadow: 0 1px 20px 0 rgba(0,0,0,0.2);
+}
+.popup-header {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    margin: 0px;
+}
+.popup-header h1 {
+    display: block;
+    margin: 30px 0 0 0;
+    padding: 5px 30px;
+    width: 100%;
+    word-break: break-all;
+    font-size: 13pt;
+    font-weight: normal;
+}
+.popup-body {
+/*    overflow-y: hidden;  */
+    padding: 0 20px 20px 20px;
+}
+.popup-close {
+    position: absolute;
+    right: 0; 
+    top: 0;
+    margin: 0;
+    width: 20px;
+    height: 20px;
+    border: none;
+    cursor: pointer;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-image: url("icons/delete.png");
+    background-size: 20px 20px;
+}
+
+
+.popup-body li {
+    display: block;
+    list-style-type: none;
+    padding: 15px 15px 15px 60px;
+    background-position: 10px 50%;
+    background-repeat: no-repeat;
+    background-size: 35px 23px;
+    cursor: pointer;
+}
+.popup-body li:hover {
+    background-color: #fafafa;
+}
+.popup-body li#orientation-none {
+    background-image: url("icons/none.png");
+}
+.popup-body li#orientation-column {
+    background-image: url("icons/column.png");
+}
+.popup-body li#orientation-row {
+    background-image: url("icons/row.png");
+}
+.popup-body li#orientation-column-row {
+    background-image: url("icons/column-row.png");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

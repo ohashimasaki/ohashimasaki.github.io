@@ -1,9 +1,0 @@
-﻿{
-	"name": "月の砂漠ニュータウン入口",
-	"のりば": [
-		{
-			"name": "1番のりば",
-			"href": "http://ohashimasaki.github.io/TransitJSON/CamelBus/stops/Tsukinosabaku-newtown-iriguchi/1.json"
-		}
-	]
-}
