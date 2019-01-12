@@ -1,0 +1,332 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="description" content="jt.js: JSON Transform like XSLT" />
+<meta name="keywords" content="JSON, XSLT, XSL, transform, equivalent, XPath" />
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<link rel="stylesheet" type="text/css" href="style.css"/>
+<title>jt.js</title>
+</head>
+<body>
+</body>
+<script src="request.js"></script>
+<!--script src="https://rawgit.com/ohashimasaki/jt/master/jt.js"></script-->
+<script src="https://cdn.jsdelivr.net/gh/ohashimasaki/jt@master/jt.js"></script>
+<script>
+(function() {
+
+    var stylesheet = MyStylesheet();
+    var jt = new JT;
+
+
+    (new Request).get({
+        url: "doc.json",
+        async: false,
+        callback: function(response) {
+            if(response.status == 200) {
+                try {
+                    data = JSON.parse(response.text);
+                    if(data) {
+                        document.body.innerHTML = jt.transform(stylesheet, data);
+                    }
+                } catch(e) {
+                }
+            }
+        }
+    });
+
+
+    //-------------------------------------------------------------------------------------
+    function MyStylesheet() {
+
+        return {
+            match: {
+                ".": function() {
+                    return [
+                        jt.select(".head").apply(),
+                        jt.select(".body").apply()
+                    ].join('');
+                },
+                ".head": function() {
+                    return [
+                        '<h1>' +  jt.select(this.path + ".meta.Title").value() + '</h1>',
+                        '<h2>' + jt.select(this.path + ".meta.Summary").value() + '</h2>',
+                        jt.select(this.path + ".meta.NOTE").apply()
+                    ].join('');
+                },
+                ".head.meta.NOTE": function() {
+                    return '<p id="head-note">' + this.name + ": " + this.value("") + '</p>';
+                },
+                ".body": function() {
+                    return jt.select(this.path + ".*[!Example Data]").apply();
+                },
+
+                "Introduction": function() {
+                    return [
+                        '<section>',
+                        '<h2>' + this.name + '</h2>',
+                        '<p>' + jt.select(this.path + ".[*]").value('<br/>') + '</p>',
+                        '</section>'
+                    ].join('');
+                },
+                "Usage": function() {
+                    return [
+                        '<section>',
+                        '<h2>' + this.name + '</h2>',
+                        '<code>' + jt.select(this.path + ".Example.*").value('<br/>') + '</code>',
+                        '<ul class="note"><li>' + jt.select(this.path + ".Notes").value('</li><li>') + '</li></ul>',
+                        '</section>'
+                    ].join('');
+                },
+                "Stylesheet": function() {
+                    return [
+                        '<section id="stylesheet">',
+                        '<h2>' + this.name + '</h2>',
+                        jt.select(this.path + ".*").apply(),
+                        '</section>'
+                    ].join('');
+                },
+                "Stylesheet.Summary": function() {
+                    return '<p class="summary">' + this.value('<br/>') + '</p>';
+                    return '<p class="summary">' + this.value('<br/>') + '</p>';
+                },
+                "Stylesheet.Syntax": function() {
+                    return [
+                        '<dl>',
+                        '<dt><h4>' + this.name + '</h4></dt>',
+                        '<dd><pre>' + this.value('\r\n') + '</pre></dd>',
+                        '</dl>'
+                    ].join("");
+                },
+                "Stylesheet.Example": function() {
+                    return [
+                        '<dl>',
+                        '<dt><h4>' + this.name + '</h4></dt>',
+                        '<dd>',
+                            '<pre>' + jt.select(this.path + ".*").value('<br/>') + '</pre>',
+                        '</dd>',
+                        '</dl>'
+                    ].join("");
+                },
+                "Stylesheet.Notes": function() {
+                    return '<ul class="note"><li>' + this.value('</li><li>') + '</li></ul>';
+                },
+                "Stylesheet.this": function() {
+                    return [
+                        '<dl>',
+                        '<dt><h4>' + this.name + '</h4></dt>',
+                        '<dd>',
+                        '<p class="summary">' + jt.select(this.path + ".Summary").value('<br/>') + '</p>',
+                        '<table class="path">' + jt.select(this.path + ".Properties.*").apply() + '</table>',
+                        '<ul class="note"><li>' + jt.select(this.path + ".Notes").value('</li><li>') + '</li></ul>',
+                        '</dd>',
+                        '</dl>'
+                    ].join("");
+                },
+                "Stylesheet.this.Properties[*]": function() {
+                    var t = this.value('').split("\t");
+                    return [
+                        '<tr>',
+                        '<th>' + t[0] + '</th>',
+                        '<td>' + t[1] + '</td>',
+                        '</tr>'
+                    ].join('');
+                },
+
+                "Path Expression": function() {
+                    return [
+                        '<section>',
+                        '<h2>' + this.name + '</h2>',
+                        '<p>' + jt.select(this.path + ".Summary").value() + '</p>',
+                        '<table class="path">' + jt.select(this.path + ".Example.*").apply() + '</table>',
+                        '<ul class="note"><li>' + jt.select(this.path + ".Notes").value('</li><li>') + '</li></ul>',
+                        '</section>'
+                    ].join('');
+                },
+                "Path Expression.Example[*]": function() {
+                    var t = this.value('').split("\t");
+                    return [
+                        '<tr>',
+                        '<th>' + t[0] + '</th>',
+                        '<td>' + t[1] + '</td>',
+                        '</tr>'
+                    ].join('');
+                },
+                "Methods": function() {
+                    return [
+                        '<section>',
+                        '<h2>' + this.name + '</h2>',
+                        jt.select(this.path + ".*").apply(),
+                        '</section>'
+                    ].join('');
+                },
+                "Methods[*]": function() {
+                    return [
+                        '<div class="method">',
+                        '<h3>' + jt.select(this.path + ".Name").value() + '</h3>',
+                        '<p class="summary">' + jt.select(this.path + ".Summary.*").value('<br/>') + '</p>',
+                        '<dl>' + jt.select(this.path + ".*[!Name and !Summary]").apply() + '</dl>',
+                        '</div>'
+                    ].join('');
+                },
+                "Methods[*].Syntax": function() {
+                    return [
+                        '<dt><h4>' + this.name + '</h4></dt>',
+                        '<dd><pre>' + this.value('\r\n') + '</pre></dd>'
+                    ].join('');
+                },
+                "Methods[*].Parameters": function() {
+                    return [
+                        '<dt><h4>' + this.name + '</h4></dt>',
+                        '<dd>',
+                        '<dl class="parameters">' + jt.select(this.path + ".*").apply() + '</dl>',
+                        '<p>' + jt.select(this.path + ".Note").value('<br/>') + '</p>',
+                        '</dd>',
+                    ].join('');
+                },
+                "Methods[*].Parameters[*]": function() {
+                    return [
+                        '<dt><h5>' + jt.select(this.path + ".Name").value("") + '</h5></dt>',
+                        '<dd>' + jt.select(this.path + ".Description").value() + '</dd>'
+                    ].join('');
+                },
+                "Methods[*].Example": function() {
+                    return [
+                        '<dt><h4>' + this.name + '</h4></dt>',
+                        '<dd><pre>' + this.value('<br/>') + '</pre></dd>',
+                    ].join('');
+                },
+                "Methods[*].Argument": function() {
+                    return [
+                        '<dt><h4>' + this.name + '</h4></dt>',
+                        '<dd>',
+                        '<p>' + jt.select(this.path + ".Summary").value('<br/>') + '</p>',
+                        '<pre>' + jt.select(this.path + ".Syntax").apply() + '</pre>',
+                        '<p>' + jt.select(this.path + ".Note").value('<br/>') + '</p>',
+                        '</dd>'
+                    ].join('');
+                },
+                "Methods[*].Filter Function": function() {
+                    return [
+                        '<dt><h4>' + this.name + '</h4></dt>',
+                        '<dd>',
+                        '<p>' + jt.select(this.path + ".Summary").value('<br/>') + '</p>',
+                        '<pre>' + jt.select(this.path + ".Syntax").apply() + '</pre>',
+                        '<p>' + jt.select(this.path + ".Note").value('<br/>') + '</p>',
+                        '</dd>'
+                    ].join('');
+                },
+                "Methods[*].Sort Function": function() {
+                    return [
+                        '<dt><h4>' + this.name + '</h4></dt>',
+                        '<dd>',
+                        '<p>' + jt.select(this.path + ".Summary").value('<br/>') + '</p>',
+                        '<pre>' + jt.select(this.path + ".Syntax").apply() + '</pre>',
+                        '<p>' + jt.select(this.path + ".Note").value('<br/>') + '</p>',
+                        '</dd>'
+                    ].join('');
+                },
+                "Methods[*].Note": function() {
+                    return [
+                        '<dt><h4>' + this.name + '</h4></dt>',
+                        '<dd>' + this.value('<br/>') + '</dd>',
+                    ].join('');
+                },
+                "Tips": function() {
+                    return [
+                        '<section>',
+                        '<h2>' + this.name + '</h2>',
+                        jt.select(this.path + ".*").apply(),
+                        '</section>'
+                    ].join('');
+                },
+                "Tips[0]": function() {
+                    return [
+                        '<div class="tip">',
+                        '<h3>' + jt.select(this.path + '.Title').value() + '</h3>',
+                        '<pre>' + jt.select(this.path + '.Code').value('<br/>') + '</pre>',
+                        '<h4>Demo</h4>',
+                        '<ul><li>' + jt.select('.body.Example Data.List.*').value('</li><li>') + '</li></ul>',
+                        '</div>'
+                    ].join('');
+                },
+                "Tips[1]": function() {
+                    return [
+                        '<div class="tip">',
+                        '<h3>' + jt.select(this.path + '.Title').value() + '</h3>',
+                        '<pre>' + jt.select(this.path + '.Code').value('<br/>') + '</pre>',
+                        '<h4>Demo</h4>',
+                        '<table>',
+                        '<thead>' + jt.select('.body.Example Data.Table[0]').apply() + '</thead>',
+                        '<tbody>' + jt.select('.body.Example Data.Table[>0]').apply() + '</tbody>',
+                        '</table>',
+                        '</div>'
+                    ].join('');
+                },
+                "Example Data.Table[0]": function() {
+                    return '<tr><th>' + jt.select(this.path + '.*').value('</th><th>') + '</th></tr>';
+                },
+                "Example Data.Table[>0]": function() {
+                    return '<tr><td>' + jt.select(this.path + '.*').value('</td><td>') + '</td></tr>';
+                },
+                "Tips[>=2]": function() {
+                    return [
+                        '<div class="tip">',
+                        '<h3>' + jt.select(this.path + '.Title').value() + '</h3>',
+                        '<pre>' + jt.select(this.path + '.Code').value('<br/>') + '</pre>',
+                        '</div>'
+                    ].join('');
+                }
+            }
+        }
+    }
+
+}())
+</script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

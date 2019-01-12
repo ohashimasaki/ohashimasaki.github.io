@@ -1,0 +1,292 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Lucida Sans Unicode, Lucida Grande, Meiryo, "メイリオ", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", Arial, sans-serif;
+}
+body {
+    padding: 0px 20px 200px 20px;
+    font-size: 12pt;
+    background-color: #d3cdc6;
+    color: #3c2629;
+    color: #100000;
+}
+@media only screen and (min-width: 768px) {
+    body {
+        padding: 20px 50px 300px 50px;
+    }
+}
+
+
+div {
+    box-sizing: border-box;
+    *zoom: 1;
+}
+a {
+    color: #00acc6;
+    font-weight: bold;
+}
+p {
+    padding: 0 10px;
+    box-sizing: border-box;
+    *zoom: 1;
+    font-size: 13pt;
+    line-height: 1.4em;
+}
+h1 {
+    margin: 0 0 20px 0;
+    font-family: Calibri, Lucida Sans Unicode, sans-serif;
+    font-weight: normal;
+    color: #fffcfc;
+    font-size: 75pt;
+}
+h2 {
+    margin: 0 0 10px 0;
+    font-weight: normal;
+    font-size: 19pt;
+}
+h3 {
+    color: #00acc6;
+    font-weight: bold;
+    font-size: 16pt;
+}
+
+@media only screen and (min-width: 768px) {
+    h1 {
+        font-size: 90pt;
+    }
+    h2 {
+        font-size: 24pt;
+    }
+    h3 {
+        font-size: 22pt;
+    }
+}
+
+
+h4 {
+    font-weight: normal;
+    font-size: 14pt;
+}
+h5 {
+    font-size: 13pt;
+    font-weight: normal;
+}
+h4:after {
+    content: ":";
+}
+h5:after {
+    content: ":";
+}
+
+
+#head-note {
+    color: #ff0000;
+    font-size: 13pt;
+}
+
+@media only screen and (min-width: 768px) {
+    #head-note {
+        font-size: 16pt;
+    }
+}
+
+
+table {
+    display: block;
+    width: 95%;
+    margin: 10px auto;
+    border-collapse: collapse;
+    font-size: 10pt;
+    overflow-x: auto;
+}
+tbody {
+    overflow-x: auto;
+}
+th {
+    padding: 5px 10px;
+    font-weight: normal;
+    background-color: #59b9c7;
+    font-weight: normal;
+    border-bottom: 3px solid #d3cdc6;
+    border-right: 2px solid #d3cdc6;
+}
+td {
+    padding: 5px 10px;
+    background-color: #f3f3f0;
+    border-bottom: 3px solid #d3cdc6;
+    border-right: 2px solid #d3cdc6;
+}
+
+
+table.path th {
+    text-align: right;
+    white-space: nowrap;
+}
+
+
+code, pre {
+    display: block;
+    margin: 5px 0;
+    padding: 10px 15px 15px 15px;
+    background-color: #f3f3f0;
+    color: #000000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10.5pt;
+    line-height: 140%;
+    letter-spacing: 1px;
+    overflow-x: auto;
+    white-space: pre;
+}
+
+dl {
+    margin: 0px 20px;
+}
+dt {
+    padding: 1px 0;
+}
+dd {
+    padding: 1px 0 4px 10px;
+}
+@media only screen and (min-width: 768px) {
+    dd {
+        padding: 1px 0 4px 40px;
+    }
+}
+
+
+dd p {
+    margin: 4px 0;
+    font-size: 10.5pt;
+}
+
+#meta dt {
+    padding: 0;
+}
+#meta dd {
+    padding: 0 0 0 40px;
+}
+#meta dt:after {
+    content: ":";
+}
+#updates dl {
+    margin: 0px 0px;
+    padding: 0;
+}
+#updates dt {
+    margin: 0 20px 0 0;
+    padding: 0;
+    float: left;
+    font-size: 10.5pt;
+}
+#updates dd {
+    margin: 0;
+    padding: 0;
+    font-size: 10.5pt;
+}
+
+section {
+    margin: 30px 0;
+}
+section p {
+    margin: 0;
+    padding: 5px;
+}
+b {
+    padding: 1px 5px;
+    color: #00acc6;
+    font-size: 11pt;
+    font-weight: bold;
+}
+
+
+ul {
+    margin: 0px 10px 20px 10px;
+    padding: 5px 10px;
+    list-style-position: inside;
+    font-size: 10.5pt;
+}
+li {
+    line-height: 140%;
+}
+.method, .tip {
+    width: 95%;
+    margin: 10px auto;
+    padding: 0 0 10px 0;
+    border-bottom: 2px groove #ffffff;
+}
+.method:last-child, .tip:last-child {
+    border-bottom: none;
+}
+@media only screen and (min-width: 768px) {
+    .method, .tip {
+        margin: 20px 30px 20px 30px;
+    }
+}
+
+
+
+
+.tip table, .tip ul {
+    font-size: 10pt;
+    width: 95%;
+    margin: 10px auto;
+    border-collapse: collapse;
+    font-size: 10pt;
+    overflow-x: auto;
+
+}
+.tip table th {
+    font-weight: bold;
+}
+.tip h4 {
+    margin: 10px 0 0 0;
+    font-size: 13pt;
+    font-weight: normal;
+}
+
+
+section h3 {
+    margin: 0 0 10px 0;
+}
+.summary {
+    margin: 5px 0 5px 0px;
+    font-size: 11pt;
+}
+
+dl.parameters {
+    margin: 0;
+    font-size: 12pt;
+}
+dl.parameters dt {
+    font-size: 11pt;
+    font-style: italic;
+}
+
+
+
+#this_props th {
+    text-align: right;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
