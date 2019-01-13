@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <article title="How to Make SVG Paths Fuzzy" published="2019-01-13T21:14:18+09:00" updated="2019-01-13T21:33:04+09:00" category="SVG">
-		<h1>How to Make SVG Paths Fuzzy</h1>
+		<h1>How to make SVG paths fuzzy</h1>
 		<p>Original (No Filter)</p>
 		<div>
 <svg version="1.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" width="320px" height="90px" viewBox="0 0 13200 3600" preserveAspectRatio="xMidYMid" stroke-width="250" stroke-linejoin="round" stroke-linecap="round" fill="none" stroke="#333333" size="12947,3590">
