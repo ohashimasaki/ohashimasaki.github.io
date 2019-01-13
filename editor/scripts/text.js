@@ -6,6 +6,7 @@
         Note: "注意書き",
         Quote: "引用",
         PreformattedText: "整形テキスト（入力通りに表示）",
+        Markup: "マークアップ",
         List: "リスト",
         Image: "画像",
         Table: "表",
@@ -14,6 +15,7 @@
         EnterNote: "注意書きを入力",
         EnterQuote: "引用を入力",
         EnterPreformattedText: "整形テキストを入力",
+        EnterMarkup: "マークアップを入力",
         EnterList: "箇条書きでリストを入力",
         EnterTSV: "表計算シートなどから表を貼り付け（タブ区切り）",
         EnterImageCaption: "画像のキャプション（タイトル・説明・出典など）を入力",
@@ -31,7 +33,8 @@
         Deleted: "削除しました。",
         Loading: "読み込み中…",
         Unsaved: "変更が保存されていません。保存しますか？",
-        Discard: "変更が保存されていません。破棄しますか？"
+        Discard: "変更が保存されていません。破棄しますか？",
+        EnterWellFormedXML: "整形式のXMLを入力してください。"
     },
 
     en: {
@@ -40,6 +43,7 @@
         Note: "Note",
         Quote: "Quote",
         PreformattedText: "Preformatted Text",
+        Markup: "Markup",
         List: "List",
         Image: "Image",
         Table: "Table",
@@ -48,6 +52,7 @@
         EnterNote: "Enter Notes",
         EnterQuote: "Enter Quote",
         EnterPreformattedText: "Enter Preformatted Text",
+        EnterMarkup: "Enter Markup",
         EnterList: "Enter List",
         EnterTSV: "Paste Tab Delimited Text from Spreadsheet",
         EnterImageCaption: "Enter Caption for Image",
@@ -65,7 +70,8 @@
         Deleted: "Deleted Successfully",
         Loading: "Loading...",
         Unsaved: "You have unsaved changes. Do you want to save all changes?",
-        Discard: "Are you sure to discard all unsaved changes?"
+        Discard: "Are you sure to discard all unsaved changes?",
+        EnterWellFormedXML: "Enter Well-Formed XML."
     }
 
 };

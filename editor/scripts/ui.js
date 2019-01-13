@@ -81,9 +81,10 @@
                     if(name == "title") {
                         $titlechanged = true;
                     }
-                    var v = getValue(this);
+                    var v = getValue(this, name);
                     var blank = ! v;
                     var t = createParagraph(this, v, id);
+
                     replaceParagraph(id, t);
                     var viewer = deactivate(this);
                     viewer.innerHTML = t;
@@ -121,11 +122,13 @@
             if(type == "paragraph") {
                 t = '<p>' + $text.EnterParagraph + '</p>';
             } else if(type == "note") {
-                t = '<div><small>' + $text.EnterNote + '</small></div>';
+                t = '<aside>' + $text.EnterNote + '</aside>';
             } else if(type == "quote") {
                 t = '<blockquote>' + $text.EnterQuote + '</blockquote>';
             } else if(type == "preformatted") {
                 t = '<pre>' + $text.EnterPreformattedText + '</pre>';
+            } else if(type == "markup") {
+                t = '<div>' + $text.EnterMarkup + '</div>';
             } else {
                 return;
             }
@@ -163,8 +166,18 @@
 
     };
     //----------------------------------------------------------------------------------------------------
-    function getValue(e) {
+    function getValue(e, name) {
 
+        if(name == "markup") {
+            var v = trim(e.value);
+            var xml = new ActiveXObject("MSXML2.DOMDocument");
+            if( ! xml.loadXML(v)) {
+                alert($text.EnterWellFormedXML);
+                return "";
+            }
+            return v;
+        }
+ 
         var v = escape(e.value);
 
         if(/\r\n$/.test(v)) {
@@ -183,7 +196,7 @@
 
         var name = document.getElementById(id).className;
 
-        if(name != "preformatted") {
+        if(name != "preformatted" && name != "markup") {
             v = v.replace(/\r\n|[\r\n]/g, "<br />\r\n");
             v = v.replace(/(?:^|\s)((?:https?|\.\.?\/)[^\s"<>\[\]\{\}]+)(?:\[([^\[\]]+)\])?/g, function(m, s1, s2) {
                 return '<a href="' + s1 + '" target="_blank" rel="noopener">' + (s2 || s1) + '</a>';
@@ -195,11 +208,13 @@
         } else if(name == "paragraph") {
             return '<p>' + v + '</p>';
         } else if(name == "note") {
-            return '<div><small>' + v + '</small></div>';
+            return '<aside>' + v + '</aside>';
         } else if(name == "quote") {
             return '<blockquote>' + v + '</blockquote>';
         } else if(name == "preformatted") {
             return '<pre>' + v + '</pre>';
+        } else if(name == "markup") {
+            return '<div>' + v + '</div>';
         } else if(name == "image" || name == "table") {
             return '<figcaption>' + v + '</figcaption>';
         }
@@ -789,6 +804,7 @@
                     '<li class="insert-note">' + $text.Note + '</li>',
                     '<li class="insert-quote">' + $text.Quote + '</li>',
                     '<li class="insert-preformatted">' + $text.PreformattedText + '</li>',
+                    '<li class="insert-markup">' + $text.Markup + '</li>',
                     '<li class="insert-list">' + $text.List + '</li>',
                     '<li class="insert-image">' + $text.Image + '</li>',
                     '<li class="insert-table">' + $text.Table + '</li>',
@@ -824,7 +840,7 @@
             var _insertMenu = section.getElementsByClassName("insert-menu")[0];
             _insertMenu.onclick = function() {
                 var type = trim(event.srcElement.className.split("insert-")[1]);
-                if(/paragraph|note|quote|preformatted/.test(type)) {
+                if(/paragraph|note|quote|preformatted|markup/.test(type)) {
                     ui.Paragraph.insert(section, type);
                 } else if(type == "list") {
                     ui.List.insert(section);

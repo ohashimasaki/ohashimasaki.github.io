@@ -141,6 +141,9 @@ section:hover.preformatted {
 section:hover.note {
     background-image: url("icons/note.png");
 }
+section:hover.markup {
+    background-image: url("icons/markup.png");
+}
 section:hover.list {
     background-image: url("icons/list.png");
 }

@@ -235,7 +235,7 @@ article > p {
     font-size: 11pt;
 }
 
-article > div > small {
+article > aside {
     display: block;
     margin: 10px 0 40px 0;
     padding: 0 10px;
@@ -266,6 +266,10 @@ article > blockquote::before {
 }
 article > blockquote:after {
   content: close-quote;
+}
+
+
+article > div {
 }
 
 article > ul {

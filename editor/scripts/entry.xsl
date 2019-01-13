@@ -45,16 +45,21 @@
 </xsl:template>
 
 
-<xsl:template match="/*/div">
+<xsl:template match="/*/aside">
     <section class="note" id="{@id}" tabindex="-1">
         <div class="view" tabindex="0"><xsl:copy-of select="." /></div>
-        <textarea class="write"><xsl:apply-templates select="small" /></textarea>
+        <textarea class="write"><xsl:apply-templates select="text()|br" /></textarea>
     </section>
 </xsl:template>
 
-<xsl:template match="small">
-    <xsl:apply-templates select="text()|br" />
+
+<xsl:template match="/*/div">
+    <section class="note" id="{@id}" tabindex="-1">
+        <div class="view" tabindex="0"><xsl:copy-of select="." /></div>
+        <textarea class="write"><xsl:copy-of select="." /></textarea>
+    </section>
 </xsl:template>
+
 
 
 <xsl:template match="/*/ul">

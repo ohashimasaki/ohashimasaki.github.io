@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article title="Discipline.js &amp; Cascade.js" published="2019-01-13T19:30:39+09:00" updated="2019-01-13T19:30:39+09:00" category="JavaScript,Decision Table,VBA">
+		<h1>Discipline.js &amp; Cascade.js</h1>
+	
+		
+		
+		
+		
+		
+		<p>Discipline.js allows you to set constraints and dependencies among UI inputs from decision tables in Excel Worksheets.<br/>
+		<a href="./resources/Discipline/discipline.js" target="_blank" rel="noopener">discipline.js</a><br/>
+		<a href="./resources/Discipline/discipline.js" target="_blank" rel="noopener">rules.js</a> (example)</p>
+	
+	
+	
+	
+	
+	
+		
+		
+		
+		
+		
+		
+		<p>Usage<br/>
+		<br/>
+1. Define your decision table, and export the rules as a JavaScript file by this <a href="./resources/Discipline/DecisionTable.xlsm" target="_blank" rel="noopener">VBA Macro here</a>.<br/>
+2. Insert script element into your HTML.</p>
+	
+	
+	
+	
+	
+	
+	
+		<pre>&lt;script src="rules.js"&gt;&lt;/script&gt;&lt;!-- decision table file created by VBA Macro in the step above --&gt;
+&lt;script src="discipline.js"&gt;&lt;/script&gt;</pre>
+	
+	
+	
+		
+		
+		
+		
+		
+		<p>3. Write JavaScript like below.<br/>
+		<a href="./resources/Discipline/discipline.html" target="_blank" rel="noopener">See a simple example here.</a></p>
+	
+	
+		<pre>var discipline = new Discipline(rules);
+discipline.constrain();</pre>
+	
+		
+		
+		<p>Cascade.js allows you to easily set chain reactions of &lt;select&gt; elements.<br/>
+		<a href="./resources/Discipline/cascade.js" target="_blank" rel="noopener">cascade.js</a></p>
+	
+	
+		<p>Usage<br/>
+		<br/>
+1. Add "data-class" attribute of cascading parent value to all &lt;option&gt; elements.</p>
+	
+		<pre>&lt;select id="level1"&gt;
+    &lt;option value=""&gt;&lt;/option&gt;
+    &lt;option value="1"&gt;1&lt;/option&gt;
+    &lt;option value="2"&gt;2&lt;/option&gt;
+    &lt;option value="3"&gt;3&lt;/option&gt;
+&lt;/select&gt;
+
+&lt;select id="level2"&gt;
+    &lt;option value="11" data-class="1"&gt;1-1&lt;/option&gt;
+    &lt;option value="12" data-class="1"&gt;1-2&lt;/option&gt;
+    &lt;option value="13" data-class="1"&gt;1-3&lt;/option&gt;
+
+    &lt;option value="21" data-class="2"&gt;2-1&lt;/option&gt;
+    &lt;option value="22" data-class="2"&gt;2-2&lt;/option&gt;
+    &lt;option value="23" data-class="2"&gt;2-3&lt;/option&gt;
+
+    &lt;option value="31" data-class="3"&gt;3-1&lt;/option&gt;
+    &lt;option value="32" data-class="3"&gt;3-2&lt;/option&gt;
+    &lt;option value="33" data-class="3"&gt;3-3&lt;/option&gt;
+&lt;/select&gt;
+
+...</pre>
+	
+	
+	
+		<p>2. Write JavaScript like below.</p>
+	
+		<pre>var cascade = new Cascade();
+cascade.add("level1").add("level2").add("level3")....add("levelN").set();</pre>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	</article>
