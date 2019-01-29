@@ -2,6 +2,7 @@
 
     ja: {
         Title: "題名",
+        Header: "ヘッダ",
         Paragraph: "通常の文章",
         Note: "注意書き",
         Quote: "引用",
@@ -11,6 +12,7 @@
         Image: "画像",
         Table: "表",
         EnterTitle: "題名を入力",
+        EnterHeader: "ヘッダを入力",
         EnterParagraph: "文章を入力",
         EnterNote: "注意書きを入力",
         EnterQuote: "引用を入力",
@@ -39,6 +41,7 @@
 
     en: {
         Title: "Title",
+        Header: "Header",
         Paragraph: "Paragraph",
         Note: "Note",
         Quote: "Quote",
@@ -48,6 +51,7 @@
         Image: "Image",
         Table: "Table",
         EnterTitle: "Enter Title",
+        EnterHeader: "Enter Header",
         EnterParagraph: "Enter Paragraph",
         EnterNote: "Enter Notes",
         EnterQuote: "Enter Quote",

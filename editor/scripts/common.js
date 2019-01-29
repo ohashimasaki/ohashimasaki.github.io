@@ -193,25 +193,27 @@
 
     }
     //----------------------------------------------------------------------------------------------------
-    function getPlaceholder(text, name, subname) {
+    function getPlaceholder(text, type, subtype) {
 
-        if(name == "title") {
+        if(type == "title") {
             return text.EnterTitle;
-        } else if(name == "paragraph") {
+        } else if(type == "header") {
+            return text.EnterTitle;
+        } else if(type == "paragraph") {
             return text.EnterParagraph;
-        } else if(name == "note") {
+        } else if(type == "note") {
             return text.EnterNote;
-        } else if(name == "quote") {
+        } else if(type == "quote") {
             return text.EnterQuote;
-        } else if(name == "preformatted") {
+        } else if(type == "preformatted") {
             return text.EnterPreformattedText;
-        } else if(name == "list") {
+        } else if(type == "list") {
             return text.EnterList;
-        } else if(name == "image" && subname == "caption") {
+        } else if(type == "image" && subtype == "caption") {
             return text.EnterImageCaption;
-        } else if(name == "table" && subname == "figure") {
+        } else if(type == "table" && subtype == "figure") {
             return text.EnterTSV;
-        } else if(name == "table" && subname == "caption") {
+        } else if(type == "table" && subtype == "caption") {
             return text.EnterTableCaption;
         }
 

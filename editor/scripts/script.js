@@ -23,7 +23,6 @@
     var $id;
     var $path;
     var $changed;
-    var $titlechanged;
 
 
     setWindowCaption();
@@ -140,7 +139,6 @@
         _save.disabled = false;
 
         $changed = false;
-        $titlechanged = false;
 
         var path = "";
 
@@ -254,7 +252,6 @@
 
         _delete.disabled = false;
         $changed = false;
-        $titlechanged = false;
 
 
     }
@@ -273,7 +270,6 @@
         setWindowCaption();
 
         $changed = false;
-        $titlechanged = false;
 
         showStatusbar($text.Deleted);
 

@@ -19,21 +19,28 @@
 <xsl:template match="/*/h1">
     <section class="title" id="{@id}" tabindex="-1">
         <div class="view" tabindex="0"><xsl:copy-of select="." /></div>
-        <textarea class="write"><xsl:apply-templates select="text()|br" /></textarea>
+        <textarea class="write"><xsl:apply-templates select="text()|a|br" /></textarea>
+    </section>
+</xsl:template>
+
+<xsl:template match="/*/h2">
+    <section class="header" id="{@id}" tabindex="-1">
+        <div class="view" tabindex="0"><xsl:copy-of select="." /></div>
+        <textarea class="write"><xsl:apply-templates select="text()|a|br" /></textarea>
     </section>
 </xsl:template>
 
 <xsl:template match="/*/p">
     <section class="paragraph" id="{@id}" tabindex="-1">
         <div class="view" tabindex="0"><xsl:copy-of select="." /></div>
-        <textarea class="write"><xsl:apply-templates select="text()|br" /></textarea>
+        <textarea class="write"><xsl:apply-templates select="text()|a|br" /></textarea>
     </section>
 </xsl:template>
 
 <xsl:template match="/*/blockquote">
     <section class="quote" id="{@id}" tabindex="-1">
         <div class="view" tabindex="0"><xsl:copy-of select="." /></div>
-        <textarea class="write"><xsl:apply-templates select="text()|br" /></textarea>
+        <textarea class="write"><xsl:apply-templates select="text()|a|br" /></textarea>
     </section>
 </xsl:template>
 
@@ -48,7 +55,7 @@
 <xsl:template match="/*/aside">
     <section class="note" id="{@id}" tabindex="-1">
         <div class="view" tabindex="0"><xsl:copy-of select="." /></div>
-        <textarea class="write"><xsl:apply-templates select="text()|br" /></textarea>
+        <textarea class="write"><xsl:apply-templates select="text()|a|br" /></textarea>
     </section>
 </xsl:template>
 
@@ -91,14 +98,14 @@
 <xsl:template match="li" mode="text"><xsl:apply-templates /><xsl:if test="position()!=last()"><xsl:text>&#xD;&#xA;</xsl:text></xsl:if></xsl:template>
 
 <xsl:template match="li" mode="list">
-<li><xsl:apply-templates select="text()|br" /></li>
+<li><xsl:apply-templates select="text()|a|br" /></li>
 </xsl:template>
 
 
 <xsl:template match="/*/figure/figcaption">
     <div class="caption" tabindex="-1">
         <div class="view" tabindex="0"><xsl:copy-of select="." /></div>
-        <textarea class="write"><xsl:apply-templates select="text()|br" /></textarea>
+        <textarea class="write"><xsl:apply-templates select="text()|a|br" /></textarea>
     </div>
 </xsl:template>
 
@@ -139,6 +146,8 @@
 <xsl:template match="text()">
     <xsl:value-of select="translate(., '&#xD;&#xA;', '')" />
 </xsl:template>
+
+<xsl:template match="a"><xsl:value-of select="." />[<xsl:value-of select="@href" />]</xsl:template>
 
 <xsl:template match="br">
     <xsl:text>&#xD;&#xA;</xsl:text>

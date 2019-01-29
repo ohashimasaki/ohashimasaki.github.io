@@ -1,4 +1,4 @@
-﻿function UI(_editor, xml, $text) {
+﻿function UI(_editor, $xml, $text) {
 
     var ui = {};
 
@@ -23,316 +23,317 @@
     ui.equipAll = function(e) {
         var q = e.querySelectorAll("section");
         for(var i = 0; i < q.length; i++) {
-            ui.equip(q[i]);
+            equip(q[i]);
         }
     };
 
 
-    ui.equip = function(section) {
-        if( ! section) {
-            return false;
+
+    //----------------------------------------------------------------------------------------------------
+    function equip(e) {
+
+        if(e.className != "title") {
+            attachMenu(e);
         }
 
-        if(section.className != "title") {
-            ui.Menu.insert(section);
-        }
-
-        if(section.className == "list") {
-            return ui.List.equip(section);
+        if(e.className == "list") {
+            //ui.List.equip(e);
+        } else if(e.className == "image") {
+            Figure.equip(e);
         } else {
-            return ui.Paragraph.equip(section);
+            Paragraph.equip(e);
         }
 
-        return false;    
-    };
+        return e;
 
+    }
+    //----------------------------------------------------------------------------------------------------
+    function attachMenu(section) {
 
+        var id = section.getAttribute("id");
 
-    ui.Paragraph = {
-        equip: function(section) {
-            try {
-                var id = section.getAttribute("id");
-                var name = section.className;
+        var section_menu = SectionMenu(section);
+        if( ! section.getElementsByClassName("section-menu")[0]) {
+            section.appendChild(section_menu);
+        }
 
-                var isFigure = (name == "image" || name == "table");
-                var caption = isFigure ? section.getElementsByClassName("caption")[0] : null;
-                var viewer = (caption || section).getElementsByClassName("view")[0];
-                var writer = (caption || section).getElementsByClassName("write")[0];
+        var insertion_menu = InsertionMenu(section);
+        if( ! section.getElementsByClassName("insertion-menu")[0]) {
+            section.appendChild(insertion_menu);
+        }
 
-                viewer.onmousedown = function() {
-                    var writer = activate(this);
-                    textbox.stretch(writer);
-                    focus(writer);
-                };
-                viewer.onfocus = function() {
-                    scroll(this.parentNode);
-                    var writer = activate(this);
-                    textbox.stretch(writer);
-                   focus(writer);
-                };
+        section.onmouseover = function() {
+            if(this.hover) {
+                clearTimeout(this.hover);
+                this.hover = null;
+            };
+            var e = this;
+            this.hover = setTimeout(function() {
+                show(e.getElementsByClassName("section-menu")[0]);
+            }, 400);
+        };
 
-
-                writer.onblur = function() {
-                    deactivate(this);
-                };
-
-                writer.addEventListener("change", function() {
-                    _changed = true;
-                    if(name == "title") {
-                        $titlechanged = true;
-                    }
-                    var v = getValue(this, name);
-                    var blank = ! v;
-                    var t = createParagraph(this, v, id);
-
-                    replaceParagraph(id, t);
-                    var viewer = deactivate(this);
-                    viewer.innerHTML = t;
-                    if(blank) {
-                        viewer.setAttribute("empty", "true");
-                        if(name == "image" || name == "table") {
-                            setPlaceholder(viewer, getPlaceholder($text, name, "caption"));
-                        } else {
-                            setPlaceholder(viewer, getPlaceholder($text, name));
-                        }
-                    } else {
-                        viewer.removeAttribute("empty");
-                    }
-                }, false);
-
-                if(name == "image") {
-                    ui.Image.equip(section);
-                }
-                if(name == "table") {
-                    ui.Table.equip(section);
-                }
-
-                return true;
-
-            } catch(ex) {
-                return false;
-            }
-        },
-
-
-        insert: function(section, type) {
-            _changed = true;
-            var id = getGuid();
-            var t = "";
-            if(type == "paragraph") {
-                t = '<p>' + $text.EnterParagraph + '</p>';
-            } else if(type == "note") {
-                t = '<aside>' + $text.EnterNote + '</aside>';
-            } else if(type == "quote") {
-                t = '<blockquote>' + $text.EnterQuote + '</blockquote>';
-            } else if(type == "preformatted") {
-                t = '<pre>' + $text.EnterPreformattedText + '</pre>';
-            } else if(type == "markup") {
-                t = '<div>' + $text.EnterMarkup + '</div>';
-            } else {
+        section.onmouseout = function() {
+            if(this.hover) {
+                clearTimeout(this.hover);
+                this.hover = null;
+            };
+            if(this.contains(event.toElement)) {
                 return;
             }
-
-            var c = toNode(t);
-            c.setAttribute("id", id); 
-            if( ! insertXmlNode(c, section.getAttribute("id"))) {
-                notice($text.ItemInsertFailed);
+            hide(section_menu);
+            if(insertion_menu.hover) {
+                return;
             }
+            hide(insertion_menu);
+            this.hover = null;
+            insertion_menu.hover = null;
+        };
 
-            section.insertAdjacentHTML("afterend", "\r\n" + [
+    }
+    //----------------------------------------------------------------------------------------------------
+    var Paragraph = {
+
+        new: function(type) {
+            var node = null;
+            var id = getGuid();
+            var section = parseHTML([
                 '<section class="' +  type + '" id="' + id + '" tabindex="-1">',
-                    '<div class="view" tabindex="0" empty="true">' + t + '</div>',
+                    '<div class="view" tabindex="0" empty="true">' + markup(type, getPlaceholder($text, type)) + '</div>',
                     '<textarea class="write"></textarea>',
                 '</section>'
             ].join("\r\n"));
-
-            var e = document.getElementById(id);
-            ui.elasticateAll(e); 
-
-            if(ui.equip(e)) {
-                var w = e.document.getElementsByTagName("textare");
-                for(var i = 0; i < w.length; i++) {
-                    w[i].style.display = "block";
-                    textbox.elasticate(w[i]);
-                    w[i].style.display = "none";
+            section = this.equip(section);
+            var node = parseXML(markup(type));
+            node.setAttribute("id", id);
+            return {
+                html: section,
+                xml: node
+            };
+        },
+        equip: function(section) {
+            var type = section.className;
+            var viewer = section.getElementsByClassName("view")[0];
+            var writer = section.getElementsByClassName("write")[0];
+            writer.style.display = "none";
+            viewer.onmousedown = function() {
+                activate(this);
+                textbox.stretch(writer);
+                focus(writer);
+            };
+            viewer.onfocus = function() {
+                scroll(this.parentNode);
+                activate(this);
+                textbox.stretch(writer);
+                focus(writer);
+            };
+            writer.onblur = function() {
+                deactivate(this);
+            };
+            writer.onchange = function() {
+                _changed = true;
+                var v = hypertext(getValue(this, type), type);
+                var t = markup(type, v);
+                var c = parseXML(t);
+                var e = $xml.selectSingleNode("/*/*[@id='" + section.getAttribute("id") + "']");
+                if(c && e) {
+                    e.parentNode.replaceChild(c, e);
                 }
-                flash(e);
-                notice($text.ItemInserted);
-            } else {
-                notice($text.ItemInsertFailed);
-            }
-        }
+                viewer.innerHTML = t;
+                deactivate(this);
+                if( ! v) {
+                    viewer.setAttribute("empty", "true");
+                    setPlaceholder(viewer, getPlaceholder($text, type));
+                } else {
+                    viewer.removeAttribute("empty");
+                }
+            };
 
+            attachMenu(section);
+
+            return section;
+        }
 
     };
     //----------------------------------------------------------------------------------------------------
-    function getValue(e, name) {
+    var Figure = {
 
-        if(name == "markup") {
-            var v = trim(e.value);
-            var xml = new ActiveXObject("MSXML2.DOMDocument");
-            if( ! xml.loadXML(v)) {
-                alert($text.EnterWellFormedXML);
-                return "";
-            }
-            return v;
-        }
- 
-        var v = escape(e.value);
-
-        if(/\r\n$/.test(v)) {
-            v = v + "\r\n";
-        } else if(v && /\n$/.test(v)) {
-            v = v + "\n";
-        }
-
-        v = v.replace(/^(?:\r\n|\s)$/, "");
-
-        return v;
-
-    }
-    //----------------------------------------------------------------------------------------------------
-    function createParagraph(e, v, id) {
-
-        var name = document.getElementById(id).className;
-
-        if(name != "preformatted" && name != "markup") {
-            v = v.replace(/\r\n|[\r\n]/g, "<br />\r\n");
-            v = v.replace(/(?:^|\s)((?:https?|\.\.?\/)[^\s"<>\[\]\{\}]+)(?:\[([^\[\]]+)\])?/g, function(m, s1, s2) {
-                return '<a href="' + s1 + '" target="_blank" rel="noopener">' + (s2 || s1) + '</a>';
-            });
-        }
-
-        if(name == "title") {
-            return '<h1>' + v + '</h1>';
-        } else if(name == "paragraph") {
-            return '<p>' + v + '</p>';
-        } else if(name == "note") {
-            return '<aside>' + v + '</aside>';
-        } else if(name == "quote") {
-            return '<blockquote>' + v + '</blockquote>';
-        } else if(name == "preformatted") {
-            return '<pre>' + v + '</pre>';
-        } else if(name == "markup") {
-            return '<div>' + v + '</div>';
-        } else if(name == "image" || name == "table") {
-            return '<figcaption>' + v + '</figcaption>';
-        }
-    }
-    //----------------------------------------------------------------------------------------------------
-    function replaceParagraph(id, t) {
-
-        var c = toNode(t);
-        var n = xml.selectSingleNode("/*/*[@id='" + id + "']");
-        if( ! c || ! n) {
-            return;
-        }
-        if(n.nodeName == "figure") {
-            n.replaceChild(c, n.selectSingleNode("figcaption"));
-        } else {
-            c.setAttribute("id", id);
-            n.parentNode.insertBefore(xml.createTextNode("\r\n\t\t"), n);
-            n.parentNode.insertBefore(c, n);
-            n.parentNode.insertBefore(xml.createTextNode("\r\n\t"), n);
-            n.parentNode.removeChild(n);
-        }
-    }
-    //----------------------------------------------------------------------------------------------------
-    ui.Image = {
-
-        equip: function(section) {
-            try {
-                var id = section.getAttribute("id");
-                var img = section.getElementsByTagName("img")[0];
-
-                img.onmousedown = function() {
-                    replaceImage(this, id);
-                    _changed = true;
-                };
-                img.onkeydown = function() {
-                    if(event.keyCode == 13) {
-                        replaceImage(this, id);
-                        _changed = true;
-                    }
-                };
-                img.onfocus = function() {
-                    scroll(this.parentNode);
-                };
-                img.onload = function() {
-                    onResize(_editor);
-                };
-                img.onerror = function() {
-                    this.className = "noimage";
-                };
-
-                var bt = section.getElementsByClassName("remove-image")[0];
-                bt.onclick = function() {
-                    if( ! confirm($text.RemoveImage)) {
-                        return;
-                    }
-                    var img = this.parentNode.getElementsByTagName("img")[0];
-                    removeImage(img, id);
-                    _changed = true;
-                };
-                bt.onkeydown = function() {
-                    if(event.keyCode == 13) {
-                        if( ! confirm($text.RemoveImage)) {
-                            return;
-                        }
-                        var img = this.parentNode.getElementsByTagName("img")[0];
-                        removeImage(img, id);
-                        event.returnValue = false;
-                        _changed = true;
-                    }
-                };
-                bt.onfocus = function() {
-                    scroll(this.parentNode);
-                };
-
-                return true;
-
-            } catch(ex) {
-                return false;
-            }
-        },
-
-        insert: function(section) {
-            _changed = true;
+        new: function() {
+            var node = null;
             var id = getGuid();
-            var c = toNode([
-                '<figure id="' + id + '">',
-                    '<img src="" />',
-                    '<figcaption></figcaption>',
-                '</figure>'
-            ].join("\r\n"));
-            if( ! insertXmlNode(c, section.getAttribute("id"))) {
-                notice($text.ItemInsertFailed);
-            }
-            section.insertAdjacentHTML("afterend", "\r\n" + [
+            var section = parseHTML([
                 '<section class="image" id="' + id + '" tabindex="-1">',
                     '<div class="figure" tabindex="-1">',
                         '<img src="" tabindex="0" />',
                         '<button type="button" class="remove-image" tabindex="0"></button>',
                     '</div>',
                     '<div class="caption" tabindex="-1">',
-                        '<div class="view" tabindex="0" empty="true"><figcaption>' + $text.EnterImageCaption + '</figcaption></div>',
+                        '<div class="view" tabindex="0" empty="true">',
+                            '<figcaption>' + $text.EnterImageCaption + '</figcaption>',
+                        '</div>',
                         '<textarea class="write"></textarea>',
                     '</div>',
                 '</section>'
             ].join("\r\n"));
+            section = this.equip(section);
+            var node = parseXML([
+                '<figure>',
+                    '<img src="" />',
+                    '<figcaption></figcaption>',
+                '</figure>'
+            ].join("\r\n"));
+            var node = parseXML(markup("image"));
+            node.setAttribute("id", id);
+            return {
+                html: section,
+                xml: node
+            };
+        },
+        equip: function(section) {
+            var id = section.getAttribute("id");
 
-            var e = document.getElementById(id);
-            ui.elasticateAll(e);
-            if(ui.equip(e)) {
-                flash(e);
-                notice($text.ItemInserted);
+            var caption = section.getElementsByClassName("caption")[0];
+            var viewer = caption.getElementsByClassName("view")[0];
+            var writer = caption.getElementsByClassName("write")[0];
+            writer.style.display = "none";
+            viewer.onmousedown = function() {
+                activate(this);
+                textbox.stretch(writer);
+                focus(writer);
+            };
+            viewer.onfocus = function() {
+                scroll(this.parentNode);
+                activate(this);
+                textbox.stretch(writer);
+                focus(writer);
+            };
+            writer.onblur = function() {
+                deactivate(this);
+            };
+            writer.onchange = function() {
+                _changed = true;
+                var v = hypertext(getValue(this));
+                var c = parseXML([
+                    '<figure>',
+                        '<img src="" />',
+                        '<figcaption>' + v + '</figcaption>',
+                    '</figure>'
+                ].join("\r\n"));
+                var e = $xml.selectSingleNode("/*/*[@id='" + section.getAttribute("id") + "']");
+                if(c && e) {
+                    e.parentNode.replaceChild(c, e);
+                }
+                viewer.innerHTML = '<figcaption>' + v + '</figcaption>';
+                deactivate(this);
+                if( ! v) {
+                    viewer.setAttribute("empty", "true");
+                    setPlaceholder(viewer, getPlaceholder($text, type, "caption"));
+                } else {
+                    viewer.removeAttribute("empty");
+                }
+            };
+
+            var img = section.getElementsByTagName("img")[0];
+            img.onmousedown = function() {
+                replaceImage(this, id);
+                _changed = true;
+            };
+            img.onkeydown = function() {
+                if(event.keyCode == 13) {
+                    replaceImage(this, id);
+                    _changed = true;
+                }
+            };
+            img.onfocus = function() {
+                scroll(this.parentNode);
+            };
+            img.onload = function() {
+                onResize(_editor);
+            };
+            img.onerror = function() {
+                this.className = "noimage";
+            };
+            var bt = section.getElementsByClassName("remove-image")[0];
+            bt.onclick = function() {
+                if( ! confirm($text.RemoveImage)) {
+                    return;
+                }
+                var img = this.parentNode.getElementsByTagName("img")[0];
+                removeImage(img, id);
+                _changed = true;
+            };
+            bt.onkeydown = function() {
+                if(event.keyCode == 13) {
+                    if( ! confirm($text.RemoveImage)) {
+                        return;
+                    }
+                    var img = this.parentNode.getElementsByTagName("img")[0];
+                    removeImage(img, id);
+                    event.returnValue = false;
+                    _changed = true;
+                }
+            };
+            bt.onfocus = function() {
+                scroll(this.parentNode);
+            };
+
+            attachMenu(section);
+
+            return section;
+        }
+
+    };
+    //----------------------------------------------------------------------------------------------------
+    function hypertext(t, type) {
+
+        if(/^(?:preformatted|markup)$/.test(type)) {
+            return t;
+        }
+
+        t = t.replace(/\r\n|[\r\n]/g, "<br />\r\n");
+        t = t.replace(/(^|\s)((?:https?|\.\.?\/)[^\s"<>\[\]\{\}]+)(?:\[([^\[\]]+)\])?/g, function(m, s1, s2, s3) {
+            return s1 + '<a href="' + s2 + '" target="_blank" rel="noopener">' + (s3 || s2) + '</a>';
+        });
+
+        return t;
+
+    }
+    //----------------------------------------------------------------------------------------------------
+    function add(id, o) {
+
+        var e = document.getElementById(id); // section
+
+        if( ! e) {
+            notice($text.ItemInsertFailed);
+            return;
+        }
+
+        if(e.nextElementSibling) {
+            e.parentNode.insertBefore(o.html, e.nextElementSibling);
+        } else {
+            e.parentNode.appendChild(o.html);
+        }
+
+        var n = $xml.selectSingleNode("/*/*[@id='" + id + "']");
+        if(n) {
+            var s = n.nextSibling;
+            if(s) {
+                n.parentNode.insertBefore($xml.createTextNode("\r\n\t"), s);
+                n.parentNode.insertBefore(o.xml, s);
+                n.parentNode.insertBefore($xml.createTextNode("\r\n\t"), s);
             } else {
-                notice($text.ItemInsertFailed);
+                n.parentNode.appendChild($xml.createTextNode("\r\n\t"));
+                n.parentNode.appendChild(o.xml);
+                $xml.documentElement.appendChild($xml.createTextNode("\r\n"));
             }
+        } else {
+            $xml.documentElement.appendChild($xml.createTextNode("\r\n\t"));
+            $xml.documentElement.appendChild(o.xml);
+            $xml.documentElement.appendChild($xml.createTextNode("\r\n"));
         }
 
 
-    };
+    }
     //----------------------------------------------------------------------------------------------------
     function replaceImage(img, id) {
 
@@ -354,7 +355,7 @@
         var src = "images/" + getUniqueName(10) + ext;
         fso.copyFile(path, src, true);
         fso = null;
-        xml.selectSingleNode("/*/figure[@id='" + id + "']/img").setAttribute("src", src);
+        $xml.selectSingleNode("/*/figure[@id='" + id + "']/img").setAttribute("src", src);
         fetchImage(img, src, 20);
 
     }
@@ -402,404 +403,167 @@
             fso.deleteFile(src);
         }
 
-        xml.selectSingleNode("/*/figure[@id='" + id + "']/img").setAttribute("src", "");
+        $xml.selectSingleNode("/*/figure[@id='" + id + "']/img").setAttribute("src", "");
 
     }
     //----------------------------------------------------------------------------------------------------
-    ui.Table = {
+    function markup(type, value) {
 
-        equip: function(section) {
-            try {
-                var id = section.getAttribute("id");
+        if(type == "note") {
+            return '<aside>' + (value || "") + '</aside>';
+        } else if(type == "quote") {
+            return '<blockquote>' + (value || "") + '</blockquote>';
+        } else if(type == "preformatted") {
+            return '<pre>' + (value || "") + '</pre>';
+        } else if(type == "markup") {
+            return '<div>' + (value || "") + '</div>';
+        } else if(type == "title") {
+            return '<h1>' + (value || "") + '</h1>';
+        } else if(type == "header") {
+            return '<h2>' + (value || "") + '</h2>';
+        } else {
+            return '<p>' + (value || "") + '</p>';
+        }
 
-                var figure = section.getElementsByClassName("figure")[0];
-                var viewer = figure.getElementsByClassName("view")[0];
-                var writer = figure.getElementsByClassName("write")[0];
+    }
+    //----------------------------------------------------------------------------------------------------
+    function getValue(e, type) {
 
-                viewer.onmousedown = function() {
-                    var writer = activate(this);
-                    textbox.stretch(writer);
-                    focus(writer);
-                };
-                viewer.onkeydown = function() {
-                    if(event.keyCode == 13) {
-                        var writer = activate(this);
-                        textbox.stretch(writer);
-                        focus(writer);
-                        event.returnValue = false;
-                    }
-                };
-                viewer.onfocus = function() {
-                    scroll(this.parentNode);
-                };
-                writer.onblur = function() {
-                    if(this.changed) {
-                        return;
-                    }
-                    deactivate(this);
-                };
-
-                var callback = function() {
-                    _changed = true;
-                    event.cancelBubble = true;
-                    var s = event.srcElement;
-                    s.changed = true;
-                    var v = trim(s.value);
-                    var blank = ! v;
-                    if(blank) {
-                        var t = createTable(v);
-                        replaceTable(id, t);
-                        s.changed = false;
-                        setTimeout(function() {
-                            var viewer = deactivate(s);
-                            viewer = replaceHtmlNode(viewer, t);
-                            viewer.setAttribute("empty", "true");
-                            setPlaceholder(viewer, $text.EnterTSV);
-                            s.removeEventListener("change", callback, false);
-                            ui.equip(section);
-                        }, 0);
-                    } else {
-                        selectTableOrientation(s, function(e, o) {
-                            var t = createTable(v, o);
-                            replaceTable(id, t);
-                            e.changed = false;
-                            setTimeout(function() {
-                                var viewer = deactivate(e);
-                                viewer = replaceHtmlNode(viewer, t);
-                                viewer.removeAttribute("empty"); 
-                                e.removeEventListener("change", callback, false);
-                                ui.equip(section);
-                            }, 0);
-                        });
-                    }
-                };
-
-                writer.addEventListener("change", callback, false);
-                return true;
-
-            } catch(ex) {
-                return false;
+        if(type == "markup") {
+            var v = trim(e.value);
+            var xml = new ActiveXObject("MSXML2.DOMDocument");
+            if( ! xml.loadXML(v)) {
+                alert($text.EnterWellFormedXML);
+                return "";
             }
-        },
+            return v;
+        }
+ 
+        var v = escape(e.value);
 
-        insert: function(section) {
-            _changed = true;
-            var id = getGuid();
+        if(/\r\n$/.test(v)) {
+            v = v + "\r\n";
+        } else if(v && /\n$/.test(v)) {
+            v = v + "\n";
+        }
 
-            var c = toNode([
-                '<figure id="' + id + '">',
-                    '<figcaption></figcaption>',
-                    '<table></table>',
-                '</figure>'
-            ].join("\r\n"));
+        v = v.replace(/^(?:\r\n|\s)$/, "");
 
-            if( ! insertXmlNode(c, section.getAttribute("id"))) {
-                notice($text.ItemInsertFailed);
+        return v;
+
+    }
+    //----------------------------------------------------------------------------------------------------
+    function remove(id) {
+
+        var e = document.getElementById(id); // section
+        if(e) {
+            e.parentNode.removeChild(e);
+        }
+
+        e = $xml.selectSingleNode("/*/*[@id='" + id + "']");
+        if(e) {
+            e.parentNode.removeChild(e);
+        }
+
+    }
+    //----------------------------------------------------------------------------------------------------
+    function moveup(id) {
+
+        var e = document.getElementById(id); // section
+        if(e) {
+            var s = e.previousElementSibling;
+            if(s) {
+                var c = equip(e.cloneNode(true));
+                s.parentNode.insertBefore(c, s);
+                e.parentNode.removeChild(e);
             }
+        }
 
-            section.insertAdjacentHTML("afterend", "\r\n" + [
-                '<section class="table" id="' + id + '" tabindex="-1">',
-                    '<div class="figure" tabindex="-1">',
-                        '<table class="view" tabindex="0" empty="true">',
-                            '<tbody>',
-                                '<tr><td>' + $text.EnterTSV + '</td></tr>',
-                            '</tbody>',
-                        '</table>',
-                        '<textarea class="write"></textarea>',
-                    '</div>',
-                    '<div class="caption" tabindex="-1">',
-                        '<div class="view" tabindex="0" empty="true"><figcaption>' + $text.EnterTableCaption + '</figcaption></div>',
-                        '<textarea class="write"></textarea>',
-                    '</div>',
-                '</section>'
-            ].join("\r\n"));
+        var e = $xml.selectSingleNode("/*/*[@id='" + id + "']");
+        if(e) {
+            var s = $xml.selectSingleNode("/*/*[@id='" + e.getAttribute("id") + "']/preceding-sibling::*[1]");
+            if(s) {
+                var c = e.cloneNode(true);
+                s.parentNode.insertBefore(c, s);
+                e.parentNode.removeChild(e);
+            }
+        }
 
-            var e = document.getElementById(id);
-            ui.elasticateAll(e, true);
+    }
+    //----------------------------------------------------------------------------------------------------
+    function movedown(id) {
 
-            if(ui.equip(e)) {
-                flash(e);
-                notice($text.ItemInserted);
+        var e = document.getElementById(id); // section
+        if(e) {
+            var s = e.nextElementSibling ? e.nextElementSibling.nextElementSibling : e.nextElementSibling;
+            var c = equip(e.cloneNode(true));
+            if( ! s) {
+                e.parentNode.appendChild(c);
             } else {
-                notice($text.ItemInsertFailed);
+                s.parentNode.insertBefore(c, s);
             }
+            e.parentNode.removeChild(e);
         }
 
 
-    };
-    //----------------------------------------------------------------------------------------------------
-    function selectTableOrientation(e, callback) {
-
-        if(typeof callback != "function") {
-            return;
-        }
-
-        var ht = [
-            '<ul id="table-orientation">',
-                '<li id="orientation-none">' + $text.None + '</li>',
-                '<li id="orientation-column">' + $text.Column + '</li>',
-                '<li id="orientation-row">' + $text.Row + '</li>',
-                '<li id="orientation-column-row">' + $text.ColumnRow + '</li>',
-            '</ul>'
-        ].join("\r\n");
-
-        var popup = new Popup();
-        popup.show($text.TableOrientation, ht);
-
-        var q = document.getElementById("table-orientation").getElementsByTagName("li");
-        for(var i = 0; i < q.length; i++) {
-            q[i].onclick = function() {
-                popup.hide();
-                var o = this.getAttribute("id").split("-");
-                o.shift();
-                o = o.join("-");
-                callback(e, o);
-            };
-        }
-
-    }
-    //----------------------------------------------------------------------------------------------------
-    function createTable(v, o) {
-
-        if( ! v) {
-            return [
-                '<table class="view" tabindex="0">',
-                    '<tbody>',
-                        '<tr><td></td></tr>',
-                    '</tbody>',
-                '</table>'
-            ].join("\r\n");
-        }
-
-        d = v.replace(/\r\n|[\r\n]/g, "\r\n").split("\r\n");
-
-        for(var i = 0; i < d.length; i++) {
-            var r = trim(d[i]);
-            if(r) {
-                d[i] = r.split("\t");
-            }
-        }
-
-        var c = 0;
-        for(var i = 0; i < d.length; i++) {
-            c = c >= d[i].length ? c : d[i].length;
-        }
-        if(c == 0) {
-            return "";
-        }
-
-        var hasColumnHeader = /column/i.test(o);
-        var hasRowHeader = /row/i.test(o);
-
-        var t = [];
-        var label = [];
-
-        t.push('<table class="view" tabindex="0">');
-
-        if(hasColumnHeader) {
-            t.push('<thead>');
-            t.push('<tr>');
-            var cells = d.shift();
-            for(var i = 0; i < c; i++) {
-                var v = escape(trim(cells[i] || "")).replace(/:$/, "");
-                label.push(v);
-                t.push('<th>' + v + '</th>');
-            }
-            t.push('</tr>');
-            t.push('</thead>');
-        }
-        t.push('<tbody>');
-
-        for(var j = 0; j < d.length; j++) {
-            t.push('<tr>');
-            var cells = d[j];
-            for(var i = 0; i < c; i++) {
-                var v = escape(trim(cells[i] || "")).replace(/:$/, "");
-                if(hasRowHeader && i == 0) {
-                    t.push('<th label="' + label[i] + '">' + v + '</th>');
-                } else {
-                    t.push('<td label="' + label[i] + '">' + v + '</td>');
-                }
-            }
-            t.push('</tr>');
-        }
-        t.push('</tbody>');
-        t.push('</table>');
-
-        t =  t.join("\r\n");
-
-        return t;
-
-    }
-    //----------------------------------------------------------------------------------------------------
-    function replaceTable(id, t) {
-
-        var c = toNode(t);
-        var n = xml.selectSingleNode("/*/figure[@id='" + id + "']");
-
-        if( ! c || ! n) {
-            return;
-        }
-
-        c.removeAttribute("class");
-        c.removeAttribute("tabindex");
-        c.setAttribute("id", id);
-        var b = n.selectSingleNode("table");
-        b.parentNode.removeChild(b);
-        n.appendChild(xml.createTextNode("\r\n\t\t"));
-        n.appendChild(c);
-        n.appendChild(xml.createTextNode("\r\n\t"));
-
-    }
-    //----------------------------------------------------------------------------------------------------
-    ui.List = {
-
-        equip: function(section) {
-            try {
-                var id = section.getAttribute("id");
-
-                var viewer = section.getElementsByClassName("view")[0];
-                var writer = section.getElementsByClassName("write")[0];
-
-                viewer.onmousedown = function() {
-                    var writer = activate(this);
-                    textbox.stretch(writer);
-                    focus(writer);
-                };
-                viewer.onfocus = function() {
-                    scroll(this.parentNode);
-                    var writer = activate(this);
-                    textbox.stretch(writer);
-                    focus(writer);
-                };
-
-                writer.onblur = function() {
-                    deactivate(this);
-                    show(viewer);
-                    hide(writer);
-                };
-
-                var callback = function() {
-                    _changed = true;
-                    event.cancelBubble = true;
-                    var s = event.srcElement;
-                    var v = getValue(s);
-                    var blank = ! v;
-                    var t = createList(s, v, id);
-                    replaceList(id, t);
-                    var viewer = deactivate(s);
-                    viewer = replaceHtmlNode(viewer, t);
-                    if(blank) {
-                        viewer.setAttribute("empty", "true");
-                        setPlaceholder(viewer, $text.EnterList);
-                    } else {
-                        viewer.removeAttribute("empty");
-                    }
-                    s.removeEventListener("change", callback, false);
-                    ui.equip(section);
-                };
-
-                writer.addEventListener("change", callback, false);
-                return true;
-
-            } catch(ex) {
-                return false;
-            }
-        },
-
-        insert: function(section) {
-            _changed = true;
-            var id = getGuid();
-
-            var c = toNode([
-                '<ul id="' + id + '"></ul>'
-            ].join("\r\n"));
-
-            c.setAttribute("id", id);
-            if( ! insertXmlNode(c, section.getAttribute("id"))) {
-                notice($text.ItemInsertFailed);
-            }
-
-            section.insertAdjacentHTML("afterend", "\r\n" + [
-                '<section class="list" id="' + id + '" tabindex="-1">',
-                    '<ul class="view" tabindex="0" empty="true">' + $text.EnterList + '</ul>',
-                    '<textarea class="write"></textarea>',
-                '</section>'
-            ].join("\r\n"));
-
-            var e = document.getElementById(id);
-            ui.elasticateAll(e);
-
-            if(ui.equip(e)) {
-                flash(e);
-                notice($text.ItemInserted);
+        var e = $xml.selectSingleNode("/*/*[@id='" + id + "']");
+        if(e) {
+            var s = $xml.selectSingleNode("/*/*[@id='" + e.getAttribute("id") + "']/following-sibling::*[2]");
+            var c = e.cloneNode(true);
+            if( ! s) {
+                e.parentNode.appendChild(c);
             } else {
-                notice($text.ItemInsertFailed);
+                s.parentNode.insertBefore(c, s);
             }
+            e.parentNode.removeChild(e);
         }
-
-
-    };
-    //----------------------------------------------------------------------------------------------------
-    function replaceList(id, t) {
-
-        var c = toNode(t);
-        var n = xml.selectSingleNode("/*/ul[@id='" + id + "']");
-
-        if( ! c || ! n) {
-            return;
-        }
-
-        c.removeAttribute("class");
-        c.removeAttribute("tabindex");
-        c.setAttribute("id", id);
-        n.parentNode.insertBefore(xml.createTextNode("\r\n\t\t"), n);
-        n.parentNode.insertBefore(c, n);
-        n.parentNode.insertBefore(xml.createTextNode("\r\n\t"), n);
-        n.parentNode.removeChild(n);  
 
     }
     //----------------------------------------------------------------------------------------------------
-    function createList(e, v, id) {
+    function SectionMenu(section) {
 
-        if( ! v) {
-            return [
-                '<ul class="view" tabindex="0">',
-                '</ul>'
-            ].join("\r\n");
-        }
+        var menu = section.getElementsByClassName("section-menu")[0];
 
-        var d = v.replace(/\r\n|[\r\n]/g, "\r\n").split("\r\n");
-
-        var t = [];
-
-        t.push('<ul class="view" tabindex="0">');
-        for(var i = 0; i < d.length; i++) {
-            var v = trim(d[i]);
-            if(v) {
-                t.push('<li>' + escape(v) + '</li>');
-            }
-        }
-        t.push('</ul>');
-
-        t = t.join("\r\n");
-        return t;
-
-    }
-    //----------------------------------------------------------------------------------------------------
-    ui.Menu = {
-
-        insert: function(section) {
-            var id = section.getAttribute("id");
-
-            section.insertAdjacentHTML("beforeend", "\r\n" + [
-                '<ul class="section-menu" for="' + id + '">',
+        if( ! menu) {
+            menu = parseHTML([
+                '<ul class="section-menu" for="' + section.getAttribute("id") + '">',
                     '<li class="delete"> </li>',
                     '<li class="up"> </li>',
                     '<li class="down"> </li>',
                     '<li class="insert"> </li>',
-                '</ul>',
-                '<ul class="insert-menu">',
+                '</ul>'
+            ].join("\r\n"));
+        }
+
+        menu.onclick = function() {
+            var a = event.srcElement.className;
+            var id = this.getAttribute("for");
+            if(a == "delete") {
+                remove(id);
+            } else if(a == "up") {
+                moveup(id);
+            } else if(a == "down") {
+                movedown(id);
+            } else if(a == "insert") {
+                var m = document.getElementById(id).getElementsByClassName("insertion-menu")[0];
+                m.style.top = (this.offsetTop + 30) + "px";
+                m.style.right = 10 + "px";
+                show(m);
+            }
+        };
+
+        return menu;
+
+    }
+    //----------------------------------------------------------------------------------------------------
+    function InsertionMenu(section) {
+
+        var menu = section.getElementsByClassName("insertion-menu")[0];
+
+        if( ! menu) {
+            menu = parseHTML([
+                '<ul class="insertion-menu" for="' + section.getAttribute("id") + '">',
+                    '<li class="insert-header">' + $text.Header + '</li>',
                     '<li class="insert-paragraph">' + $text.Paragraph + '</li>',
                     '<li class="insert-note">' + $text.Note + '</li>',
                     '<li class="insert-quote">' + $text.Quote + '</li>',
@@ -810,232 +574,75 @@
                     '<li class="insert-table">' + $text.Table + '</li>',
                 '</ul>'
             ].join("\r\n"));
+        }
 
-            var _sectionmenu = section.getElementsByClassName("section-menu")[0];
-            _sectionmenu.onclick = function() {
-                var a = event.srcElement.className;
-                var id = this.getAttribute("for");
-                var e = document.getElementById(id); // section
-                var n = xml.selectSingleNode("/*/*[@id='" + id + "']");
-                //this.style.display = "none";
-
-                if(a == "delete") {
-                    remove(e);
-                    remove(n);
-                } else if(a == "up") {
-                    if(ui.equip(moveup(e))) {
-                        moveup(n);
-                    } 
-                } else if(a == "down") {
-                    if(ui.equip(movedown(e))) {
-                        movedown(n);
-                    }
-                } else if(a == "insert") {
-                    _insertMenu.style.top = (this.offsetTop + 30) + "px";
-                    _insertMenu.style.right = 10 + "px";
-                    show(_insertMenu);
-                }
-            };
-
-            var _insertMenu = section.getElementsByClassName("insert-menu")[0];
-            _insertMenu.onclick = function() {
-                var type = trim(event.srcElement.className.split("insert-")[1]);
-                if(/paragraph|note|quote|preformatted|markup/.test(type)) {
-                    ui.Paragraph.insert(section, type);
-                } else if(type == "list") {
-                    ui.List.insert(section);
-                } else if(type == "image") {
-                    ui.Image.insert(section);
-                } else if(type == "table") {
-                    ui.Table.insert(section);
-                }
-                hide(this);
-            };
-
-            _insertMenu.onmouseover = function() {
-                if(this.hover) {
-                    clearTimeout(this.hover);
-                    this.hover = null;
-                };
+        menu.onclick = function() {
+            var type = trim(event.srcElement.className.split("insert-")[1]);
+            var id = this.getAttribute("for");
+            if(type == "list") {
+//                ui.List.insert(section);
+            } else if(type == "image") {
+                add(id, Figure.new());
+            } else if(type == "table") {
+//                ui.Table.insert(section);
+            } else {
+                add(id, Paragraph.new(type));
             }
+            hide(this);
+        };
 
-            _insertMenu.onmouseout = function() {
-                if(this.contains(event.toElement)) {
-                    return;
-                }
-                if(this.hover) {
-                    clearTimeout(this.hover);
-                    this.hover = null;
-                };
-                var e = this;
-                this.hover = setTimeout(function() {
-                    hide(e);
-                    e.hover = null;
-                    if( ! e.parentNode.hover) {
-                        hide(e.parentNode.getElementsByClassName("section-menu")[0]);
-                        e.parentNode.hover = null;
-                    }
-                }, 800);
-            };
-
-            section.onmouseover = function() {
-                if(this.hover) {
-                    clearTimeout(this.hover);
-                    this.hover = null;
-                };
-                var e = this;
-                this.hover = setTimeout(function() {
-                    show(e.getElementsByClassName("section-menu")[0]);
-                }, 400);
-            };
-
-            section.onmouseout = function() {
-                if(this.hover) {
-                    clearTimeout(this.hover);
-                    this.hover = null;
-                };
-                if(section.contains(event.toElement)) {
-                    return;
-                }
-                var e = this;
-                var _sm = e.getElementsByClassName("section-menu")[0];
-                var _im = e.getElementsByClassName("insert-menu")[0];
-                if(_im.hover) {
-                    return;
-                }
-                hide(_sm);
-                hide(_im);
-                e.hover = null;
-                _im.hover = null;
+        menu.onmouseover = function() {
+            if(this.hover) {
+                clearTimeout(this.hover);
+                this.hover = null;
             };
         }
 
+        menu.onmouseout = function() {
+            if(this.contains(event.toElement)) {
+                return;
+            }
+            if(this.hover) {
+                clearTimeout(this.hover);
+                this.hover = null;
+            };
+            var e = this;
+            this.hover = setTimeout(function() {
+                hide(e);
+                e.hover = null;
+                if( ! e.parentNode.hover) {
+                    hide(e.parentNode.getElementsByClassName("section-menu")[0]);
+                    e.parentNode.hover = null;
+                }
+            }, 800);
+        };
+
+        return menu;
+
     }
     //----------------------------------------------------------------------------------------------------
-    function toNode(t) {
+    function parseHTML(t) {
+
+        var p = document.createElement("div");
+       p.innerHTML = t;
+
+        var e = p.childNodes;
+        for(var i = 0; i < e.length; i++) {
+            if(e[i].nodeType == 1) {
+                return e[i].cloneNode(true);
+            }
+        }
+
+        p = null;
+        return null;
+
+    }
+    //----------------------------------------------------------------------------------------------------
+    function parseXML(t) {
 
         var xml = new ActiveXObject("MSXML2.DOMDocument.6.0");
         xml.loadXML(t);
         return xml.documentElement.cloneNode(true);
-
-    }
-    //----------------------------------------------------------------------------------------------------
-    function insertXmlNode(c, id) {
-
-        var n = xml.selectSingleNode("/*/*[@id='" + id + "']");
-
-        if( ! n) {
-            return false;
-        }
-
-        var s = n.nextSibling;
-
-        if( ! s ) {
-            n.parentNode.appendChild(xml.createTextNode("\r\n\t"));
-            n.parentNode.appendChild(c);
-            xml.documentElement.appendChild(xml.createTextNode("\r\n"));
-        } else {
-            n.parentNode.insertBefore(xml.createTextNode("\r\n\t"), s);
-            n.parentNode.insertBefore(c, s);
-            n.parentNode.insertBefore(xml.createTextNode("\r\n\t"), s);
-        }
-
-        return true;
-
-    }
-    //----------------------------------------------------------------------------------------------------
-    function replaceHtmlNode(e, ht) {
-
-        e.insertAdjacentHTML("afterend", ht);
-        var c = e.nextElementSibling;
-        e.parentNode.removeChild(e);
-        return c;
-
-    }
-    //----------------------------------------------------------------------------------------------------
-    function hide(e) {
-
-        if(e) {
-            e.style.display = "none";
-        }
-
-    }
-    //----------------------------------------------------------------------------------------------------
-    function show(e) {
-
-        if(e) {
-            e.style.display = "block";
-        }
-
-    }
-    //----------------------------------------------------------------------------------------------------
-    function flash(e) {
-
-        e.style.backgroundColor = "#fcfcfc";
-
-        setTimeout(function() {
-            e.style.backgroundColor = "";
-        }, 500);
-
-    }
-    //----------------------------------------------------------------------------------------------------
-    function moveup(e) {
-
-        if( ! e) {
-            return null;
-        }
-
-        if(e.xml === undefined) { // HTML
-            var s = e.previousElementSibling;
-        } else {
-            var s = xml.selectSingleNode("/*/*[@id='" + e.getAttribute("id") + "']/preceding-sibling::*[1]");
-        }
-
-        if( ! s) {
-            return null;
-        }
-
-        var c = e.cloneNode(true);
-        s.parentNode.insertBefore(c, s);
-        e.parentNode.removeChild(e);
-        return c;
-
-    }
-    //----------------------------------------------------------------------------------------------------
-    function movedown(e) {
-
-        if( ! e) {
-            return null;
-        }
-
-        if(e.xml === undefined) { // HTML
-            var s = e.nextElementSibling;
-            if( ! s) {
-                return null;
-            }
-            s = s.nextElementSibling;
-        } else { // XML
-            var s = xml.selectSingleNode("/*/*[@id='" + e.getAttribute("id") + "']/following-sibling::*[2]");
-        }
-
-        var c = e.cloneNode(true);
-        if( ! s) {
-            e.parentNode.appendChild(c);
-        } else {
-            s.parentNode.insertBefore(c, s);
-        }
-        e.parentNode.removeChild(e);
-        return c;
-
-    }
-    //----------------------------------------------------------------------------------------------------
-    function remove(e) {
-
-        if( ! e) {
-            return null;
-        }
-
-        e.parentNode.removeChild(e);
 
     }
     //----------------------------------------------------------------------------------------------------
@@ -1078,7 +685,6 @@
         }
 
     }
-
     //----------------------------------------------------------------------------------------------------
     function notice(t) {
 

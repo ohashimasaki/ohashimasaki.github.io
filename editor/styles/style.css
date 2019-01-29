@@ -198,7 +198,7 @@ section.title {
 }
 section.title > .view h1 {
     font-size: 20pt;
-    font-weight: normal;
+    font-weight: normal
 }
 section.title > .view[empty] {
     color: #cccccc;
@@ -210,6 +210,29 @@ section.title > .write {
     font-size: 20pt;
     font-weight: normal;
 }
+
+
+section.header {
+    margin: 30px 0 0 0;
+}
+section.header:first-of-type {
+    margin: 0;
+}
+section.header > .view h2 {
+    font-size: 14pt;
+    font-weight: normal;
+}
+section.header > .view[empty] {
+    color: #cccccc;
+}
+section.header > .view[empty]:hover {
+    border: 1px dashed #cccccc;
+}
+section.header > .write {
+    font-size: 14pt;
+    font-weight: normal;
+}
+
 
 
 section.note > div {
@@ -445,7 +468,7 @@ section:last-of-type li.down {
 }
 
 
-ul.insert-menu {
+ul.insertion-menu {
     display: none;
     position: absolute;
     top: 0;
@@ -455,11 +478,11 @@ ul.insert-menu {
     background-color: #ffffff;
     z-index: 1000;
 }
-ul.insert-menu li {
+ul.insertion-menu li {
     padding: 3px 12px;
     cursor: pointer;
 }
-ul.insert-menu li:hover {
+ul.insertion-menu li:hover {
     background-color: #f9f6f5;
 }
 
