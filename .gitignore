@@ -21,10 +21,6 @@ $RECYCLE.BIN/
 *.hta
 
 
-editor/
-editor/*
-
-
 # =========================
 # Operating System Files
 # =========================
@@ -52,3 +48,4 @@ Temporary Items
 
 
 ex/
+editor/
