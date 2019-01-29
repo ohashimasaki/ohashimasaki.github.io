@@ -20,6 +20,7 @@ $RECYCLE.BIN/
 *.pdf
 *.hta
 blog/editor/
+editor/
 
 
 # =========================
