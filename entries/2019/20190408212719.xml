@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<article title="Excelから画像だけ抽出する" published="2019-04-08T21:35:54+09:00" updated="2019-04-08T21:35:54+09:00" category="Excel,C#">
+<article title="Excelから画像だけ抽出する" published="2019-04-08T21:40:19+09:00" updated="2019-04-08T21:40:19+09:00" category="Excel,C#">
 	<h1>Excelから画像だけ抽出する</h1><p>Excelから画像だけ抽出するコードを書いたので貼っておきます。<br/>
-大急ぎで書いたので、適当に改造してください。</p>
+大急ぎで書いたので、適当に改造してください。<br/>
+下記のコードを ExcelImages.cs というファイル名で保存したとします。</p>
 	<pre>using System;
 using System.Linq;
 using System.Text;
