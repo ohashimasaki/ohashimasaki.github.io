@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article title="Excelから画像だけ抽出する" published="2019-04-08T21:35:54+09:00" updated="2019-04-08T21:35:54+09:00" category="Excel,C#">
+	<h1>Excelから画像だけ抽出する</h1><p>Excelから画像だけ抽出するコードを書いたので貼っておきます。<br/>
+大急ぎで書いたので、適当に改造してください。</p>
+	<pre>using System;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.IO;
+using System.IO.Compression;
+
+
+namespace Example {
+
+    class ExcelImages {
+
+        static void Main(string[] args) {
+
+            string path = "";
+
+            if(args.Length &gt; 0) {
+                path = args[0];
+            } else {
+                return;
+            }
+
+            if( ! File.Exists(path) || ! path.EndsWith(".xlsx")) {
+                return;
+            }
+
+            string folder = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path);
+
+            if( ! Directory.Exists(folder)) {
+                Directory.CreateDirectory(folder);
+            }
+
+            using(FileStream f = new FileStream(path, FileMode.Open, FileAccess.Read)) {
+                using(ZipArchive a = new ZipArchive(f, ZipArchiveMode.Read, true)) {
+                    foreach(ZipArchiveEntry entry in a.Entries.Where(e =&gt; Regex.IsMatch(e.Name, @"\.(?:png|jpe?g|gif)$"))) {
+                        using(FileStream g = File.Create(folder + @"\" + entry.Name)) {
+                            entry.Open().CopyTo(g);
+                        }
+                    }
+                }
+            }
+
+        }
+
+    }
+
+}
+
+</pre>
+	<p>ビルドするときは、 ZipArchive関連の System.IO.Compression.dll の参照が必要です。<br/>
+適当にPC内を検索して、System.IO.Compression.dll を探してください。どれでもいいです。</p>
+	
+	
+	<pre>csc.exe /target:exe /reference:"C:\Program Files\Reference Assemblies\Microsoft\Framework\v4.5.1\System.IO.Compression.dll" ExcelImages.cs</pre>
+	
+	
+<p>できた exe ファイルに Excel ファイルをドロップすれば同名のフォルダに画像が抽出されます。</p></article>
