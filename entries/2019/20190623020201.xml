@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article title="ifを使わないでカレンダーを作る" published="2019-06-23T02:06:52+09:00" updated="2019-06-23T02:06:52+09:00" category="JavaScript">
+	<h1>ifを使わないでカレンダーを作る</h1><p>「JavaScript で if を使わないでHTMLのカレンダーを作る」という話を見かけたので、自分も試してみました。<br/>
+もっと短くできるかもしれませんが、自分にはこれが限界でしたｗ<br/>
+なお、\r\nを挿入しているのは人間のための単なる配慮です。</p>
+	<pre>document.body.innerHTML = function(date) {
+    return '&lt;table&gt;\r\n' + function() {
+        var s = new Date(Date.UTC(date.getFullYear(), date.getMonth(), 1, 0, 0, 0));
+        s.setDate(-1 * s.getDay() + 1);
+        var e = new Date(Date.UTC(date.getFullYear(), date.getMonth() + 1, 0, 0, 0, 0));
+        e.setDate(e.getDate() + 6 - e.getDay());
+        var a = [];
+        for(var d = s; d.getTime() &lt;= e.getTime(); d.setDate(d.getDate() + 1)) { a.push(new Date(d)); }
+        return a;
+    }().reduce((h, d) =&gt; {
+        return h + (d.getDay() == 0 ? '&lt;tr&gt;&lt;td&gt;' + d.getDate() + '&lt;/td&gt;\r\n'
+        : d.getDay() == 6 ? '&lt;td&gt;' + d.getDate() + '&lt;/td&gt;&lt;/tr&gt;\r\n'
+        : '&lt;td&gt;' + d.getDate() + '&lt;/td&gt;\r\n');
+    }, '') + '&lt;/table&gt;\r\n';
+}(new Date);
+
+</pre>
+</article>
