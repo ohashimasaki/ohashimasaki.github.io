@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article title="Excelでデータの1列のデータを2列にしたり2列のデータを1列にしたりするには" published="2019-08-06T21:41:26+09:00" updated="2019-08-06T21:41:26+09:00" category="Excel">
+	<h1>Excelでデータの1列のデータを2列にしたり2列のデータを1列にしたりするには</h1><p>仕事でこういうのがパッとできないと手間取ったりすることがありますね？<br/>
+手作業でコピペなんか、いやですよね…<br/>
+数学が得意な人にはなんということもないことですが、誰も教えてくれません。</p>
+	<figure>
+		<img src="images/AOJSuRenuh.png"/>
+		<figcaption>列の数を増やしたり減らしたりしたい!!<br/>
+そんなときは…</figcaption></figure>
+	<pre>1列から2列へ
+=INDIRECT(
+    ADDRESS(
+        ROW($A$2) + (ROW()-ROW($C$2)) * 2 + (COLUMN() - COLUMN($C$2)),
+        COLUMN($A$2)
+    )
+)</pre>
+	<pre>2列から1列へ
+=INDIRECT(
+    ADDRESS(
+        ROW($C$2) + INT((ROW()-ROW($S$2)) / 2),
+        COLUMN($C$2) + MOD(ROW() - ROW($S$2), 2)
+    )
+)</pre>
+	<p>「2」を「3」や「4」にすれば列数を変えられます。</p>
+	<pre>1列から3列へ
+=INDIRECT(
+    ADDRESS(
+        ROW($A$2) + (ROW() - ROW($F$2)) * 3 + (COLUMN() - COLUMN($F$2)),
+        COLUMN($A$2)
+    )
+)</pre>
+	<pre>3列から1列へ
+=INDIRECT(
+    ADDRESS(
+        ROW($F$2) + INT((ROW() - ROW($Q$2)) / 3),
+        COLUMN($F$2) + MOD(ROW() - ROW($Q$2), 3)
+    )
+)</pre>
+	<pre>1列から4列へ
+=INDIRECT(
+    ADDRESS(
+        ROW($A$2) + (ROW() - ROW($F$2)) * 4 + (COLUMN() - COLUMN($F$2)),
+        COLUMN($A$2)
+    )
+)</pre>
+	<pre>4列から1列へ
+=INDIRECT(
+    ADDRESS(
+        ROW($J$2) + INT((ROW() - ROW($Q$2)) / 4),
+        COLUMN($J$2) + MOD(ROW()-ROW($Q$2), 4)
+    )
+)</pre>
+	
+	
+	
+	
+	
+	
+	
+</article>
