@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article title="A" published="2019-01-31T17:18:42+09:00" updated="2019-02-01T21:54:07+09:00" category="aaa">
+	<h1>A</h1><p>paragraph2</p><p>paragraph1</p>
+	<h2>AAA</h2><ul><li>牛乳</li>
+		<li>ベーコン</li>
+		<li>パン</li>
+		<li>肉</li>
+		<li>卵</li></ul><aside>note</aside>
+	
+	<figure>
+		<img src=""/>
+		<figcaption>aaa</figcaption>
+	</figure>
+	<div><b>bold</b></div><blockquote>quote</blockquote><pre>cord</pre>
+</article>

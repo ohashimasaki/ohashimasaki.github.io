@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article title="素のJavaScriptでリアクティブなUIを作る" published="2022-09-23T23:22:51+09:00" updated="2022-09-23T23:22:51+09:00" category="JavaScript">
+	<h1>素のJavaScriptでリアクティブなUIを作る</h1><p>&lt;!DOCTYPE html&gt;<br/>
+&lt;head&gt;<br/>
+&lt;meta charset="UTF-8" /&gt;<br/>
+&lt;style&gt;<br/>
+div {<br/>
+    font-size: 10pt;<br/>
+}<br/>
+div.S {<br/>
+    width: 100px;<br/>
+}<br/>
+div.M {<br/>
+    width: 200px;<br/>
+}<br/>
+div.L {<br/>
+    width: 300px;<br/>
+}<br/>
+&lt;/style&gt;<br/>
+&lt;/head&gt;<br/>
+&lt;body&gt;<br/>
+&lt;script&gt;<br/>
+		<br/>
+const data = [<br/>
+    {id:1, name:"A", color:"#ff0000", size:"S"},<br/>
+    {id:2, name:"B", color:"#00ff00", size:"M"},<br/>
+    {id:3, name:"C", color:"#0000ff", size:"L"},<br/>
+];<br/>
+		<br/>
+const handler = {<br/>
+    set(target, prop, value, receiver) {<br/>
+        const oldValue = target[prop];<br/>
+        if(Reflect.set(...arguments)) {<br/>
+            notify(target, prop, value, oldValue);<br/>
+            return true;<br/>
+        } else {<br/>
+            return false;<br/>
+        }<br/>
+    }<br/>
+};<br/>
+		<br/>
+function notify(target, prop, newValue, oldValue) {<br/>
+    if(prop === "color") {<br/>
+        items.filter(e =&gt; e.data.id === target.id).forEach(e =&gt; e.render());<br/>
+    } else if(prop === "size") {<br/>
+        items.filter(e =&gt; e.data.id === target.id).forEach(e =&gt; e.render());<br/>
+    }<br/>
+}<br/>
+		<br/>
+class Foo {<br/>
+    constructor(item) {<br/>
+        this.data = item;<br/>
+        this.view = document.createElement("DIV");<br/>
+        this.view.innerHTML = `<br/>
+            &lt;p&gt;${this.data.name}&lt;/p&gt;<br/>
+            Color:<br/>
+            &lt;input type="color" value="${this.data.color}"select class="color" /&gt;<br/>
+            Size:<br/>
+            &lt;select class="size"&gt;<br/>
+                &lt;option value="S"&gt;S&lt;/option&gt;<br/>
+                &lt;option value="M"&gt;M&lt;/option&gt;<br/>
+                &lt;option value="L"&gt;L&lt;/option&gt;<br/>
+            &lt;/select&gt;<br/>
+        `;<br/>
+        this.view.querySelector("input.color").onchange = event =&gt; {<br/>
+            this.data.color = event.currentTarget.value;<br/>
+        };<br/>
+        this.view.querySelector("select.size").onchange = event =&gt; {<br/>
+            this.data.size = event.currentTarget.value;<br/>
+        };<br/>
+        this.render();<br/>
+    }<br/>
+    render() {<br/>
+        this.view.className = this.data.size;<br/>
+        this.view.style.backgroundColor = this.data.color;<br/>
+        this.view.querySelector("input.color").value = this.data.color;<br/>
+        this.view.querySelector("select.size").value = this.data.size;<br/>
+    }<br/>
+}<br/>
+		<br/>
+const items = data.map(e =&gt; new Proxy(e, handler)).map(e =&gt; new Foo(e));<br/>
+items.forEach(e =&gt; document.body.appendChild(e.view));<br/>
+		<br/>
+&lt;/script&gt;<br/>
+&lt;/body&gt;<br/>
+&lt;/html&gt;</p></article>
