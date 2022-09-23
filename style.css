@@ -54,7 +54,9 @@ header > h1 > a:visited {
         font-size: 50pt;
     }
 }
-
+header p {
+    margin: 0 20px 20px 20px;
+}
 
 ul {
     list-style-type: none;
