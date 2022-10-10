@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<article title="素のJavaScriptでリアクティブなUIを作る" published="2022-09-23T23:22:51+09:00" updated="2022-09-24T00:33:14+09:00" category="JavaScript">
+<article title="素のJavaScriptでリアクティブなUIを作る" published="2022-09-23T23:22:51+09:00" updated="2022-10-10T10:36:43+09:00" category="JavaScript">
 	<h1>素のJavaScriptでリアクティブなUIを作る</h1><p>フレームワークを使わず、素のJavaScriptでリアクティブなUIを作ってみました。<br/>
 データをProxyに置換して、それをUI要素とバインドして、データの変更があるたびに再描画する方法です。<br/>
 		<a href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Proxy" target="_blank" rel="noopener">https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Proxy</a></p>
-	
-	
 	<pre>&lt;!DOCTYPE html&gt;
 &lt;head&gt;
 &lt;meta charset="UTF-8" /&gt;
@@ -14,17 +12,24 @@ div {
 }
 div.S {
     width: 100px;
+    height: 100px;
 }
 div.M {
     width: 200px;
+    height: 200px;
 }
 div.L {
-    width: 300px;
+    width: 400px;
+    height: 400px;
 }
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 &lt;script&gt;
+
+const state = {
+    items: []
+}
 
 const data = [
     {id:1, name:"A", color:"#ff0000", size:"S"},
@@ -46,9 +51,9 @@ const handler = {
 
 function notify(target, prop, newValue, oldValue) {
     if(prop === "color") {
-        items.filter(e =&gt; e.data.id === target.id).forEach(e =&gt; e.render());
+        state.items.filter(e =&gt; e.data.id === target.id).forEach(e =&gt; e.render());
     } else if(prop === "size") {
-        items.filter(e =&gt; e.data.id === target.id).forEach(e =&gt; e.render());
+        state.items.filter(e =&gt; e.data.id === target.id).forEach(e =&gt; e.render());
     }
 }
 
@@ -83,10 +88,9 @@ class Foo {
     }
 }
 
-const items = data.map(e =&gt; new Proxy(e, handler)).map(e =&gt; new Foo(e));
-items.forEach(e =&gt; document.body.appendChild(e.view));
+state.items = data.map(e =&gt; new Proxy(e, handler)).map(e =&gt; new Foo(e));
+state.items.forEach(e =&gt; document.body.appendChild(e.view));
 
 &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;</pre>
-</article>
+&lt;/html&gt;</pre></article>
